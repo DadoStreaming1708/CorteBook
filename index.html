@@ -2354,7 +2354,7 @@ $s('#adminContent').addEventListener('submit',async e=>{
  }
 if(e.target.id==='settingsForm'){e.preventDefault();const d=new FormData(e.target);const open=d.get('open'),close=d.get('close');if(open>=close){toast('O horário de término precisa ser depois do início.');return;}state.settings={whatsapp:String(d.get('whatsapp')).replace(/\D/g,''),pixKey:String(d.get('pixKey')||'').trim(),instagram:String(d.get('instagram')).trim(),address:String(d.get('address')).trim(),notice:String(d.get('notice')).trim()};state.hours.open=open;state.hours.close=close;save();renderPublicSettings();renderAdmin('configuracoes');toast('Configurações salvas e aplicadas ao site.');}
 
-});
+
 $s('#openClientAccount').onclick=()=>{showClientAccountForm('register');openModal('clientAccountModal')};
 $s('#openClientLogin').onclick=()=>{showClientAccountForm('login');openModal('clientAccountModal')};
 function showClientAccountForm(mode){const reg=mode==='register';$s('#clientRegisterForm').classList.toggle('hidden',!reg);$s('#clientLoginForm').classList.toggle('hidden',reg);$s('#clientAccountTitle').textContent=reg?'Criar Nova Conta':'Entrar na minha conta';$s('#switchClientForm').textContent=reg?'Já tenho conta — Entrar':'Ainda não tenho conta — Criar cadastro';}
