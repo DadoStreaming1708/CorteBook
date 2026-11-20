@@ -197,7 +197,8 @@ body.staff-mode #metrics { display: none !important; }
 
 /* ===== CORTEBOOK — tema Preto & Dourado Metálico (somente visual) ===== */
 :root{--bg:#0A0A0A;--panel:#141414;--panel2:#1a1a1a;--line:#2c2718;--white:#fbf8ee;--muted:#b4ad98;
- --blue:#D4AF37!important;--blue2:#B8860B!important;--accent-light:#F3D06B!important;--accent-text:#F3D06B!important;
+  --blue:#D4AF37;--blue2:#B8860B;--accent-light:#F3D06B;--accent-text:#F3D06B;
+
  --gold-gradient:linear-gradient(135deg,#F3D06B 0%,#D4AF37 48%,#B8860B 100%)}
 body{background:#0A0A0A}
 .topbar{background:#0A0A0Af2;border-bottom:1px solid #D4AF3733}
@@ -209,8 +210,10 @@ body{background:#0A0A0A}
 .hero .wrap{position:relative;z-index:1}
 .hero h1{color:#D4AF37;text-shadow:0 2px 18px #000}
 .hero p{color:#fff;text-shadow:0 1px 8px #000}
-.btn,.fab{background:var(--gold-gradient);color:#0A0A0A;box-shadow:0 8px 24px #D4AF3733}
-.btn:hover,.fab:hover{background:var(--gold-gradient);filter:brightness(1.1)}
+.btn,.fab{background:var(--blue);color:#0A0A0A;box-shadow:0 8px 24px #0006}
+
+.btn:hover,.fab:hover{background:var(--blue);filter:brightness(1.1)}
+
 .btn.secondary,.btn.ghost,.btn.danger{color:#f8f5ea}
 .btn.secondary{background:#1c1c1c;border:1px solid #3a3320;box-shadow:none}
 .btn.ghost{background:transparent;border:1px solid #3a3320;box-shadow:none}
@@ -1210,7 +1213,8 @@ document.addEventListener('click',async e=>{
  if(!data||!data.length){del.disabled=false;toast('Nenhuma avaliação foi excluída. Verifique a permissão de DELETE (RLS) na tabela de avaliações.');return;}
  state.reviews=state.reviews.filter(r=>r.id!==id);renderReviews();toast('Avaliação excluída.');
 });
-  function applyBranding(){const c=state.branding?.color||'#d4af37';const shade=(hex,amt)=>{const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,(n>>16)+amt)),g=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')};document.documentElement.style.setProperty('--blue',c);document.documentElement.style.setProperty('--blue2',shade(c,-28));document.documentElement.style.setProperty('--gold',c);document.documentElement.style.setProperty('--gold2',shade(c,-28));document.documentElement.style.setProperty('--accent',c);document.documentElement.style.setProperty('--accent-light',shade(c,55));document.documentElement.style.setProperty('--accent-text',shade(c,85));$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'">`});}
+    function applyBranding(){const c=state.branding?.color||'#d4af37';const r=document.documentElement.style;r.setProperty('--blue',c);r.setProperty('--blue2',c);r.setProperty('--gold',c);r.setProperty('--gold2',c);r.setProperty('--accent',c);r.setProperty('--accent-light',c);r.setProperty('--accent-text',c);$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-cortebook.png" alt="CorteBook" onerror="this.outerHTML='CB'">`});}
+
 
 
 function whatsappDigits(){return String(state.settings.whatsapp||'').replace(/\D/g,'')}
