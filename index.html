@@ -1210,7 +1210,8 @@ document.addEventListener('click',async e=>{
  if(!data||!data.length){del.disabled=false;toast('Nenhuma avaliação foi excluída. Verifique a permissão de DELETE (RLS) na tabela de avaliações.');return;}
  state.reviews=state.reviews.filter(r=>r.id!==id);renderReviews();toast('Avaliação excluída.');
 });
-function applyBranding(){const c=state.branding?.color||'#d4af37';const shade=(hex,amt)=>{const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,(n>>16)+amt)),g=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')};document.documentElement.style.setProperty('--blue',c);document.documentElement.style.setProperty('--blue2',shade(c,-28));document.documentElement.style.setProperty('--accent-light',shade(c,55));document.documentElement.style.setProperty('--accent-text',shade(c,85));$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'">`});}
+  function applyBranding(){const c=state.branding?.color||'#d4af37';const shade=(hex,amt)=>{const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,(n>>16)+amt)),g=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')};document.documentElement.style.setProperty('--blue',c);document.documentElement.style.setProperty('--blue2',shade(c,-28));document.documentElement.style.setProperty('--gold',c);document.documentElement.style.setProperty('--gold2',shade(c,-28));document.documentElement.style.setProperty('--accent',c);document.documentElement.style.setProperty('--accent-light',shade(c,55));document.documentElement.style.setProperty('--accent-text',shade(c,85));$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'">`});}
+
 
 function whatsappDigits(){return String(state.settings.whatsapp||'').replace(/\D/g,'')}
 function renderPublicSettings(){
@@ -2321,8 +2322,9 @@ $s('#adminContent').addEventListener('submit',async e=>{
   toast('Preços atualizados. O agendamento já exibe os novos valores.');
  }
 });
-$s('#adminContent').addEventListener('submit',async e=>{
-if(e.target.id==='brandingForm'){e.preventDefault();const selected=e.target.querySelector('input[name=brandColor]:checked')?.value;const custom=e.target.elements.customColor?.value;state.branding.color=(selected&&selected!=='custom')?selected:(custom||'#d4af37');save();applyBranding();renderAdmin('configuracoes');toast('Identidade visual atualizada em todo o site.');}
+    if(e.target.id==='brandingForm'){e.preventDefault();const selected=e.target.querySelector('input[name=brandColor]:checked')?.value;const custom=e.target.elements.customColor?.value;const novaCor=(selected&&selected!=='custom')?selected:(custom||'#d4af37');state.branding.color=novaCor;if(state.home)state.home.accentColor=novaCor;save();applyBranding();renderAdmin('configuracoes');toast('Identidade visual atualizada em todo o site.');}
+
+
 
  if(e.target.id==='weeklyScheduleForm'){
   e.preventDefault();const data=new FormData(e.target),next={};let invalid=false;
