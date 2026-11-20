@@ -2321,7 +2321,7 @@ $s('#adminContent').addEventListener('submit',async e=>{
   save();renderPublicServices();renderAdmin('servicos');
   toast('Preços atualizados. O agendamento já exibe os novos valores.');
  }
-});
+
     if(e.target.id==='brandingForm'){e.preventDefault();const selected=e.target.querySelector('input[name=brandColor]:checked')?.value;const custom=e.target.elements.customColor?.value;const novaCor=(selected&&selected!=='custom')?selected:(custom||'#d4af37');state.branding.color=novaCor;if(state.home)state.home.accentColor=novaCor;save();applyBranding();renderAdmin('configuracoes');toast('Identidade visual atualizada em todo o site.');}
 
 
@@ -2353,7 +2353,7 @@ $s('#adminContent').addEventListener('submit',async e=>{
   state.barbers=updated;pendingBarberPhotos={};save();renderPublicServices();renderAdmin('profissionais');toast('Nomes, comissões e fotos atualizados.');
  }
 if(e.target.id==='settingsForm'){e.preventDefault();const d=new FormData(e.target);const open=d.get('open'),close=d.get('close');if(open>=close){toast('O horário de término precisa ser depois do início.');return;}state.settings={whatsapp:String(d.get('whatsapp')).replace(/\D/g,''),pixKey:String(d.get('pixKey')||'').trim(),instagram:String(d.get('instagram')).trim(),address:String(d.get('address')).trim(),notice:String(d.get('notice')).trim()};state.hours.open=open;state.hours.close=close;save();renderPublicSettings();renderAdmin('configuracoes');toast('Configurações salvas e aplicadas ao site.');}
-
+});
 
 
 $s('#openClientAccount').onclick=()=>{showClientAccountForm('register');openModal('clientAccountModal')};
