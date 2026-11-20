@@ -195,7 +195,7 @@ body.staff-mode #metrics { display: none !important; }
 .reviews-toggle{justify-self:center;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:8px 16px;font-size:12px;font-weight:700}
 .reviews-toggle:hover{color:var(--white);border-color:#3f3f46}
 
-/* ===== CORTEBOOK BARBER STUDIO — tema Preto & Dourado Metálico (somente visual) ===== */
+/* ===== CORTEBOOK — tema Preto & Dourado Metálico (somente visual) ===== */
 :root{--bg:#0A0A0A;--panel:#141414;--panel2:#1a1a1a;--line:#2c2718;--white:#fbf8ee;--muted:#b4ad98;
  --blue:#D4AF37!important;--blue2:#B8860B!important;--accent-light:#F3D06B!important;--accent-text:#F3D06B!important;
  --gold-gradient:linear-gradient(135deg,#F3D06B 0%,#D4AF37 48%,#B8860B 100%)}
@@ -665,7 +665,7 @@ body.staff-mode #vipScoreboard{display:none!important}
 <header class="topbar">
  <div class="wrap topinner">
   <button class="iconbtn" id="menuBtn" aria-label="Abrir menu">☰</button>
-    <div class="brand"><div class="brandmark"><img src="logo-imperium.png" alt="CorteBook Barber Studio" onerror="this.outerHTML='IB'"></div><div><div class="brandname">CORTEBOOK BARBER STUDIO</div><div class="brandtag"></div></div></div>
+    <div class="brand"><div class="brandmark"><img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'"></div><div><div class="brandname">CORTEBOOK</div><div class="brandtag"></div></div></div>
 
   <div class="grow"></div><span class="small muted" id="headerContext">Agendamento premium</span>
  </div>
@@ -673,7 +673,7 @@ body.staff-mode #vipScoreboard{display:none!important}
 
 <div class="sidebarshade" id="sidebarShade"></div>
 <aside class="sidebar" id="sidebar" aria-label="Menu lateral">
- <div class="sidebrand"><div class="brandmark"><img src="logo-imperium.png" alt="CorteBook Barber Studio" onerror="this.outerHTML='IB'"></div><div><b>CorteBook Barber Studio</b><div class="sideemail" id="sideEmail">Área pública</div></div><button class="close" id="closeSidebar" style="margin-left:auto">×</button></div>
+ <div class="sidebrand"><div class="brandmark"><img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'"></div><div><b>CorteBook</b><div class="sideemail" id="sideEmail">Área pública</div></div><button class="close" id="closeSidebar" style="margin-left:auto">×</button></div>
  <div class="navgroup"><div class="navtitle">AGENDA</div>
   <button class="navitem" data-admin-view="agenda"><span class="navicon">▦</span>Agenda</button>
   <button class="navitem" data-action="booking"><span class="navicon">＋</span>Novo agendamento</button>
@@ -708,7 +708,7 @@ body.staff-mode #vipScoreboard{display:none!important}
 <section class="hero hero-vip"><div class="wrap hero-grid">
   <div class="hero-copy">
    
-   <h1>CORTEBOOK BARBER STUDIO</h1>
+   <h1>CORTEBOOK</h1>
    <p>Tradição, cuidado e excelência em cada detalhe. Escolha seu serviço, profissional e horário.</p>
    <div class="hero-actions">
     <button class="btn" type="button" id="heroBookNow">Agendar Horário</button>
@@ -723,7 +723,7 @@ body.staff-mode #vipScoreboard{display:none!important}
   <div class="hl"><span class="hl-ico" aria-hidden="true">⚡</span><strong>Agendamento</strong><small>24h</small></div>
  </section>
  <section class="section wrap" id="servicesSection">
-  <div class="sectionhead"><h2>Serviços</h2><span class="eyebrow">CORTEBOOK BARBER STUDIO</span></div>
+  <div class="sectionhead"><h2>Serviços</h2><span class="eyebrow">CORTEBOOK</span></div>
   <div class="grid grid2" id="publicServices"></div>
  </section>
  <section class="section wrap hidden" id="combosSection">
@@ -853,12 +853,12 @@ body.staff-mode #vipScoreboard{display:none!important}
 <main id="storeView" class="hidden-view">
  <section class="section wrap" style="padding-top:22px">
   <div class="sectionhead" style="align-items:center">
-   <div><div class="eyebrow">CORTEBOOK BARBER STUDIO</div><h1 style="font-size:25px;margin:5px 0 0">Loja de produtos</h1><span class="small muted">Produtos selecionados para cuidar do seu visual</span></div>
+   <div><div class="eyebrow">CORTEBOOK</div><h1 style="font-size:25px;margin:5px 0 0">Loja de produtos</h1><span class="small muted">Produtos selecionados para cuidar do seu visual</span></div>
    <button class="btn secondary" id="backFromStore" type="button">← Voltar</button>
   </div>
  </section>
  <section class="section wrap" id="publicStore">
-  <div class="sectionhead"><div><h2>Loja CorteBook Barber Studio</h2><span class="small muted">Produtos selecionados para cuidar do seu visual</span></div><span class="eyebrow">LOJA</span></div>
+  <div class="sectionhead"><div><h2>Loja CorteBook</h2><span class="small muted">Produtos selecionados para cuidar do seu visual</span></div><span class="eyebrow">LOJA</span></div>
   <div id="publicProductGrid" class="grid grid2"></div>
   <div class="panel" style="padding:16px;margin-top:14px">
    <div class="sectionhead"><h2>Meu pedido</h2><span class="small muted" id="storeCartCount">0 itens</span></div>
@@ -993,7 +993,7 @@ function normalizeState(){
 
  state.hours=Object.assign({open:'09:00',close:'19:00',days:[1,2,3,4,5,6]},state.hours||{});
  state.branding=Object.assign({color:'#d4af37',logo:''},state.branding||{});
- state.siteContent=Object.assign({siteName:'CORTEBOOK BARBER STUDIO',eyebrow:'BARBEARIA · DESDE 1999',headline:'CORTEBOOK BARBER STUDIO',description:'',buttonText:'AGENDAR MEU HORÁRIO',announcement:'',accentColor:state.branding.color},state.siteContent||{});
+ state.siteContent=Object.assign({siteName:'CORTEBOOK',eyebrow:'BARBEARIA · DESDE 1999',headline:'CORTEBOOK',description:'',buttonText:'AGENDAR MEU HORÁRIO',announcement:'',accentColor:state.branding.color},state.siteContent||{});
  state.siteDraft=Object.assign({},state.siteContent,state.siteDraft||{});
  state.clients.forEach(c=>{if(!Number.isInteger(c.loyaltyStamps))c.loyaltyStamps=0});
  state.blocks=state.blocks.map(b=>({...b,barberId:b.barberId||'all',duration:Math.max(15,Number(b.duration)||30)}));
@@ -1032,7 +1032,7 @@ let horariosFuncionamento=structuredCloneSafe(DEFAULT_WEEKLY_HOURS);
 const blankState=()=>({services:structuredCloneSafe(DEFAULT_SERVICES),barbers:structuredCloneSafe(DEFAULT_BARBERS),appointments:[],clients:[],reviews:[],gallery:[],orders:[],transactions:[],payables:[],cashClosings:[],products:[],blocks:[],hours:{open:'09:00',close:'19:00',days:[1,2,3,4,5,6]},weeklySchedule:structuredCloneSafe(DEFAULT_WEEKLY_HOURS),settings:{whatsapp:'82987075016',pixKey:'dadosupport@gmail.com',instagram:'',address:'Maceió - AL',notice:''},branding:{color:'#d4af37',logo:''},plans:[],subscriptions:[]});
 function structuredCloneSafe(v){return JSON.parse(JSON.stringify(v))}
 let state;
-try{state=Object.assign(blankState(),JSON.parse(localStorage.getItem('barberOnStudioPublicCache')||'{}'));state.settings=Object.assign(blankState().settings,state.settings||{});if(!state.settings.pixKey)state.settings.pixKey='dadosupport@gmail.com';state.hours=Object.assign(blankState().hours,state.hours||{});state.branding=Object.assign(blankState().branding,state.branding||{});state.siteContent=Object.assign({siteName:'CORTEBOOK BARBER STUDIO',eyebrow:'BARBEARIA · DESDE 1999',headline:'CORTEBOOK BARBER STUDIO',description:'Tradição, cuidado e excelência em cada detalhe. Escolha seu serviço, profissional e horário.',buttonText:'AGENDAR MEU HORÁRIO',announcement:'',accentColor:state.branding.color||'#d4af37'},state.siteContent||{});state.siteDraft=Object.assign({},state.siteContent,state.siteDraft||{})}catch{state=blankState()}
+try{state=Object.assign(blankState(),JSON.parse(localStorage.getItem('barberOnStudioPublicCache')||'{}'));state.settings=Object.assign(blankState().settings,state.settings||{});if(!state.settings.pixKey)state.settings.pixKey='dadosupport@gmail.com';state.hours=Object.assign(blankState().hours,state.hours||{});state.branding=Object.assign(blankState().branding,state.branding||{});state.siteContent=Object.assign({siteName:'CORTEBOOK',eyebrow:'BARBEARIA · DESDE 1999',headline:'CORTEBOOK',description:'Tradição, cuidado e excelência em cada detalhe. Escolha seu serviço, profissional e horário.',buttonText:'AGENDAR MEU HORÁRIO',announcement:'',accentColor:state.branding.color||'#d4af37'},state.siteContent||{});state.siteDraft=Object.assign({},state.siteContent,state.siteDraft||{})}catch{state=blankState()}
 try{localStorage.removeItem('barberOnStudioData');localStorage.removeItem('barberOnStudioAdminPassword');localStorage.removeItem('barberOnStudioClientSession');}catch{}
 // Preserva os preços editados no navegador e usa o catálogo padrão para novos serviços.
 const savedServiceList = Array.isArray(state.services) ? state.services : [];
@@ -1210,7 +1210,7 @@ document.addEventListener('click',async e=>{
  if(!data||!data.length){del.disabled=false;toast('Nenhuma avaliação foi excluída. Verifique a permissão de DELETE (RLS) na tabela de avaliações.');return;}
  state.reviews=state.reviews.filter(r=>r.id!==id);renderReviews();toast('Avaliação excluída.');
 });
-function applyBranding(){const c=state.branding?.color||'#d4af37';const shade=(hex,amt)=>{const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,(n>>16)+amt)),g=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')};document.documentElement.style.setProperty('--blue',c);document.documentElement.style.setProperty('--blue2',shade(c,-28));document.documentElement.style.setProperty('--accent-light',shade(c,55));document.documentElement.style.setProperty('--accent-text',shade(c,85));$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-imperium.png" alt="CorteBook Barber Studio" onerror="this.outerHTML='IB'">`});}
+function applyBranding(){const c=state.branding?.color||'#d4af37';const shade=(hex,amt)=>{const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,(n>>16)+amt)),g=Math.max(0,Math.min(255,((n>>8)&255)+amt)),b=Math.max(0,Math.min(255,(n&255)+amt));return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')};document.documentElement.style.setProperty('--blue',c);document.documentElement.style.setProperty('--blue2',shade(c,-28));document.documentElement.style.setProperty('--accent-light',shade(c,55));document.documentElement.style.setProperty('--accent-text',shade(c,85));$$('.brandmark').forEach(el=>{el.innerHTML=state.branding.logo?`<img src="${state.branding.logo}" alt="Logomarca">`:`<img src="logo-imperium.png" alt="CorteBook" onerror="this.outerHTML='IB'">`});}
 
 function whatsappDigits(){return String(state.settings.whatsapp||'').replace(/\D/g,'')}
 function renderPublicSettings(){
@@ -1379,7 +1379,7 @@ $s('#bookingForm').onsubmit=async e=>{
  const appointment={id:bookingResult.id,name,phone,serviceId:services[0].id,serviceIds:services.map(svc=>svc.id),clientId:authClient?.id||null,clientUserId:authClient?.userId||null,service:serviceNames,barberId:barber.id,barber:barber.name,date:requestedDate,time:requestedTime,price:total,duration,prepaidPix:prepaid,paymentStatus:prepaid?'Aguardando confirmação':'Pendente',status:'Pendente',createdAt:new Date().toISOString()};
  state.appointments.push(appointment);notifyBarberOnThisDevice(appointment);if(authClient){window._clientApptsFor=null;renderClientArea();}
  const paymentTag=prepaid?'%0A%E2%9A%A0%EF%B8%8F%20%5BPAGAMENTO%20ANTECIPADO%20REALIZADO%20VIA%20PIX%5D':'';
- const msg=`Olá! Gostaria de confirmar meu agendamento no CorteBook Barber Studio.%0ACliente: ${encodeURIComponent(name)}%0AServiços: ${encodeURIComponent(serviceNames)}%0ADuração total: ${duration} min%0ABarbeiro: ${encodeURIComponent(barber.name)}%0AData: ${appointment.date.split('-').reverse().join('/')}%0AHorário: ${appointment.time}%0AValor: ${encodeURIComponent(money(total))}${paymentTag}`;
+ const msg=`Olá! Gostaria de confirmar meu agendamento no CorteBook.%0ACliente: ${encodeURIComponent(name)}%0AServiços: ${encodeURIComponent(serviceNames)}%0ADuração total: ${duration} min%0ABarbeiro: ${encodeURIComponent(barber.name)}%0AData: ${appointment.date.split('-').reverse().join('/')}%0AHorário: ${appointment.time}%0AValor: ${encodeURIComponent(money(total))}${paymentTag}`;
  closeModal('bookingModal');window.open(`https://wa.me/55${whatsappDigits().replace(/^55/,'')}?text=${msg}`,'_blank');toast('Pedido registrado! Finalize a confirmação no WhatsApp.');
 };
 function showPublicHome(){
@@ -1541,7 +1541,7 @@ function radarList(){
 }
 function radarMessage(c){
  const first=String(c.name||'').trim().split(/\s+/)[0]||'cliente';
- return `Olá, ${first}! Aqui é da CorteBook Barber Studio ✂️\n\nJá faz ${c.days} dias desde o seu último atendimento (${c.service||'seu corte'}) e sentimos a sua falta. Que tal renovar o visual? Reservamos um horário especial para você, com toda a Experiência Black CorteBook.\n\nÉ só responder esta mensagem que garantimos o seu horário. Será um prazer te receber!`;
+ return `Olá, ${first}! Aqui é da CorteBook ✂️\n\nJá faz ${c.days} dias desde o seu último atendimento (${c.service||'seu corte'}) e sentimos a sua falta. Que tal renovar o visual? Reservamos um horário especial para você, com toda a Experiência Black CorteBook.\n\nÉ só responder esta mensagem que garantimos o seu horário. Será um prazer te receber!`;
 }
 function renderRadar(){
  const list=radarList();
@@ -1599,7 +1599,7 @@ function renderSiteEditor(){
 function sitePreviewDocument(d){
  const escHtml=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const color=/^#[0-9a-f]{6}$/i.test(d.accentColor||'')?d.accentColor:'#d4af37';
- return `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#0a0a0a;color:#fcfbf8;font:15px Arial,sans-serif}.top{padding:15px 7%;border-bottom:1px solid #27272a;font-weight:800;letter-spacing:1px}.hero{padding:54px 7%;background:radial-gradient(ellipse at 80% 15%,${color}44,transparent 50%),linear-gradient(135deg,#141414,#0a0a0a);min-height:270px}.eyebrow{color:${color};font-size:11px;letter-spacing:2px;font-weight:bold}.hero h1{font-size:clamp(30px,6vw,52px);margin:14px 0;max-width:760px}.hero p{color:#d4d4d8;max-width:650px;line-height:1.6}.btn{display:inline-block;background:${color};color:#fff;border:0;border-radius:9px;padding:13px 18px;font-weight:bold;margin-top:8px}.notice{margin:18px 7%;padding:13px;border:1px solid ${color}66;border-radius:10px;color:#e4e4e7}.sections{padding:20px 7%;color:#a1a1aa}.foot{padding:20px 7%;border-top:1px solid #27272a;color:#71717a;font-size:12px}</style><div class="top">${escHtml(d.siteName||'CORTEBOOK BARBER STUDIO')}</div><section class="hero"><div class="eyebrow">${escHtml(d.eyebrow||'')}</div><h1>${escHtml(d.headline||'')}</h1><p>${escHtml(d.description||'')}</p><span class="btn">${escHtml(d.buttonText||'AGENDAR')}</span></section>${d.announcement?`<div class="notice">${escHtml(d.announcement)}</div>`:''}<div class="sections">SERVIÇOS · PROFISSIONAIS · AGENDAMENTO · ÁREA DO CLIENTE</div><div class="foot">Prévia demonstrativa do site · CorteBook Barber Studio</div></html>`;
+ return `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#0a0a0a;color:#fcfbf8;font:15px Arial,sans-serif}.top{padding:15px 7%;border-bottom:1px solid #27272a;font-weight:800;letter-spacing:1px}.hero{padding:54px 7%;background:radial-gradient(ellipse at 80% 15%,${color}44,transparent 50%),linear-gradient(135deg,#141414,#0a0a0a);min-height:270px}.eyebrow{color:${color};font-size:11px;letter-spacing:2px;font-weight:bold}.hero h1{font-size:clamp(30px,6vw,52px);margin:14px 0;max-width:760px}.hero p{color:#d4d4d8;max-width:650px;line-height:1.6}.btn{display:inline-block;background:${color};color:#fff;border:0;border-radius:9px;padding:13px 18px;font-weight:bold;margin-top:8px}.notice{margin:18px 7%;padding:13px;border:1px solid ${color}66;border-radius:10px;color:#e4e4e7}.sections{padding:20px 7%;color:#a1a1aa}.foot{padding:20px 7%;border-top:1px solid #27272a;color:#71717a;font-size:12px}</style><div class="top">${escHtml(d.siteName||'CORTEBOOK')}</div><section class="hero"><div class="eyebrow">${escHtml(d.eyebrow||'')}</div><h1>${escHtml(d.headline||'')}</h1><p>${escHtml(d.description||'')}</p><span class="btn">${escHtml(d.buttonText||'AGENDAR')}</span></section>${d.announcement?`<div class="notice">${escHtml(d.announcement)}</div>`:''}<div class="sections">SERVIÇOS · PROFISSIONAIS · AGENDAMENTO · ÁREA DO CLIENTE</div><div class="foot">Prévia demonstrativa do site · CorteBook</div></html>`;
 }
 function syncSiteEditorPreview(){
  const form=document.getElementById('siteEditorForm'),frame=document.getElementById('siteEditorPreview');if(!form||!frame)return;
@@ -2165,7 +2165,7 @@ $s('#storeCheckout').addEventListener('click',()=>{
  state.storeOrders.push(order);
  try{save();}catch(err){state.storeOrders.pop();toast('Não foi possível salvar o pedido neste navegador.');return;}
  const lines=items.map(i=>`• ${i.name} x${i.qty} — ${money(i.price*i.qty)}`).join('\n');
- const msg=`Olá! Quero fazer o pedido ${code} na CorteBook Barber Studio.\n\n${lines}\n\nTotal: ${money(total)}\nCliente: ${name}\nWhatsApp: ${phone}\nRetirada na barbearia. Pagamento a combinar.`;
+ const msg=`Olá! Quero fazer o pedido ${code} na CorteBook.\n\n${lines}\n\nTotal: ${money(total)}\nCliente: ${name}\nWhatsApp: ${phone}\nRetirada na barbearia. Pagamento a combinar.`;
  const number=String(state.settings.whatsapp||WHATSAPP_NUMBER).replace(/\D/g,'');
  storeCart=[];renderPublicStore();toast('Pedido registrado! Abrindo WhatsApp para confirmar.');
  window.open(`https://wa.me/${number}?text=${encodeURIComponent(msg)}`,'_blank');
@@ -2695,7 +2695,7 @@ renderPublicServices();renderPublicStore();renderPublicSettings();renderPublicBu
   const iconUrl = 'data:image/svg+xml;base64,' + btoa(svgIcon);
 
   const manifest = {
-    name: "CorteBook Barber Studio",
+    name: "CorteBook",
     short_name: "CorteBook",
     start_url: "./",
     display: "standalone",
