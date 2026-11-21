@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "br.com.cortebook.twa",
+        "sha256_cert_fingerprints": ["19:FC:44:04:D6:D5:38:94:F2:45:65:43:A7:F2:7D:8D:94:07:BE:50:FA:CF:CC:D1:16:D1:E8:D6:4A:3B:EC:C0"]
+      }
+    }]
