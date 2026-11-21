@@ -1613,7 +1613,8 @@ function renderSiteEditor(){
    <div class="field"><label>Descrição da barbearia</label><textarea name="description" maxlength="240" rows="3">${safe(d.description)}</textarea></div>
    <div class="formgrid">
     <div class="field"><label>Texto do botão de agendamento</label><input name="buttonText" maxlength="35" value="${safe(d.buttonText)}"></div>
-    <div class="field"><label>Cor de destaque</label><input name="accentColor" type="color" value="${safe(d.accentColor||'#d4af37')}" style="width:100%;height:46px"></div>
+    <div class="field"><label>Cor de destaque</label><input name="accentColor" type="color" value="${safe(d.accentColor||'#d4af37')}" style="width:100%;height:46px"><button type="button" class="btn secondary" style="margin-top:8px;width:100%;border-color:#d4af37!important;color:#f3d06b!important;background:#141414!important" onclick="const inp=this.previousElementSibling;inp.value='#d4af37';inp.dispatchEvent(new Event('input',{bubbles:true}));inp.dispatchEvent(new Event('change',{bubbles:true}));">✨ Usar Dourado CorteBook (#D4AF37)</button></div>
+
    </div>
    <div class="field"><label>Comunicado / promoção (opcional)</label><textarea name="announcement" maxlength="180" rows="2" placeholder="Ex.: Promoção válida nesta semana...">${safe(d.announcement)}</textarea></div>
    <div class="toolbar" style="flex-wrap:wrap">
