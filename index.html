@@ -3627,6 +3627,7 @@ setInterval(()=>{
     <div class="inline-actions">
      <button class="btn" type="button" onclick="window.setTenantStatus('${t.id}', 'active')">Liberar +30 dias</button>
      <button class="btn danger" type="button" onclick="window.setTenantStatus('${t.id}', 'blocked')">Bloquear</button>
+     ${t.id !== '1081308f-588b-4cd8-a750-99a038fad2b6' ? `<button class="btn ghost" type="button" style="border-color:#ef4444!important;color:#fca5a5!important" onclick="window.deleteTenantSafe('${t.id}', '${String(t.name || '').replace(/'/g, '')}')">🗑️ Excluir</button>` : ''}
     </div>
    </div>`;
   }).join('') || '<div class="empty">Nenhuma barbearia cadastrada ainda.</div>';
@@ -3640,6 +3641,23 @@ setInterval(()=>{
   if (error) alert('Erro: ' + error.message);
   else { toast(status === 'active' ? 'Plano mensal (30 dias) e Editor VIP liberados!' : 'Barbearia bloqueada.'); loadSuperAdmTenants(); }
  };
+
+ window.deleteTenantSafe = async (tenantId, shopName) => {
+  if (!tenantId || tenantId === '1081308f-588b-4cd8-a750-99a038fad2b6') {
+   alert('Proteção ativa: a barbearia principal não pode ser excluída.');
+   return;
+  }
+  if (!confirm(`Tem certeza que deseja EXCLUIR permanentemente a barbearia "${shopName}"?\n\nIsso apagará o site e os dados dessa barbearia de teste.`)) return;
+  const db = window.supabaseDataClient || window.supabaseClient;
+  await db.from('app_settings').delete().eq('tenant_id', tenantId);
+  await db.from('barber_data').delete().eq('tenant_id', tenantId);
+  await db.from('appointments').delete().eq('tenant_id', tenantId);
+  await db.from('barbers').delete().eq('tenant_id', tenantId);
+  const { error } = await db.from('tenants').delete().eq('id', tenantId);
+  if (error) alert('Erro ao excluir: ' + error.message);
+  else { toast(`Barbearia "${shopName}" excluída com sucesso!`); loadSuperAdmTenants(); }
+ };
+
 
  setTimeout(initCorteBookRouter, 400);
 })();
