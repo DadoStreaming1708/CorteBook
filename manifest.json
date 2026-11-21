@@ -1,22 +1,32 @@
 {
   "name": "CorteBook — Agenda e Gestão Para Barbearias",
   "short_name": "CorteBook",
+  "description": "Agenda inteligente, clube VIP e sistema completo de gestão para barbearias.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "icons": [
     {
-      "src": "app-icon.png",
+      "src": "/app-icon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "app-icon.png",
+      "src": "/app-icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
+
