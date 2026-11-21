@@ -1109,7 +1109,7 @@ state.weeklySchedule=structuredCloneSafe(horariosFuncionamento);
 if (!Array.isArray(state.gallery)) state.gallery = [];
 if (!Array.isArray(state.clients)) state.clients = [];
 state.clients.forEach(client => { if (!Number.isInteger(client.loyaltyStamps)) client.loyaltyStamps = 0; });
-let logged=false,currentRole='owner',currentBarberId=null,currentTab='agenda',booking={step:1,selectedServiceIds:[]};
+var logged=false,currentRole='owner',currentBarberId=null,currentTab='agenda',booking={step:1,selectedServiceIds:[]};
 let storeCart=[];
 if(!Array.isArray(state.transactions))state.transactions=[];if(!Array.isArray(state.payables))state.payables=[];if(!Array.isArray(state.cashClosings))state.cashClosings=[];if(!Array.isArray(state.products))state.products=[];
 if(!Array.isArray(state.storeOrders))state.storeOrders=[];
