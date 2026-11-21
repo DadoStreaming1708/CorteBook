@@ -12,6 +12,8 @@
 <meta property="og:description" content="Crie o site exclusivo da sua barbearia com agendamento 24h, cobrança no cartão e personalização total de cores, logo e fotos.">
 <meta property="og:image" content="https://cortebook.com.br/app-icon.png>
 
+<style id="noFlash">#cortebookLanding.hidden{display:none!important}html.cb-boot body{opacity:0!important}</style>
+<script>document.documentElement.classList.add('cb-boot');window.addEventListener('DOMContentLoaded',()=>setTimeout(()=>document.documentElement.classList.remove('cb-boot'),120));</script>
 
 
 <meta property="og:url" content="https://cortebook.com.br">
@@ -199,7 +201,8 @@ body.staff-mode #metrics { display: none !important; }
 :root{--bg:#0A0A0A;--panel:#141414;--panel2:#1a1a1a;--line:#2c2718;--white:#fbf8ee;--muted:#b4ad98;
   --blue:#D4AF37;--blue2:#B8860B;--accent-light:#F3D06B;--accent-text:#F3D06B;
 
- --gold-gradient:linear-gradient(135deg,#F3D06B 0%,#D4AF37 48%,#B8860B 100%)}
+ --gold-gradient:linear-gradient(135deg,var(--blue) 0%,var(--blue) 100%)}
+
 body{background:#0A0A0A}
 .topbar{background:#0A0A0Af2;border-bottom:1px solid #D4AF3733}
 .brandmark{width:50px!important;height:50px!important;min-width:50px!important;padding:0!important;background:#0A0A0A!important;border:2px solid var(--blue)!important;color:var(--blue)!important;box-shadow:0 0 18px #0008!important;font-family:Georgia,serif;font-weight:900}
