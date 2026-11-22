@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
-  <title>CorteBook — Agenda Inteligente e Personalizável para Barbearias</title>
-  <meta name="description" content="Crie o site exclusivo da sua barbearia com agendamento 24h, cobrança no cartão e personalização total de cores, logo e fotos.">
+    <title>CorteBook — Sistema Oficial de Agendamento</title>
+  <meta name="description" content="Agendamento online 24h, cartão fidelidade VIP e gestão completa para barbearias.">
   <link rel="icon" type="image/png" href="logo-cortebook.png">
   <link rel="apple-touch-icon" href="logo-cortebook.png">
-<meta property="og:title" content="CorteBook — Agenda Inteligente e Personalizável para Barbearias">
-<meta property="og:description" content="Crie o site exclusivo da sua barbearia com agendamento 24h, cobrança no cartão e personalização total de cores, logo e fotos.">
+<meta property="og:title" content="CorteBook — Agendamento Online">
+<meta property="og:description" content="Agende seu horário em segundos. Plataforma oficial para barbearias.">
+
 <meta property="og:image" content="https://cortebook.com.br/app-icon.png">
 
 
@@ -696,15 +697,32 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
 
 
 
+.topbar{top:43px!important}
 </style>
   <script>(function(){try{const s=new URLSearchParams(location.search).get('b')||'default';const bg=localStorage.getItem('cb_hero_bg_'+s);if(bg)document.documentElement.style.setProperty('--hero-bg','url('+bg+')');}catch(e){}})();</script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+<div id="cbBrandHeader" style="position:sticky;top:0;z-index:9000;height:43px;background:linear-gradient(90deg,#14120c 0%,#1c1910 50%,#14120c 100%);border-bottom:1px solid rgba(212,175,55,0.45);padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;backdrop-filter:blur(12px)">
+  <a href="https://cortebook.com.br" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;text-decoration:none">
+    <img src="logo-cortebook.png" alt="CorteBook" style="width:25px;height:25px;border-radius:50%;border:1.5px solid #d4af37;object-fit:cover" onerror="this.style.display='none'">
+    <div style="display:flex;align-items:center;gap:5px">
+      <strong style="color:#fcfbf8;font-size:14px;font-weight:900;letter-spacing:.02em">CorteBook</strong>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-label="Verificado">
+        <path d="M12 2L14.8 4.2L18.4 3.8L19.6 7.2L22.6 9.2L21.6 12.6L22.6 16L19.6 18L18.4 21.4L14.8 21L12 23.2L9.2 21L5.6 21.4L4.4 18L1.4 16L2.4 12.6L1.4 9.2L4.4 7.2L5.6 3.8L9.2 4.2L12 2Z" fill="#d4af37"/>
+        <path d="M9 12.5L11 14.5L15.5 10" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </a>
+  <a href="https://cortebook.com.br" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#f3d06b,#d4af37);color:#0a0a0a;font-size:11px;font-weight:900;padding:5px 11px;border-radius:99px;text-decoration:none;box-shadow:0 4px 12px rgba(212,175,55,0.25);white-space:nowrap">
+    💈 Ter no meu negócio
+  </a>
+</div>
 <header class="topbar">
+
  <div class="wrap topinner">
   <button class="iconbtn" id="menuBtn" aria-label="Abrir menu">☰</button>
     <div class="brand"><div class="brandmark"><img src="logo-cortebook.png" alt="CorteBook" onerror="this.outerHTML='IB'"></div><div><div class="brandname">CORTEBOOK</div><div class="brandtag"></div></div></div>
@@ -883,7 +901,17 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
    </div>
   </div>
  </section>
-  <footer class="footer"><div id="footerContact" style="margin-bottom:8px"></div>Tecnologia <a href="https://cortebook.com.br" style="color:var(--blue);font-weight:700;text-decoration:none">CorteBook</a> · Tenha um site assim na sua barbearia</footer>
+<footer class="footer">
+  <div id="footerContact" style="margin-bottom:16px"></div>
+  <div style="max-width:440px;margin:0 auto;padding:16px;background:linear-gradient(145deg,#18150e,#111114);border:1px solid rgba(212,175,55,0.4);border-radius:16px;text-align:center">
+    <div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:6px">
+      <strong style="color:#fcfbf8;font-size:15px">CorteBook</strong>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.8 4.2L18.4 3.8L19.6 7.2L22.6 9.2L21.6 12.6L22.6 16L19.6 18L18.4 21.4L14.8 21L12 23.2L9.2 21L5.6 21.4L4.4 18L1.4 16L2.4 12.6L1.4 9.2L4.4 7.2L5.6 3.8L9.2 4.2L12 2Z" fill="#d4af37"/><path d="M9 12.5L11 14.5L15.5 10" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <p style="margin:0 0 12px;font-size:12px;color:#b4ad98;line-height:1.45">Tem uma barbearia? Automatize seus agendamentos, fidelize clientes e tenha seu site exclusivo em minutos.</p>
+    <a href="https://cortebook.com.br" target="_blank" rel="noopener" style="display:inline-block;padding:9px 18px;background:linear-gradient(135deg,#f3d06b,#d4af37);color:#0a0a0a;font-weight:900;font-size:12px;border-radius:99px;text-decoration:none">Criar minha barbearia (15 dias grátis) →</a>
+  </div>
+</footer>
 
 </main>
 
@@ -908,7 +936,8 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
    <button class="btn full" id="storeCheckout" type="button">Enviar pedido pelo WhatsApp</button>
   </div>
  </section>
- <footer class="footer">All Rights Reserved 2026 © DadoStreaming</footer>
+ <footer class="footer">Tecnologia Oficial CorteBook ✔ · cortebook.com.br</footer>
+
 </main>
 
 
