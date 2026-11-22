@@ -705,7 +705,7 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
 <link rel="preconnect" href="https://gstatic.com" crossorigin>
 <link href="https://googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<>
 <div id="cbBrandHeader" style="position:sticky;top:0;z-index:9000;height:43px;background:linear-gradient(90deg,#14120c 0%,#1c1910 50%,#14120c 100%);border-bottom:1px solid rgba(212,175,55,0.45);padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;backdrop-filter:blur(12px)">
   <a href="https://cortebook.com.br" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;text-decoration:none">
     <img src="logo-cortebook.png" alt="CorteBook" style="width:25px;height:25px;border-radius:50%;border:1.5px solid #d4af37;object-fit:cover" onerror="this.style.display='none'">
@@ -5521,7 +5521,171 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   <style>#cbWppFloat{position:fixed;right:16px;bottom:86px;z-index:40;width:50px;height:50px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(37,211,102,.4);text-decoration:none}#cbWppFloat:active{transform:scale(.93)}</style>
 <a id="cbWppFloat" href="https://wa.me/5582987075016" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="26" height="26" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 2.67c-7.36 0-13.33 5.97-13.33 13.33 0 2.35.61 4.64 1.78 6.67L2.6 29.4l6.91-1.81a13.28 13.28 0 0 0 6.53 1.71h.01c7.36 0 13.33-5.97 13.33-13.33 0-3.56-1.39-6.91-3.91-9.43a13.24 13.24 0 0 0-9.43-3.87zm0 24.4h-.01a11.05 11.05 0 0 1-5.63-1.54l-.4-.24-4.1 1.07 1.09-4-.26-.41a11.03 11.03 0 0 1-1.69-5.88c0-6.1 4.96-11.06 11.07-11.06 2.95 0 5.73 1.15 7.82 3.24a10.99 10.99 0 0 1 3.24 7.82c0 6.1-4.97 11.06-11.13 11.06zm6.07-8.28c-.33-.17-1.97-.97-2.27-1.08-.31-.11-.53-.17-.75.17-.22.33-.86 1.08-1.05 1.3-.19.22-.39.25-.72.08-.33-.17-1.4-.52-2.67-1.65-.99-.88-1.65-1.97-1.85-2.3-.19-.33-.02-.51.15-.68.15-.15.33-.39.5-.58.17-.19.22-.33.33-.55.11-.22.06-.42-.03-.58-.08-.17-.75-1.81-1.03-2.48-.27-.65-.55-.56-.75-.57h-.64c-.22 0-.58.08-.89.42-.31.33-1.17 1.14-1.17 2.78s1.2 3.22 1.36 3.45c.17.22 2.35 3.59 5.7 5.03.8.34 1.42.55 1.9.7.8.25 1.53.22 2.1.13.64-.1 1.97-.81 2.25-1.58.28-.78.28-1.44.19-1.58-.08-.14-.3-.22-.64-.39z"/></svg></a>
 
-</body>
+<!-- MÓDULO CORTEBOOK PRO TOOLS (4 FERRAMENTAS TUDO-EM-UM) -->
+<script>
+(function(){
+  function getShopInfo(){
+    const name = document.querySelector('.brandname')?.textContent?.trim() || 'Nossa Barbearia';
+    const slug = new URLSearchParams(location.search).get('b') || '';
+    const url = slug ? `${location.origin}${location.pathname}?b=${encodeURIComponent(slug)}` : location.href.split('#')[0];
+    return { name, url };
+  }
+
+  // 1. MODAL DIVULGAR MEU SITE (LINK DA BIO + WHATSAPP)
+  window.cbOpenShareHub = function(){
+    const { name, url } = getShopInfo();
+    const msgZap = `💈 *Novidade na ${name}!* ✂️\n\nAgora você pode agendar seu horário online em 15 segundos, escolher seu barbeiro e acompanhar seu Cartão Fidelidade VIP!\n\n👉 *Agende direto pelo link:*\n${url}`;
+    const bioText = `✂️ Agende seu horário online em 15s 👇\n${url}`;
+    let m = document.getElementById('cbShareModal');
+    if(!m){
+      m = document.createElement('div');
+      m.id = 'cbShareModal';
+      m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)';
+      document.body.appendChild(m);
+    }
+    m.innerHTML = `
+      <div style="width:100%;max-width:420px;background:#141414;border:1px solid rgba(212,175,55,.45);border-radius:18px;padding:20px;color:#fcfbf8;font-family:Inter,sans-serif">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h3 style="margin:0;font-size:17px">🔗 Divulgar ${name}</h3>
+          <button onclick="document.getElementById('cbShareModal').remove()" style="background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer">✕</button>
+        </div>
+        <p style="font-size:12px;color:#b4ad98;margin:0 0 12px">Copie o link pronto para a bio do Instagram ou avise seus clientes no WhatsApp:</p>
+        <div style="background:#0a0a0a;border:1px solid #27272f;padding:10px;border-radius:10px;font-size:12px;color:#f3d06b;word-break:break-all;margin-bottom:10px">${url}</div>
+        <button onclick="navigator.clipboard.writeText('${url}');if(typeof toast==='function')toast('Link copiado! Cole na bio do Instagram.');" style="width:100%;padding:11px;margin-bottom:8px;background:linear-gradient(135deg,#f3d06b,#d4af37);color:#0a0a0a;font-weight:900;border:none;border-radius:10px;cursor:pointer">📋 Copiar Link da Barbearia</button>
+        <button onclick="navigator.clipboard.writeText(\`${bioText}\`);if(typeof toast==='function')toast('Texto da Bio copiado!');" style="width:100%;padding:10px;margin-bottom:8px;background:#1f1f24;color:#fcfbf8;font-weight:700;border:1px solid #32323c;border-radius:10px;cursor:pointer">✨ Copiar Frase Pronta para Bio do Insta</button>
+        <a href="https://wa.me{encodeURIComponent(msgZap)}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:11px;background:#25D366;color:#0a0a0a;font-weight:900;border-radius:10px;text-decoration:none">📲 Enviar Aviso no WhatsApp / Status</a>
+      </div>`;
+  };
+
+  // 2. GERADOR DE CARD/STORY DE HORÁRIOS LIVRES HOJE
+  window.cbGenerateFreeSlotsStory = function(){
+    const { name, url } = getShopInfo();
+    const today = new Date().toISOString().slice(0,10);
+    const booked = ((typeof state !== 'undefined' && state.appointments) ? state.appointments : [])
+      .filter(a => a.date === today && a.status !== 'Cancelado')
+      .map(a => String(a.time || '').slice(0,5));
+    const defaultSlots = ['09:00','10:00','11:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+    const free = defaultSlots.filter(t => !booked.includes(t));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080; canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+
+    // Fundo escuro luxuoso
+    const grad = ctx.createLinearGradient(0,0,0,1920);
+    grad.addColorStop(0,'#0a0a0a'); grad.addColorStop(0.5,'#17140d'); grad.addColorStop(1,'#0a0a0a');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,1080,1920);
+
+    // Moldura dourada
+    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 8;
+    ctx.strokeRect(55,55,970,1810);
+
+    ctx.fillStyle = '#d4af37'; ctx.font = 'bold 42px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('AGENDA ABERTA HOJE', 540, 220);
+
+    ctx.fillStyle = '#ffffff'; ctx.font = '900 74px sans-serif';
+    ctx.fillText(name.toUpperCase().slice(0,22), 540, 320);
+
+    ctx.fillStyle = '#b4ad98'; ctx.font = '38px sans-serif';
+    ctx.fillText('Horários disponíveis para dar aquele talento:', 540, 420);
+
+    // Desenha pílulas com horários livres
+    const listToShow = free.length ? free.slice(0,8) : ['Consulte encaixe no link!'];
+    listToShow.forEach((slot, i) => {
+      const y = 520 + (i * 125);
+      ctx.fillStyle = 'rgba(212,175,55,0.16)';
+      ctx.fillRect(220, y, 640, 95);
+      ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 3;
+      ctx.strokeRect(220, y, 640, 95);
+      ctx.fillStyle = '#f3d06b'; ctx.font = '900 48px sans-serif';
+      ctx.fillText('✂  ' + slot, 540, y + 64);
+    });
+
+    ctx.fillStyle = '#ffffff'; ctx.font = 'bold 40px sans-serif';
+    ctx.fillText('Reserve em 15 segundos pelo link da bio!', 540, 1660);
+    ctx.fillStyle = '#d4af37'; ctx.font = '30px sans-serif';
+    ctx.fillText(url.replace(/^https?:\/\//,'').slice(0,48), 540, 1730);
+    ctx.fillStyle = '#71717a'; ctx.font = '26px sans-serif';
+    ctx.fillText('Sistema Oficial CorteBook ✔', 540, 1810);
+
+    const dataUrl = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = `horarios-livres-${today}.png`;
+    link.href = dataUrl;
+    link.click();
+    if(typeof toast === 'function') toast('Imagem Story gerada! Veja na pasta Downloads.');
+  };
+
+  // INJETOR AUTOMÁTICO NAS ABAS DO PAINEL ADMIN
+  function injectProTools(){
+    const admin = document.getElementById('adminContent');
+    if(!admin) return;
+    const { name, url } = getShopInfo();
+
+    // Barra superior de Divulgação no Painel Admin
+    const head = document.querySelector('#adminView .sectionhead, #adminHeaderActions') || admin.parentElement;
+    if(head && !document.getElementById('cbAdminShareBtn')){
+      const bar = document.createElement('div');
+      bar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px';
+      bar.innerHTML = `
+        <button id="cbAdminShareBtn" type="button" onclick="cbOpenShareHub()" class="btn" style="background:linear-gradient(135deg,#f3d06b,#d4af37);color:#0a0a0a;font-weight:900">🔗 Divulgar meu Site</button>
+        <button type="button" onclick="cbGenerateFreeSlotsStory()" class="btn secondary">📸 Card Story: Horários Livres Hoje</button>
+      `;
+      admin.parentElement.insertBefore(bar, admin);
+    }
+
+    // 3. BOTÃO "CHAMAR DE VOLTA" NO RADAR DE RETORNO
+    if(typeof currentTab !== 'undefined' && currentTab === 'radar'){
+      admin.querySelectorAll('.card, .listrow, .appointment').forEach(row => {
+        if(row.querySelector('.cb-radar-zap')) return;
+        const txt = row.textContent || '';
+        const phoneMatch = txt.match(/\(?\d{2}\)?\s*\d{4,5}-?\d{4}/);
+        const clientName = row.querySelector('b, strong')?.textContent?.trim() || 'Cliente';
+        if(phoneMatch){
+          const digits = phoneMatch[0].replace(/\D/g,'');
+          const full = digits.startsWith('55') ? digits : '55' + digits;
+          const msg = encodeURIComponent(`Fala ${clientName}, tudo certo? Já faz um tempinho desde o seu último corte aqui na ${name}! Bora dar aquele talento no visual essa semana? Reserva seu horário direto aqui: ${url}`);
+          const a = document.createElement('a');
+          a.className = 'btn cb-radar-zap';
+          a.href = `https://wa.me{full}?text=${msg}`;
+          a.target = '_blank'; a.rel = 'noopener';
+          a.style.cssText = 'background:#25D366;color:#0a0a0a;border-color:#25D366;font-weight:900;text-decoration:none;margin-top:8px;display:inline-block';
+          a.textContent = '🔥 Chamar de Volta (Zap)';
+          row.appendChild(a);
+        }
+      });
+    }
+
+    // 4. CALCULADORA DE TROCO NA ABA COMANDAS
+    if(typeof currentTab !== 'undefined' && currentTab === 'comandas' && !document.getElementById('cbChangeCalc')){
+      const calc = document.createElement('div');
+      calc.id = 'cbChangeCalc';
+      calc.style.cssText = 'background:#141414;border:1px solid rgba(212,175,55,.35);border-radius:14px;padding:12px;margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center';
+      calc.innerHTML = `
+        <strong style="font-size:12px;color:#f3d06b;width:100%">💵 Calculadora Rápida de Troco (Balcão)</strong>
+        <input id="cbCalcTotal" type="number" placeholder="Valor do corte (R$)" style="flex:1;min-width:110px;padding:8px;border-radius:8px;border:1px solid #27272f;background:#0a0a0a;color:#fff">
+        <input id="cbCalcPaid" type="number" placeholder="Recebido (R$)" style="flex:1;min-width:110px;padding:8px;border-radius:8px;border:1px solid #27272f;background:#0a0a0a;color:#fff">
+        <div id="cbCalcRes" style="font-weight:900;font-size:13px;color:#10b981;min-width:120px">Troco: R$ 0,00</div>
+      `;
+      admin.prepend(calc);
+      const upd = () => {
+        const t = parseFloat(document.getElementById('cbCalcTotal').value) || 0;
+        const p = parseFloat(document.getElementById('cbCalcPaid').value) || 0;
+        const diff = p - t;
+        const el = document.getElementById('cbCalcRes');
+        el.textContent = diff >= 0 ? `Troco: R$ ${diff.toFixed(2).replace('.',',')}` : `Falta: R$ ${Math.abs(diff).toFixed(2).replace('.',',')}`;
+        el.style.color = diff >= 0 ? '#10b981' : '#ef4444';
+      };
+      document.getElementById('cbCalcTotal').addEventListener('input', upd);
+      document.getElementById('cbCalcPaid').addEventListener('input', upd);
+    }
+  }
+
+  const obs = new MutationObserver(() => injectProTools());
+  obs.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+
 </html>
 
 
