@@ -3432,29 +3432,7 @@ setInterval(()=>{
     </button>
   </div>
 
-  <div style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #f3d06b; text-transform: uppercase; margin-bottom: 12px;">
-    ✨ Conheça o sistema por dentro ✨
-  </div>
-
-  <!-- Grade 2x2 com imagens inteiras (height: auto, zero cortes) -->
-  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
-      <img src="print1.jpg" alt="Vitrine Exclusiva" style="width: 100%; height: auto; display: block;">
-      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">1. Vitrine Exclusiva</strong><br><span style="color: #a1a1aa;">Sua logo, cores e serviços</span></div>
-    </div>
-    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
-      <img src="print2.jpg" alt="Reserva Rápida" style="width: 100%; height: auto; display: block;">
-      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">2. Reserva Rápida</strong><br><span style="color: #a1a1aa;">Agenda em 15 segundos</span></div>
-    </div>
-    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
-      <img src="print3.jpg" alt="Fidelidade VIP" style="width: 100%; height: auto; display: block;">
-      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">3. Fidelidade & Produtos</strong><br><span style="color: #a1a1aa;">Selos VIP e loja online</span></div>
-    </div>
-    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
-      <img src="print4.jpg" alt="Painel Completo" style="width: 100%; height: auto; display: block;">
-      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">4. Painel Tudo-em-Um</strong><br><span style="color: #a1a1aa;">Zap, Story e Caixa</span></div>
-    </div>
-  </div>
+  
 </div>
 
 <!-- JANELA MODAL DO GUIA COMPLETO DE FUNÇÕES -->
@@ -5744,13 +5722,33 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+<style>
+#cortebookLanding .cb-nav{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  gap:10px!important;padding:12px!important;
+}
+#cortebookLanding .cb-nav > div:last-child{
+  display:grid!important;grid-template-columns:1fr 0.85fr 1.25fr!important;
+  gap:6px!important;width:100%!important;max-width:480px!important;
+}
+#cortebookLanding .cb-nav .btn{
+  padding:10px 6px!important;font-size:12px!important;min-height:38px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  text-align:center!important;line-height:1.15!important;white-space:nowrap!important;
+}
+</style>
 <script>
-window.addEventListener('DOMContentLoaded',()=>{
-  const cta=document.querySelector('#cortebookLanding .cb-cta-group');
-  const gal=document.querySelector('#cortebookLanding .cb-hero')?.firstElementChild;
-  if(cta && gal && gal.querySelector('img')) cta.insertAdjacentElement('afterend',gal);
-});
+(function moveGuia(){
+  const cta = document.querySelector('#cortebookLanding .cb-cta-group');
+  const guia = document.querySelector('#cortebookLanding .cb-hero > div:first-child');
+  if(cta && guia && guia.querySelector('button')){
+    cta.insertAdjacentElement('afterend', guia);
+  } else {
+    setTimeout(moveGuia, 150);
+  }
+})();
 </script>
+
 </body>
 
 </html>
