@@ -1675,7 +1675,8 @@ function renderSiteEditor(){
  const safe=(v)=>esc(String(v??''));
  return `<div class="panel" style="padding:16px;margin-bottom:14px">
   <div class="sectionhead"><div><h2>Editor completo do site</h2><div class="small muted">Edite os textos da página inicial e confira a prévia antes de publicar.</div></div><span class="status">Rascunho</span></div>
-  <div class="notice" style="margin-bottom:14px">A publicação abaixo atualiza a versão deste navegador. Para que todos os visitantes vejam as alterações no Netlify, será necessário conectar um banco/serviço de conteúdo (ex.: Supabase) ou publicar uma nova versão dos arquivos.</div>
+  <div class="notice" style="margin-bottom:14px">Personalize os textos, botões e a cor da sua barbearia abaixo. Ao salvar, as mudanças ficam visíveis na hora para todos os seus clientes.</div>
+
   <form id="siteEditorForm">
    <div class="formgrid">
     <div class="field"><label>Nome exibido no topo</label><input name="siteName" maxlength="60" value="${safe(d.siteName)}" required></div>
