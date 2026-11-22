@@ -1450,8 +1450,41 @@ $s('#bookingForm').onsubmit=async e=>{
  const appointment={id:bookingResult.id,name,phone,serviceId:services[0].id,serviceIds:services.map(svc=>svc.id),clientId:authClient?.id||null,clientUserId:authClient?.userId||null,service:serviceNames,barberId:barber.id,barber:barber.name,date:requestedDate,time:requestedTime,price:total,duration,prepaidPix:prepaid,paymentStatus:prepaid?'Aguardando confirmação':'Pendente',status:'Pendente',createdAt:new Date().toISOString()};
  state.appointments.push(appointment);notifyBarberOnThisDevice(appointment);if(authClient){window._clientApptsFor=null;renderClientArea();}
  const paymentTag=prepaid?'%0A%E2%9A%A0%EF%B8%8F%20%5BPAGAMENTO%20ANTECIPADO%20REALIZADO%20VIA%20PIX%5D':'';
- const msg=`Olá! Gostaria de confirmar meu agendamento no CorteBook.%0ACliente: ${encodeURIComponent(name)}%0AServiços: ${encodeURIComponent(serviceNames)}%0ADuração total: ${duration} min%0ABarbeiro: ${encodeURIComponent(barber.name)}%0AData: ${appointment.date.split('-').reverse().join('/')}%0AHorário: ${appointment.time}%0AValor: ${encodeURIComponent(money(total))}${paymentTag}`;
- closeModal('bookingModal');window.open(`https://wa.me/55${whatsappDigits().replace(/^55/,'')}?text=${msg}`,'_blank');toast('Pedido registrado! Finalize a confirmação no WhatsApp.');
+    const shopName = document.querySelector('.brandname')?.textContent || 'Barbearia';
+    const msg = `Olá! Gostaria de confirmar meu agendamento na *${shopName}*.%0ACliente: ${encodeURIComponent(name)}%0AServiços: ${encodeURIComponent(serviceNames)}%0ADuração total: ${duration} min%0ABarbeiro: ${encodeURIComponent(barber.name)}%0AData: ${appointment.date.split('-').reverse().join('/')}%0AHorário: ${appointment.time}%0AValor: ${encodeURIComponent(money(total))}${paymentTag}%0A%0A⚡ _Agendado via CorteBook (cortebook.com.br)_`;
+    const waUrl = `https://wa.me{whatsappDigits().replace(/^55/,'')}?text=${msg}`;
+
+    // Gera link automático para o Google Agenda do celular do cliente
+    const [y, m, d] = appointment.date.split('-');
+    const [hh, mm] = appointment.time.split(':');
+    const startDt = new Date(Number(y), Number(m) - 1, Number(d), Number(hh), Number(mm));
+    const endDt = new Date(startDt.getTime() + (Number(duration) || 30) * 60000);
+    const fmtGCal = (dt) => dt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+                const gcalBase = 'https://google.com/calendar/render';
+
+    const gcalUrl = `${gcalBase}?action=TEMPLATE&text=${encodeURIComponent('Corte na ' + shopName)}&dates=${fmtGCal(startDt)}/${fmtGCal(endDt)}&details=${encodeURIComponent('Serviço: ' + serviceNames + '\nBarbeiro: ' + barber.name + '\nAgendado via CorteBook ✔')}`;
+
+    closeModal('bookingModal');
+    toast('Agendamento registrado com sucesso!');
+
+    // Exibe janela de confirmação com os 2 botões (WhatsApp + Google Agenda)
+    let box = document.getElementById('cbSuccessBox');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'cbSuccessBox';
+      box.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)';
+      document.body.appendChild(box);
+    }
+    box.innerHTML = `
+      <div style="width:100%;max-width:400px;background:#141414;border:1px solid rgba(212,175,55,0.45);border-radius:18px;padding:22px;text-align:center;color:#fcfbf8;font-family:Inter,sans-serif">
+        <div style="width:52px;height:52px;margin:0 auto 12px;border-radius:50%;background:rgba(16,185,129,0.15);border:1px solid #10b981;display:flex;align-items:center;justify-content:center;font-size:24px">✅</div>
+        <h3 style="margin:0 0 6px;font-size:19px">Horário Reservado!</h3>
+        <p style="margin:0 0 16px;font-size:13px;color:#b4ad98;line-height:1.4"><b>${shopName}</b> · ${appointment.date.split('-').reverse().join('/')} às <b>${appointment.time}</b><br>Profissional: ${barber.name}</p>
+        <a href="${waUrl}" target="_blank" rel="noopener" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin-bottom:10px;background:#25D366;color:#0a0a0a;font-weight:900;font-size:13px;border-radius:12px;text-decoration:none">📲 Enviar no WhatsApp da Barbearia</a>
+        <a href="${gcalUrl}" target="_blank" rel="noopener" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin-bottom:12px;background:linear-gradient(135deg,#f3d06b,#d4af37);color:#0a0a0a;font-weight:900;font-size:13px;border-radius:12px;text-decoration:none">📅 Salvar na Agenda do Celular</a>
+        <button type="button" onclick="document.getElementById('cbSuccessBox').remove()" style="background:transparent;border:none;color:#a1a1aa;font-size:12px;font-weight:700;cursor:pointer;padding:6px">Fechar janela</button>
+      </div>`;
+
 };
 function showPublicHome(){
  try{renderReviews();}catch(_){}
@@ -1887,9 +1920,11 @@ async function deleteAppointment(ap){
  
 function refreshAgendaView(){if(document.querySelector('#adminContent [data-act="back-agenda"]'))handleAction('all-appointments');else renderAdmin(currentTab);}
 function renderAgenda(){
- const date=new Date().toISOString().slice(0,10),list=state.appointments.filter(a=>a.date===date).sort((a,b)=>a.time.localeCompare(b.time));
- return `<div class="sectionhead"><h2>Agendamentos de hoje</h2><button class="btn" data-act="new-appointment">＋ Adicionar</button></div><div class="cards">${list.length?list.map(a=>`<div class="appointment"><div><div class="time">${a.time}</div><div class="small muted">${a.date.split('-').reverse().join('/')}</div></div><div><b>${esc(a.name)}</b><div class="small muted">${esc(a.service)} · ${esc(a.barber)}</div>${clientPrefsLine(a)}<div style="margin-top:8px"><span class="status ${a.status==='Pendente'?'pending':a.status==='Cancelado'?'cancel':''}">${esc(a.status)}</span></div></div><div style="grid-column:1/-1;text-align:right"><b>${money(a.price)}</b>${appointmentActionButtons(a)}</div></div>`).join(''):'<div class="empty"><div class="symbol">▦</div><b>Nenhum agendamento para hoje</b><p class="small">Os novos horários aparecerão aqui quando forem solicitados.</p></div>'}</div><div style="margin-top:20px"><button class="btn secondary full" data-act="all-appointments">Ver todos os agendamentos</button></div>`;
+  const date=new Date().toISOString().slice(0,10),list=state.appointments.filter(a=>a.date===date).sort((a,b)=>a.time.localeCompare(b.time));
+  const shop=document.querySelector('.brandname')?.textContent||'nossa barbearia';
+  return `<div class="sectionhead"><h2>Agendamentos de hoje</h2><button class="btn" data-act="new-appointment">+ Adicionar</button></div><div class="cards">${list.length?list.map(a=>{const d=String(a.phone||'').replace(/\D/g,'');const zap=d.length>=10?`<a class="btn" style="background:#25D366;color:#0a0a0a;border-color:#25D366;font-weight:900;text-decoration:none;margin-right:6px" href="https://wa.me{d.startsWith('55')?d:'55'+d}?text=${encodeURIComponent('Fala '+a.name+', tudo certo? Passando só pra lembrar do seu horário hoje às '+a.time+' aqui na '+shop+'. Te aguardamos!')}" target="_blank" rel="noopener">📲 Lembrar no Zap</a>`:'';return `<div class="appointment"><div><div class="time">${a.time}</div><div class="small muted">${a.date.split('-').reverse().join('/')}</div></div><div><b>${esc(a.name)}</b><div class="small muted">${esc(a.service)} · ${esc(a.barber)}</div>${clientPrefsLine(a)}<div style="margin-top:8px"><span class="status ${a.status==='Pendente'?'pending':a.status==='Cancelado'?'cancel':''}">${esc(a.status)}</span></div></div><div style="grid-column:1/-1;text-align:right"><b>${money(a.price)}</b>${zap}${appointmentActionButtons(a)}</div></div>`;}).join(''):'<div class="empty"><div class="symbol">✂</div><b>Nenhum agendamento para hoje</b><p class="small">Os novos horários aparecerão aqui quando forem solicitados.</p></div>'}</div><div style="margin-top:20px"><button class="btn secondary full" data-act="all-appointments">Ver todos os agendamentos</button></div>`;
 }
+
 function renderOrders(){return `<div class="sectionhead"><h2>Comandas do balcão</h2><button class="btn" data-act="new-order">＋ Nova comanda</button></div><div class="tabs"><button class="tab active" data-act="orders-open">Abertas (${state.orders.filter(o=>o.status==='Aberta').length})</button><button class="tab" data-act="orders-closed">Fechadas (${state.orders.filter(o=>o.status==='Fechada').length})</button></div><div class="cards">${state.orders.length?state.orders.map(o=>`<div class="listrow"><div><strong>${esc(o.client)} · ${esc(o.barber)}</strong><small>${esc(o.description||'Atendimento')} · ${money(o.value)}</small>${clientPrefsLine({name:o.client})}</div><div class="inline-actions"><span class="status ${o.status==='Aberta'?'pending':''}">${o.status}</span>${o.status==='Aberta'?`<button class="btn" data-act="close-order" data-id="${o.id}">Fechar</button>`:''}</div></div>`).join(''):'<div class="empty"><div class="symbol">▤</div><b>Nenhuma comanda cadastrada</b><p class="small">Inicie um atendimento para abrir uma comanda.</p></div>'}</div>`}
 function renderServices(){
  return `<div class="sectionhead"><h2>Serviços e preços</h2><span class="small muted">Gerenciado por DadoStreaming</span></div>
@@ -3721,16 +3756,7 @@ setInterval(()=>{
   </div>
  </section>
 
- <!-- Selos de Garantia e Prova Social -->
- <section style="max-width:860px;margin:0 auto 40px;padding:0 6%;text-align:center">
-  <div class="eyebrow" style="margin-bottom:8px">Junte-se às barbearias modernas</div>
-  <h2 style="margin:0 0 18px;font-size:24px">Comece sem risco e sem fidelidade</h2>
-  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-   <span style="background:#141414;border:1px solid #27272f;padding:10px 16px;border-radius:99px;font-size:13px">✅ 15 dias grátis para testar</span>
-   <span style="background:#141414;border:1px solid #27272f;padding:10px 16px;border-radius:99px;font-size:13px">✅ Cancele quando quiser</span>
-   <span style="background:#141414;border:1px solid #27272f;padding:10px 16px;border-radius:99px;font-size:13px">✅ Suporte direto no WhatsApp</span>
-  </div>
- </section>
+ 
 
  <!-- Perguntas Frequentes (FAQ) -->
  <section style="max-width:740px;margin:0 auto 44px;padding:0 6%;text-align:left">
