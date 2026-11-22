@@ -705,7 +705,7 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
 <link rel="preconnect" href="https://gstatic.com" crossorigin>
 <link href="https://googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<>
+
 <div id="cbBrandHeader" style="position:sticky;top:0;z-index:9000;height:43px;background:linear-gradient(90deg,#14120c 0%,#1c1910 50%,#14120c 100%);border-bottom:1px solid rgba(212,175,55,0.45);padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;backdrop-filter:blur(12px)">
   <a href="https://cortebook.com.br" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;text-decoration:none">
     <img src="logo-cortebook.png" alt="CorteBook" style="width:25px;height:25px;border-radius:50%;border:1.5px solid #d4af37;object-fit:cover" onerror="this.style.display='none'">
@@ -3420,7 +3420,61 @@ setInterval(()=>{
    <button class="btn" type="button" id="cbOpenRegister">Testar 15 dias grátis</button>
   </div>
  </header>
+  
  <section class="cb-hero">
+   <!-- ÁLBUM DESLIZÁVEL DE 4 PRINTS + BOTÃO GUIA DE FUNÇÕES -->
+<div style="margin: 0 auto 24px; max-width: 720px; text-align: center;">
+  <div style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #f3d06b; text-transform: uppercase; margin-bottom: 10px;">
+    👈 Deslize para ver o sistema funcionando na prática 👉
+  </div>
+  
+  <!-- Carrossel Horizontal de 4 Prints -->
+  <div style="display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 4px 14px; -webkit-overflow-scrolling: touch;">
+    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
+      <img src="print1.jpg" alt="Vitrine da Barbearia" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
+      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">1. Vitrine Exclusiva</strong><br><span style="color: #a1a1aa;">Sua logo, cores e serviços</span></div>
+    </div>
+    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
+      <img src="print2.jpg" alt="Agendamento em 15s" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
+      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">2. Reserva Rápida</strong><br><span style="color: #a1a1aa;">Cliente agenda em 15 segundos</span></div>
+    </div>
+    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
+      <img src="print3.jpg" alt="Cartão Fidelidade e Loja" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
+      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">3. Fidelidade & Produtos</strong><br><span style="color: #a1a1aa;">Selos VIP e venda de itens</span></div>
+    </div>
+    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
+      <img src="print4.jpg" alt="Painel do Barbeiro" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
+      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">4. Painel Tudo-em-Um</strong><br><span style="color: #a1a1aa;">Lembrete no Zap, Story e Caixa</span></div>
+    </div>
+  </div>
+
+  <!-- Botão Guia Completo das Funções -->
+  <button type="button" onclick="document.getElementById('cbGuideModal').style.display='flex'" style="margin-top: 8px; padding: 11px 18px; background: rgba(212,175,55,0.14); color: #f3d06b; border: 1px solid rgba(212,175,55,0.5); border-radius: 99px; font-size: 13px; font-weight: 800; cursor: pointer;">
+    📖 Ver Tudo que o Sistema Faz (Guia Rápido)
+  </button>
+</div>
+
+<!-- JANELA MODAL DO GUIA COMPLETO DE FUNÇÕES -->
+<div id="cbGuideModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9999; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(6px);">
+  <div style="width: 100%; max-width: 460px; max-height: 85vh; overflow-y: auto; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 20px; padding: 20px; text-align: left; color: #fcfbf8;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #27272f; padding-bottom: 10px;">
+      <h3 style="margin: 0; font-size: 17px; color: #f3d06b;">📖 Tudo que você tem no CorteBook</h3>
+      <button type="button" onclick="document.getElementById('cbGuideModal').style.display='none'" style="background: none; border: none; color: #a1a1aa; font-size: 22px; cursor: pointer;">✕</button>
+    </div>
+    <div style="display: grid; gap: 10px; font-size: 13px; line-height: 1.45;">
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #f3d06b;">📅 Agenda Online 24h:</strong> Seu cliente escolhe o barbeiro, o serviço e marca o horário sozinho pelo link da sua bio.</div>
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #25D366;">📲 Lembrete de 1 Clique no Zap:</strong> Na sua agenda, toque em "Lembrar no Zap" e o WhatsApp abre com a mensagem pronta para evitar faltas.</div>
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #f3d06b;">📸 Criador de Story Automático:</strong> O sistema lê seus horários livres do dia e gera uma imagem pronta para você postar no Instagram.</div>
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #f3d06b;">🔥 Radar de Clientes Sumidos:</strong> Mostra quem cortou há mais de 25 dias e libera um botão para chamar o cliente de volta no WhatsApp.</div>
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #f3d06b;">💎 Cartão Fidelidade VIP:</strong> Acumula selos automáticos a cada corte para fidelizar seus clientes sem papelzinho.</div>
+      <div style="background: #1a1a1f; padding: 11px; border-radius: 12px;"><strong style="color: #f3d06b;">💰 Comandas, Troco & Comissões:</strong> Controle o caixa do dia, calcule o troco no balcão e divida a porcentagem de cada barbeiro.</div>
+    </div>
+    <button type="button" onclick="document.getElementById('cbGuideModal').style.display='none';document.getElementById('cbOpenRegister')?.click();" style="width: 100%; margin-top: 16px; padding: 12px; background: linear-gradient(135deg,#f3d06b,#d4af37); color: #0a0a0a; font-weight: 900; font-size: 13px; border: none; border-radius: 12px; cursor: pointer;">
+      Testar 15 dias grátis agora →
+    </button>
+  </div>
+</div>
+
   <div class="cb-badge">✦ Plataforma Exclusiva Para Barbearias</div>
   <h1>A agenda inteligente com a identidade visual da sua barbearia</h1>
   <p>Tenha seu link exclusivo de agendamento 24h, controle financeiro, painel individual para cada barbeiro, cartão fidelidade VIP e cobrança recorrente no cartão.</p>
