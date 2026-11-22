@@ -3414,45 +3414,47 @@ setInterval(()=>{
 </style>
 
 <div id="cortebookLanding" class="hidden">
- <header class="cb-nav">
-  <div class="cb-logo"><img src="logo-cortebook.png" alt="CorteBook" onerror="this.style.display='none'"><span>CorteBook</span></div>
-  <div style="display:flex;gap:8px">
-   <button class="btn secondary" type="button" id="cbOpenLogin">Entrar</button>
-   <button class="btn" type="button" id="cbOpenRegister">Testar 15 dias grátis</button>
-  </div>
- </header>
+   <header class="cb-nav" style="flex-wrap:wrap;gap:10px;padding:12px 14px">
+    <div class="cb-logo"><img src="logo-cortebook.png" alt="CorteBook" onerror="this.style.display='none'"><span>CorteBook</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;justify-content:center">
+      <button class="btn secondary" type="button" id="cbOpenLogin" style="padding:10px 16px;font-size:13px;font-weight:800;flex:1;min-width:95px">Entrar</button>
+      <button class="btn" type="button" id="cbOpenRegister" style="padding:10px 16px;font-size:13px;font-weight:900;flex:1.4;min-width:145px">Testar 15 dias grátis</button>
+    </div>
+  </header>
+
   
  <section class="cb-hero">
-   <!-- ÁLBUM DESLIZÁVEL DE 4 PRINTS + BOTÃO GUIA DE FUNÇÕES -->
-<div style="margin: 0 auto 24px; max-width: 720px; text-align: center;">
-  <div style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #f3d06b; text-transform: uppercase; margin-bottom: 10px;">
-    👈 Deslize para ver o sistema funcionando na prática 👉
-  </div>
-  
-  <!-- Carrossel Horizontal de 4 Prints -->
-  <div style="display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 4px 14px; -webkit-overflow-scrolling: touch;">
-    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
-      <img src="print1.jpg" alt="Vitrine da Barbearia" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
-      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">1. Vitrine Exclusiva</strong><br><span style="color: #a1a1aa;">Sua logo, cores e serviços</span></div>
-    </div>
-    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
-      <img src="print2.jpg" alt="Agendamento em 15s" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
-      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">2. Reserva Rápida</strong><br><span style="color: #a1a1aa;">Cliente agenda em 15 segundos</span></div>
-    </div>
-    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
-      <img src="print3.jpg" alt="Cartão Fidelidade e Loja" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
-      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">3. Fidelidade & Produtos</strong><br><span style="color: #a1a1aa;">Selos VIP e venda de itens</span></div>
-    </div>
-    <div style="flex: 0 0 230px; scroll-snap-align: center; background: #141414; border: 1px solid rgba(212,175,55,0.45); border-radius: 16px; overflow: hidden; text-align: left;">
-      <img src="print4.jpg" alt="Painel do Barbeiro" style="width: 100%; height: 390px; object-fit: cover; display: block; background: #1a1a1f;" onerror="this.style.display='none'">
-      <div style="padding: 10px 12px; font-size: 12px;"><strong style="color: #f3d06b;">4. Painel Tudo-em-Um</strong><br><span style="color: #a1a1aa;">Lembrete no Zap, Story e Caixa</span></div>
-    </div>
+   <!-- GALERIA 2X2 SEM CORTES + BOTÃO GUIA DE FUNÇÕES -->
+<div style="margin: 26px auto 8px; max-width: 680px; text-align: center;">
+  <div style="margin-bottom: 18px;">
+    <button type="button" onclick="document.getElementById('cbGuideModal').style.display='flex'" style="padding: 13px 22px; background: rgba(212,175,55,0.16); color: #f3d06b; border: 1px solid rgba(212,175,55,0.55); border-radius: 99px; font-size: 13px; font-weight: 800; cursor: pointer;">
+      📖 Ver Tudo que o Sistema Faz (Guia Completo)
+    </button>
   </div>
 
-  <!-- Botão Guia Completo das Funções -->
-  <button type="button" onclick="document.getElementById('cbGuideModal').style.display='flex'" style="margin-top: 8px; padding: 11px 18px; background: rgba(212,175,55,0.14); color: #f3d06b; border: 1px solid rgba(212,175,55,0.5); border-radius: 99px; font-size: 13px; font-weight: 800; cursor: pointer;">
-    📖 Ver Tudo que o Sistema Faz (Guia Rápido)
-  </button>
+  <div style="font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #f3d06b; text-transform: uppercase; margin-bottom: 12px;">
+    ✨ Conheça o sistema por dentro ✨
+  </div>
+
+  <!-- Grade 2x2 com imagens inteiras (height: auto, zero cortes) -->
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
+      <img src="print1.jpg" alt="Vitrine Exclusiva" style="width: 100%; height: auto; display: block;">
+      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">1. Vitrine Exclusiva</strong><br><span style="color: #a1a1aa;">Sua logo, cores e serviços</span></div>
+    </div>
+    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
+      <img src="print2.jpg" alt="Reserva Rápida" style="width: 100%; height: auto; display: block;">
+      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">2. Reserva Rápida</strong><br><span style="color: #a1a1aa;">Agenda em 15 segundos</span></div>
+    </div>
+    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
+      <img src="print3.jpg" alt="Fidelidade VIP" style="width: 100%; height: auto; display: block;">
+      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">3. Fidelidade & Produtos</strong><br><span style="color: #a1a1aa;">Selos VIP e loja online</span></div>
+    </div>
+    <div style="background: #141414; border: 1px solid rgba(212,175,55,0.4); border-radius: 14px; overflow: hidden; text-align: left; display: flex; flex-direction: column;">
+      <img src="print4.jpg" alt="Painel Completo" style="width: 100%; height: auto; display: block;">
+      <div style="padding: 8px 10px; font-size: 11px; margin-top: auto; border-top: 1px solid #222;"><strong style="color: #f3d06b;">4. Painel Tudo-em-Um</strong><br><span style="color: #a1a1aa;">Zap, Story e Caixa</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- JANELA MODAL DO GUIA COMPLETO DE FUNÇÕES -->
@@ -3475,6 +3477,8 @@ setInterval(()=>{
     </button>
   </div>
 </div>
+
+
 
   <div class="cb-badge">✦ Plataforma Exclusiva Para Barbearias</div>
   <h1>A agenda inteligente com a identidade visual da sua barbearia</h1>
@@ -5740,6 +5744,14 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+<script>
+window.addEventListener('DOMContentLoaded',()=>{
+  const cta=document.querySelector('#cortebookLanding .cb-cta-group');
+  const gal=document.querySelector('#cortebookLanding .cb-hero')?.firstElementChild;
+  if(cta && gal && gal.querySelector('img')) cta.insertAdjacentElement('afterend',gal);
+});
+</script>
+</body>
 
 </html>
 
