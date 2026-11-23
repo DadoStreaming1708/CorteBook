@@ -1452,7 +1452,7 @@ $s('#bookingForm').onsubmit=async e=>{
  const paymentTag=prepaid?'%0A%E2%9A%A0%EF%B8%8F%20%5BPAGAMENTO%20ANTECIPADO%20REALIZADO%20VIA%20PIX%5D':'';
     const shopName = document.querySelector('.brandname')?.textContent || 'Barbearia';
     const msg = `Olá! Gostaria de confirmar meu agendamento na *${shopName}*.%0ACliente: ${encodeURIComponent(name)}%0AServiços: ${encodeURIComponent(serviceNames)}%0ADuração total: ${duration} min%0ABarbeiro: ${encodeURIComponent(barber.name)}%0AData: ${appointment.date.split('-').reverse().join('/')}%0AHorário: ${appointment.time}%0AValor: ${encodeURIComponent(money(total))}${paymentTag}%0A%0A⚡ _Agendado via CorteBook (cortebook.com.br)_`;
-    const waUrl = `https://wa.me{whatsappDigits().replace(/^55/,'')}?text=${msg}`;
+    const waUrl = `https://wa.me/55${whatsappDigits().replace(/^55/,'')}?text=${msg}`;
 
     // Gera link automático para o Google Agenda do celular do cliente
     const [y, m, d] = appointment.date.split('-');
@@ -1460,7 +1460,7 @@ $s('#bookingForm').onsubmit=async e=>{
     const startDt = new Date(Number(y), Number(m) - 1, Number(d), Number(hh), Number(mm));
     const endDt = new Date(startDt.getTime() + (Number(duration) || 30) * 60000);
     const fmtGCal = (dt) => dt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-                const gcalBase = 'https://google.com/calendar/render';
+                const gcalBase = 'https://calendar.google.com/calendar/render';
 
     const gcalUrl = `${gcalBase}?action=TEMPLATE&text=${encodeURIComponent('Corte na ' + shopName)}&dates=${fmtGCal(startDt)}/${fmtGCal(endDt)}&details=${encodeURIComponent('Serviço: ' + serviceNames + '\nBarbeiro: ' + barber.name + '\nAgendado via CorteBook ✔')}`;
 
