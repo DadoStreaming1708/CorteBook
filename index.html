@@ -6291,5 +6291,45 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }, 600);
 })();
 </script>
+    setInterval(() => {
+    aplicarPainelDeCores();
+    montarBotaoEPainelDono();
+  }, 600);
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+
+  function limparOpcoesDuplicadas() {
+    // 1. Remove o botão flutuante "Cores & Visual" que fica por cima da tela
+    document.getElementById('cbFloatingColorBtn')?.remove();
+    document.getElementById('cbUnifiedColorPanel')?.remove();
+
+    // 2. Remove o bloco extra de "10 opções prontas + paleta livre" em Configurações
+    document.getElementById('cbExtraBgBox')?.remove();
+
+    // 3. Em "Identidade visual White Label" (Configurações), esconde os seletores repetidos e deixa só a Logomarca
+    const brandingForm = document.getElementById('brandingForm');
+    if (brandingForm) {
+      const primeiroCampo = brandingForm.querySelector('.field');
+      if (primeiroCampo && primeiroCampo.textContent.includes('Cor principal do estabelecimento')) {
+        primeiroCampo.style.display = 'none';
+      }
+    }
+
+    // 4. Troca o raio ⚡ pelo relógio 🕒
+    document.querySelectorAll('div, span, p, i, strong').forEach(el => {
+      if (el.children.length === 0 && el.textContent.trim() === '⚡') el.textContent = '🕒';
+    });
+  }
+
+  setInterval(limparOpcoesDuplicadas, 500);
+})();
+</script>
+</body>
+</html>
+
 </body>
 </html>
