@@ -7298,6 +7298,99 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }
 }
 </style>
+<!-- ACABAMENTO FINAL: LETRAS MAIÚSCULAS + ZERO AMARELO + PÍLULA PRETA + WHATSAPP -->
+<style>
+/* 1. Todos os títulos principais, títulos de seção, cards e links do menu em MAIÚSCULO */
+#cortebookLanding h1,
+#cortebookLanding h2,
+#cortebookLanding h3,
+#cortebookLanding h4,
+#cortebookLanding .cb-saas-links a,
+#cortebookLanding .cb-pill-tag {
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* 2. Remove o amarelo restante de "VITRINE VIP PERSONALIZADA" e "FUNCIONAMENTO" (4ª imagem) */
+#cortebookLanding strong[style*="#f3d06b"],
+#cortebookLanding div[style*="#f3d06b"],
+#cortebookLanding span[style*="#f3d06b"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 3. Pílula preta arredondada ao passar o mouse nos links do menu */
+#cortebookLanding .cb-saas-links a {
+  padding: 6px 14px !important;
+  border-radius: 99px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+#cortebookLanding .cb-saas-links a:hover {
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+
+/* 4. Botão Instalar App sem amarelo */
+#cortebookLanding #cbInstallLandingBtn {
+  background: #27272a !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  filter: none !important;
+}
+
+/* 5. Botão flutuante do WhatsApp sempre visível */
+#cbZapFlutuanteFinal {
+  position: fixed !important;
+  right: 22px !important;
+  bottom: 22px !important;
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  background: #25d366 !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45) !important;
+  z-index: 2147483647 !important;
+  text-decoration: none !important;
+}
+#cbZapFlutuanteFinal:hover {
+  transform: scale(1.07) !important;
+  background: #1ebe5d !important;
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  function finalizarLanding() {
+    const btnInstall = document.getElementById('cbInstallLandingBtn');
+    if (btnInstall && btnInstall.dataset.limpo !== '1') {
+      btnInstall.dataset.limpo = '1';
+      btnInstall.textContent = 'Instalar App';
+    }
+
+    if (!document.getElementById('cbZapFlutuanteFinal')) {
+      const a = document.createElement('a');
+      a.id = 'cbZapFlutuanteFinal';
+      a.href = 'https://wa.me';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.title = 'Falar no WhatsApp';
+      a.innerHTML = '<svg viewBox="0 0 32 32" width="30" height="30" fill="#ffffff"><path d="M16 3C8.82 3 3 8.82 3 16c0 2.29.6 4.52 1.74 6.49L3 29l6.69-1.71A12.93 12.93 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.6c-2.02 0-4-.54-5.73-1.56l-.41-.24-3.97 1.01 1.06-3.87-.27-.43A10.56 10.56 0 0 1 5.4 16c0-5.84 4.76-10.6 10.6-10.6S26.6 10.16 26.6 16 21.84 26.6 16 26.6zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.09 1.31 3.3c.16.21 2.26 3.45 5.48 4.84.77.33 1.36.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.89-.77 2.16-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg>';
+      document.body.appendChild(a);
+    }
+  }
+
+  finalizarLanding();
+  setInterval(finalizarLanding, 400);
+})();
+</script>
 
 </body>
   
