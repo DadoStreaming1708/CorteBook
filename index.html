@@ -6996,7 +6996,85 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }, 500);
 })();
 </script>
+  <!-- AJUSTE FINAL: CABEÇALHO EM 1 LINHA + TROCA DOS TONS AMARELOS NA LANDING + MOCKUP -->
+<style>
+@media (min-width: 920px) {
+  /* 1. Cabeçalho em 1 única linha horizontal (Logo na esquerda | Links no meio | Botões na direita) */
+  #cortebookLanding .cb-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    max-width: 1240px !important;
+    width: 100% !important;
+    padding: 18px 4% !important;
+    gap: 18px !important;
+  }
+
+  #cortebookLanding .cb-logo {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    white-space: nowrap !important;
+  }
+
+  #cortebookLanding .cb-saas-links {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 24px !important;
+    white-space: nowrap !important;
+  }
+
+  #cortebookLanding .cb-nav > div:last-child {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* 2. Remove o amarelo da Landing Page e aplica paleta moderna (Preto + Azul Royal + Branco) */
+#cortebookLanding .cb-laptop-screen strong[style*="#f3d06b"],
+#cortebookLanding strong[style*="#f3d06b"],
+#cortebookLanding div[style*="#f3d06b"] {
+  color: #ffffff !important;
+}
+
+/* Botão "Agendar Agora" da vitrine demonstrativa em Azul Royal moderno */
+#cortebookLanding span[style*="background:#f3d06b"] {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* Círculo "CB" do mockup em Azul Royal + Branco */
+#cortebookLanding div[style*="linear-gradient(135deg,#f3d06b,#b8860b)"] {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+}
+
+/* Estrelas dos depoimentos em dourado suave/âmbar discreto ou azul */
+#cortebookLanding .cb-stars {
+  color: #2563eb !important;
+}
+
+/* 3. Dá mais espaço para o celular não cortar o texto "SUA MARCA PRÓPRIA" no notebook */
+@media (min-width: 920px) {
+  .cb-devices-stage {
+    padding-left: 125px !important;
+    padding-bottom: 24px !important;
+  }
+  .cb-phone-frame {
+    width: 170px !important;
+  }
+}
+</style>
+
 </body>
+  
 </html>
 
 
