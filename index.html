@@ -5890,6 +5890,158 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }, 700);
 })();
 </script>
+<!-- ==================== SOLUÇÃO DIRETA: EDITAR NOMES + OCULTAR COMBOS + TEMA BRANCO ==================== -->
+<style id="cbMasterFixStyle">
+  body.cb-light-mode { background: #f4f4f5 !important; color: #111827 !important; }
+  body.cb-light-mode #publicServices .servicecard,
+  body.cb-light-mode .servicecard,
+  body.cb-light-mode .panel,
+  body.cb-light-mode .card {
+    background: #ffffff !important;
+    border: 1px solid #d4d4d8 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+  }
+  body.cb-light-mode #publicServices .servicecard h3,
+  body.cb-light-mode .servicecard h3,
+  body.cb-light-mode .servicecard .price,
+  body.cb-light-mode h1, body.cb-light-mode h2, body.cb-light-mode h3 {
+    color: #111827 !important;
+  }
+  body.cb-light-mode #publicServices .servicecard p,
+  body.cb-light-mode .servicecard p,
+  body.cb-light-mode .muted {
+    color: #4b5563 !important;
+  }
+  body.cb-light-mode #publicServices .svc-book,
+  body.cb-light-mode .servicecard .btn {
+    background: #111827 !important;
+    color: #ffffff !important;
+  }
+</style>
+
+<script>
+(function(){
+  'use strict';
+
+  function aplicarTudo() {
+    // 1. Troca o raio ⚡ pelo relógio 🕒
+    document.querySelectorAll('div, span, p, i, strong').forEach(el => {
+      if (el.children.length === 0 && el.textContent.trim() === '⚡') el.textContent = '🕒';
+    });
+
+    // 2. Aplica modo branco (quadrados brancos + nomes pretos) se o fundo for claro
+    const bg = (typeof state !== 'undefined' && state.branding?.bgColor) ? state.branding.bgColor : '';
+    const hex = bg.replace('#', '');
+    const lum = hex.length === 6
+      ? (0.299 * parseInt(hex.substr(0,2),16) + 0.587 * parseInt(hex.substr(2,2),16) + 0.114 * parseInt(hex.substr(4,2),16))
+      : 0;
+
+    if (lum > 165) {
+      document.body.classList.add('cb-light-mode');
+      document.querySelectorAll('div').forEach(box => {
+        const txt = box.textContent || '';
+        if (box.children.length >= 2 && box.children.length <= 4 &&
+           (txt.includes('Avaliação') || txt.includes('Cortes & Barba') || txt.includes('Agendamento'))) {
+          if (box.offsetHeight > 50 && box.offsetHeight < 160 && box.offsetWidth < 220) {
+            box.style.setProperty('background', '#ffffff', 'important');
+            box.style.setProperty('border', '1px solid #d4d4d8', 'important');
+            box.querySelectorAll('*').forEach(c => c.style.setProperty('color', '#111827', 'important'));
+          }
+        }
+      });
+    } else {
+      document.body.classList.remove('cb-light-mode');
+    }
+
+    // 3. Oculta/Mostra os 3 combos (primeira foto) baseado na escolha do dono
+    const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+      ? state.visibleCombos : [true, true, true];
+
+    const comboCards = [];
+    document.querySelectorAll('div, article, section').forEach(el => {
+      const txt = el.textContent || '';
+      if ((txt.includes('MAIS ESCOLHIDO') || txt.includes('EXPERIÊNCIA VIP') || txt.includes('ALTO PADRÃO')) &&
+          txt.includes('Reservar Experiência') && el.offsetHeight > 150 && el.offsetHeight < 420) {
+        if (!comboCards.includes(el)) comboCards.push(el);
+      }
+    });
+
+    comboCards.forEach((card, idx) => {
+      if (idx < 3) {
+        card.style.display = (vis[idx] !== false) ? '' : 'none';
+      }
+    });
+
+    // 4. Barra de controle dos 3 combos visível APENAS quando o dono está logado
+    const isAdmin = (typeof state !== 'undefined' && (state.isAdmin || sessionStorage.getItem('cb_admin') || document.getElementById('adminContent')?.offsetParent !== null));
+    if (isAdmin && comboCards.length > 0 && !document.getElementById('cbOwnerComboBar')) {
+      const bar = document.createElement('div');
+      bar.id = 'cbOwnerComboBar';
+      bar.style.cssText = 'background:#18181b;border:1px solid #d4af37;border-radius:12px;padding:12px;margin:10px 0;color:#fff;font-size:13px';
+      bar.innerHTML = `
+        <div style="font-weight:700;color:#f3d06b;margin-bottom:8px">👁️ Controle do Dono: Quais combos mostrar?</div>
+        <label style="display:block;margin-bottom:6px"><input type="checkbox" id="chkC0" ${vis[0]!==false?'checked':''}> 1. Experiência Black Completa</label>
+        <label style="display:block;margin-bottom:6px"><input type="checkbox" id="chkC1" ${vis[1]!==false?'checked':''}> 2. Experiência Black Alisado</label>
+        <label style="display:block;margin-bottom:8px"><input type="checkbox" id="chkC2" ${vis[2]!==false?'checked':''}> 3. Experiência Black Progressiva</label>
+        <button type="button" id="btnSalvarVisCombos" style="width:100%;padding:9px;background:#d4af37;color:#000;font-weight:700;border:none;border-radius:8px">Salvar Escolha</button>
+      `;
+      comboCards[0].parentElement.insertBefore(bar, comboCards[0]);
+
+      document.getElementById('btnSalvarVisCombos').onclick = () => {
+        state.visibleCombos = [
+          document.getElementById('chkC0').checked,
+          document.getElementById('chkC1').checked,
+          document.getElementById('chkC2').checked
+        ];
+        if (typeof save === 'function') save();
+        alert('Pronto! Escolha dos combos salva.');
+      };
+    }
+
+    // 5. Transforma a coluna "Serviço" (segunda foto) em caixas editáveis
+    document.querySelectorAll('table').forEach(tbl => {
+      const cabecalho = tbl.querySelector('thead')?.textContent || '';
+      if (cabecalho.includes('Serviço') && cabecalho.includes('Tempo') && !tbl.dataset.editNomesAtivo) {
+        tbl.dataset.editNomesAtivo = '1';
+
+        const linhas = tbl.querySelectorAll('tbody tr');
+        linhas.forEach((tr, i) => {
+          const celulaNome = tr.querySelector('td:first-child');
+          if (!celulaNome || celulaNome.querySelector('input')) return;
+          const textoAtual = celulaNome.textContent.trim();
+          celulaNome.innerHTML = `<input type="text" data-nome-srv-idx="${i}" value="${textoAtual.replace(/"/g, '&quot;')}" style="width:100%;min-width:130px;padding:8px;border-radius:8px;border:1px solid #52525b;background:#09090b;color:#fff;font-weight:700;font-size:13px">`;
+        });
+
+        // Ao clicar em "Salvar Alterações", grava os novos nomes no sistema
+        document.querySelectorAll('button').forEach(btn => {
+          if (btn.textContent.includes('Salvar Alterações') && !btn.dataset.hookNome) {
+            btn.dataset.hookNome = '1';
+            btn.addEventListener('click', () => {
+              tbl.querySelectorAll('[data-nome-srv-idx]').forEach(inp => {
+                const idx = Number(inp.getAttribute('data-nome-srv-idx'));
+                const novo = inp.value.trim();
+                if (!novo) return;
+                if (typeof servicosDadoStreaming !== 'undefined' && servicosDadoStreaming[idx]) {
+                  servicosDadoStreaming[idx].nome = novo;
+                  servicosDadoStreaming[idx].name = novo;
+                }
+                if (typeof state !== 'undefined' && Array.isArray(state.services) && state.services[idx]) {
+                  state.services[idx].nome = novo;
+                  state.services[idx].name = novo;
+                }
+              });
+              if (typeof save === 'function') save();
+              if (typeof renderPublicServices === 'function') renderPublicServices();
+            }, true);
+          }
+        });
+      }
+    });
+  }
+
+  setInterval(aplicarTudo, 500);
+})();
+</script>
 
 </body>
 
