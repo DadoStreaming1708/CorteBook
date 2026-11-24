@@ -6220,24 +6220,76 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
             <span style="display:block;margin-bottom:4px;font-weight:700">4. Textos e Tempo</span>
             <input type="color" id="inpTextColor" value="${c.textColor || '#b4ad98'}" style="width:100%;height:36px;border:none;border-radius:6px">
           </label>
-          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+                    <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
             <span style="display:block;margin-bottom:4px;font-weight:700">5. Cor dos Preços</span>
             <input type="color" id="inpPriceColor" value="${c.priceColor || '#f3d06b'}" style="width:100%;height:36px;border:none;border-radius:6px">
           </label>
           <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">6. Fundo dos Botões</span>
+            <input type="color" id="inpBtnBg" value="${c.btnBg || '#d4af37'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+        </div>
 
+        <div style="background:#1f1f23;padding:10px;border-radius:10px;font-size:12px;margin-bottom:14px">
+          <div style="font-weight:700;color:#f3d06b;margin-bottom:6px">Combos Visíveis na Vitrine:</div>
+          <label style="display:block;margin-bottom:4px"><input type="checkbox" id="modVisC0" ${vis[0] !== false ? 'checked' : ''}> Combo 1 (Mais Escolhido)</label>
+          <label style="display:block;margin-bottom:4px"><input type="checkbox" id="modVisC1" ${vis[1] !== false ? 'checked' : ''}> Combo 2 (Experiência VIP)</label>
+          <label style="display:block"><input type="checkbox" id="modVisC2" ${vis[2] !== false ? 'checked' : ''}> Combo 3 (Alto Padrão)</label>
+        </div>
+
+        <button type="button" id="btnSaveUnifiedColors" style="width:100%;padding:12px;background:#f3d06b;color:#000;font-weight:900;border:none;border-radius:10px;font-size:14px">Salvar Alterações</button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('cbCloseColorModal').onclick = () => modal.remove();
+
+    document.getElementById('presetWhiteMode').onclick = () => {
+      document.getElementById('inpSiteBg').value = '#f4f4f5';
+      document.getElementById('inpCardBg').value = '#ffffff';
+      document.getElementById('inpTitleColor').value = '#111827';
+      document.getElementById('inpTextColor').value = '#4b5563';
+      document.getElementById('inpPriceColor').value = '#111827';
+      document.getElementById('inpBtnBg').value = '#111827';
+    };
+
+    document.getElementById('presetDarkMode').onclick = () => {
+      document.getElementById('inpSiteBg').value = '#0a0a0a';
+      document.getElementById('inpCardBg').value = '#141414';
+      document.getElementById('inpTitleColor').value = '#fcfbf8';
+      document.getElementById('inpTextColor').value = '#b4ad98';
+      document.getElementById('inpPriceColor').value = '#f3d06b';
+      document.getElementById('inpBtnBg').value = '#d4af37';
+    };
+
+    document.getElementById('btnSaveUnifiedColors').onclick = () => {
+      state.customColors = {
+        siteBg: document.getElementById('inpSiteBg').value,
+        cardBg: document.getElementById('inpCardBg').value,
+        titleColor: document.getElementById('inpTitleColor').value,
+        textColor: document.getElementById('inpTextColor').value,
+        priceColor: document.getElementById('inpPriceColor').value,
+        btnBg: document.getElementById('inpBtnBg').value,
+        btnText: document.getElementById('inpBtnBg').value === '#111827' ? '#ffffff' : '#0a0a0a'
+      };
+      state.visibleCombos = [
+        document.getElementById('modVisC0').checked,
+        document.getElementById('modVisC1').checked,
+        document.getElementById('modVisC2').checked
+      ];
+      aplicarPainelDeCores();
+      if (typeof save === 'function') save();
+      if (typeof toast === 'function') toast('Cores e vitrine atualizadas!');
+      modal.remove();
+    };
+  }
+
+  setInterval(() => {
+    aplicarPainelDeCores();
+    montarBotaoEPainelDono();
+  }, 600);
+})();
+</script>
 </body>
-
 </html>
-
-
-      
-
-
-    
-
-        
-
-
-
-
