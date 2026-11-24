@@ -7577,11 +7577,7 @@ button[onclick*="wa.me"]:not(.cb-zap-pulse-btn),
     });
 
     // 2. Apaga qualquer botão/link flutuante duplicado do WhatsApp (como o "wpp" verde de trás)
-    document.querySelectorAll('a[href*="wa.me"], button[onclick*="wa.me"], [id*="wpp"], [class*="wpp"], [id*="whatsapp"], [class*="whatsapp"]').forEach(function(el) {
-      if (!el.classList.contains('cb-zap-pulse-btn') && !el.classList.contains('cb-menu-contato')) {
-        el.remove();
-      }
-    });
+    
 
     // 3. Remove o ícone amarelo interno do botão Instalar App
     var btn = document.getElementById('cbInstallLandingBtn');
@@ -7674,6 +7670,28 @@ button#cbInstallLandingBtn {
   gerenciarWhatsApp();
   setInterval(gerenciarWhatsApp, 200);
 })();
+</script>
+<style>
+/* Permite o botão Confirmar no WhatsApp dentro das janelas de agendamento */
+.modal a[href*="wa.me"],
+.cb-modal a[href*="wa.me"],
+#publicView a[href*="wa.me"],
+#adminView a[href*="wa.me"] {
+  display: inline-flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+</style>
+
+<script>
+setInterval(function() {
+  var landing = document.getElementById('cortebookLanding');
+  var naTelaInicial = landing && getComputedStyle(landing).display !== 'none';
+  document.querySelectorAll('.cb-zap-pulse-btn').forEach(function(btn) {
+    btn.style.setProperty('display', naTelaInicial ? 'flex' : 'none', 'important');
+  });
+}, 250);
 </script>
 
 </body>
