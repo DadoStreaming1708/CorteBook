@@ -7166,6 +7166,72 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   filter: grayscale(100%) brightness(200%) !important;
 }
 </style>
+<!-- AJUSTE COMPLETO: CONTEÚDO ALINHADO À ESQUERDA + MOCKUP MAIOR NA DIREITA -->
+<style>
+@media (min-width: 920px) {
+  /* 1. Encosta logo, título, botões e seções bem no canto esquerdo (36px da borda) */
+  #cortebookLanding .cb-nav,
+  #cortebookLanding .cb-hero,
+  #cortebookLanding .cb-sec {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 36px !important;
+    padding-right: 36px !important;
+    box-sizing: border-box !important;
+  }
+
+  #cortebookLanding .cb-logo {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  /* 2. Aumenta o mockup (Notebook + Celular) para preencher o lado direito em equilíbrio */
+  #cortebookLanding .cb-hero {
+    grid-template-columns: 0.92fr 1.08fr !important;
+    gap: 48px !important;
+    padding-top: 38px !important;
+    padding-bottom: 64px !important;
+  }
+
+  .cb-devices-stage {
+    width: 100% !important;
+    padding-left: 115px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .cb-laptop-frame {
+    padding: 14px 14px 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .cb-laptop-screen > div:last-child {
+    padding: 28px 24px !important;
+    gap: 18px !important;
+  }
+
+  .cb-laptop-screen > div:last-child > div:first-child {
+    padding: 24px 18px !important;
+  }
+
+  .cb-laptop-screen > div:last-child > div:last-child > div {
+    padding: 11px 14px !important;
+    font-size: 13px !important;
+  }
+
+  .cb-phone-frame {
+    width: 210px !important;
+    padding: 9px !important;
+    border-radius: 28px !important;
+  }
+
+  .cb-phone-screen {
+    padding: 15px 13px !important;
+    font-size: 12.5px !important;
+  }
+}
+</style>
 
 </body>
   
