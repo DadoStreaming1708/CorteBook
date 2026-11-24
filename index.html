@@ -7496,6 +7496,103 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   setInterval(manterApenasUmZapEBotaoBranco, 250);
 })();
 </script>
+<!-- FIX FINAL PC + CELULAR: REMOVE BOTÃO WPP DUPLICADO + TIRA AMARELO DO INSTALAR APP -->
+<style>
+/* 1. Esconde e bloqueia qualquer botão de WhatsApp duplicado no PC e no Celular */
+a[href*="wa.me"]:not(.cb-zap-pulse-btn):not(.cb-menu-contato),
+button[onclick*="wa.me"]:not(.cb-zap-pulse-btn),
+[id*="wpp"]:not(.cb-zap-pulse-btn),
+[class*="wpp"]:not(.cb-zap-pulse-btn),
+[id*="whatsapp"]:not(.cb-zap-pulse-btn),
+[class*="whatsapp"]:not(.cb-zap-pulse-btn) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. Garante texto 100% branco no botão Instalar App no PC e no Celular */
+#cortebookLanding #cbInstallLandingBtn,
+#cortebookLanding #cbInstallLandingBtn * {
+  background: #27272a !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* 3. Ajustes exclusivos para o Celular (não altera o PC) */
+@media (max-width: 919px) {
+  #cortebookLanding .cb-nav {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 16px 14px 8px !important;
+  }
+  #cortebookLanding .cb-logo {
+    justify-content: center !important;
+    margin: 0 auto !important;
+  }
+  #cortebookLanding .cb-nav > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  #cortebookLanding #cbInstallLandingBtn,
+  #cortebookLanding #cbOpenLogin,
+  #cortebookLanding #cbOpenRegister {
+    padding: 9px 12px !important;
+    font-size: 12px !important;
+  }
+  .cb-devices-stage {
+    padding-left: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+  .cb-laptop-frame {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .cb-phone-frame {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 220px !important;
+    margin: 0 auto !important;
+  }
+}
+</style>
+
+<script>
+(function() {
+  function limparTudo() {
+    // 1. Preserva o link "Contato" do menu superior
+    document.querySelectorAll('#cortebookLanding .cb-saas-links a[href*="wa.me"]').forEach(function(a) {
+      a.classList.add('cb-menu-contato');
+    });
+
+    // 2. Apaga qualquer botão/link flutuante duplicado do WhatsApp (como o "wpp" verde de trás)
+    document.querySelectorAll('a[href*="wa.me"], button[onclick*="wa.me"], [id*="wpp"], [class*="wpp"], [id*="whatsapp"], [class*="whatsapp"]').forEach(function(el) {
+      if (!el.classList.contains('cb-zap-pulse-btn') && !el.classList.contains('cb-menu-contato')) {
+        el.remove();
+      }
+    });
+
+    // 3. Remove o ícone amarelo interno do botão Instalar App
+    var btn = document.getElementById('cbInstallLandingBtn');
+    if (btn && btn.innerHTML !== 'Instalar App') {
+      btn.innerHTML = 'Instalar App';
+    }
+  }
+  limparTudo();
+  setInterval(limparTudo, 200);
+})();
+</script>
 
 </body>
   
