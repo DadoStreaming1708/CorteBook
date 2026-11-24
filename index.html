@@ -7072,6 +7072,67 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }
 }
 </style>
+<!-- CABEÇALHO 100% DE PONTA A PONTA + HOVER PRETO + BOTÃO INSTALAR APP LIMPO -->
+<style>
+@media (min-width: 920px) {
+  /* Faz o cabeçalho ir de ponta a ponta da tela, sem espaços vazios nas laterais */
+  #cortebookLanding .cb-nav {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 18px 36px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  /* Logomarca e nome CorteBook bem no canto esquerdo */
+  #cortebookLanding .cb-logo {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  /* Links bem distribuídos no centro */
+  #cortebookLanding .cb-saas-links {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 32px !important;
+  }
+
+  /* Botões alinhados bem no canto direito */
+  #cortebookLanding .cb-nav > div:last-child {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0 !important;
+  }
+}
+
+/* Remove qualquer amarelo de dentro do botão Instalar App */
+#cortebookLanding #cbInstallLandingBtn,
+#cortebookLanding #cbInstallLandingBtn * {
+  background: #27272a !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Efeito preto elegante ao passar o mouse em cima dos botões do topo */
+#cortebookLanding #cbInstallLandingBtn:hover,
+#cortebookLanding #cbOpenLogin:hover,
+#cortebookLanding #cbOpenRegister:hover,
+#cortebookLanding .cb-btn-outline:hover,
+#cortebookLanding .cb-btn-dark:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #000000 !important;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+</style>
 
 </body>
   
