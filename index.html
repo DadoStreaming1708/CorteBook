@@ -7133,6 +7133,39 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   transition: all 0.2s ease;
 }
 </style>
+<!-- ALINHAMENTO DE GRADE PERFEITO (CABEÇALHO + CONTEÚDO NA MESMA COLUNA) -->
+<style>
+@media (min-width: 920px) {
+  /* Alinha o cabeçalho, o hero e todas as seções exatamente na mesma linha vertical */
+  #cortebookLanding .cb-nav,
+  #cortebookLanding .cb-hero,
+  #cortebookLanding .cb-sec {
+    max-width: 1240px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Links do menu maiores e nítidos */
+  #cortebookLanding .cb-saas-links a {
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    color: #18181b !important;
+  }
+}
+
+/* Remove qualquer amarelo do botão Instalar App e do título do notebook */
+#cortebookLanding .cb-laptop-screen strong,
+#cortebookLanding #cbInstallLandingBtn,
+#cortebookLanding #cbInstallLandingBtn * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  filter: grayscale(100%) brightness(200%) !important;
+}
+</style>
 
 </body>
   
