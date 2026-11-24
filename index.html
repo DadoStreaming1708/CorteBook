@@ -7631,6 +7631,50 @@ button#cbInstallLandingBtn {
   setInterval(ajustarVitrineEBotaoBranco, 200);
 })();
 </script>
+<!-- RESTAURA BOTÃO "CONFIRMAR NO WHATSAPP" DO AGENDAMENTO + CONTROLA FLUTUANTE -->
+<style>
+/* Permite qualquer botão de WhatsApp dentro das janelas de agendamento e da vitrine */
+.modal a[href*="wa.me"],
+.cb-modal a[href*="wa.me"],
+#publicView a[href*="wa.me"],
+#adminView a[href*="wa.me"] {
+  display: inline-flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+</style>
+
+<script>
+(function() {
+  function gerenciarWhatsApp() {
+    var landing = document.getElementById('cortebookLanding');
+    var naTelaInicial = landing && getComputedStyle(landing).display !== 'none';
+
+    // 1. Mostra o botão flutuante do CorteBook APENAS na tela inicial (não atrapalha a vitrine das barbearias)
+    document.querySelectorAll('.cb-zap-pulse-btn').forEach(function(btn) {
+      btn.style.setProperty('display', naTelaInicial ? 'flex' : 'none', 'important');
+    });
+
+    // 2. Garante que o botão "Confirmar no WhatsApp" dentro do modal "Horário Reservado!" apareça normalmente
+    document.querySelectorAll('.modal, .cb-modal').forEach(function(modal) {
+      if (modal.textContent.indexOf('Horário Reservado') !== -1) {
+        modal.querySelectorAll('a, button').forEach(function(el) {
+          if ((el.getAttribute('href') || '').indexOf('wa.me') !== -1 || el.textContent.toLowerCase().indexOf('whatsapp') !== -1) {
+            el.style.setProperty('display', 'flex', 'important');
+            el.style.setProperty('opacity', '1', 'important');
+            el.style.setProperty('visibility', 'visible', 'important');
+            el.style.setProperty('pointer-events', 'auto', 'important');
+          }
+        });
+      }
+    });
+  }
+
+  gerenciarWhatsApp();
+  setInterval(gerenciarWhatsApp, 200);
+})();
+</script>
 
 </body>
   
