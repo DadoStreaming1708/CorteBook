@@ -6578,6 +6578,72 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 })();
 </script>
 
+<!-- AJUSTE VISUAL CORTEBOOK: CABEÇALHO EM 1 LINHA NO PC + CAPA SEM CAMADA ESCURA -->
+<style>
+/* 1. Remove a camada escura (overlay) da capa e preserva as cores originais da foto */
+#publicView .hero.hero-vip,
+#publicView .hero,
+.hero.hero-vip,
+.hero {
+  background-image: var(--hero-bg, url('capa-imperium.png')) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Mantém a leitura dos textos nítida sem escurecer a foto de fundo */
+#publicView .hero.hero-vip h1,
+#publicView .hero.hero-vip p {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* 2. Cabeçalho em uma única faixa horizontal no computador (telas >= 900px) */
+@media (min-width: 900px) {
+  #cortebookLanding .cb-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px 4% !important;
+    gap: 24px !important;
+    background: rgba(10, 10, 12, 0.96) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.35) !important;
+  }
+
+  /* Logomarca + nome CorteBook na esquerda */
+  #cortebookLanding .cb-logo {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    font-size: 24px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Botões lado a lado na direita */
+  #cortebookLanding .cb-nav > div:last-child {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    width: auto !important;
+    max-width: none !important;
+    gap: 14px !important;
+  }
+
+  #cortebookLanding .cb-nav .btn {
+    flex: 0 1 auto !important;
+    min-width: 170px !important;
+    padding: 12px 22px !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+    white-space: nowrap !important;
+  }
+}
+</style>
 
 </body>
 </html>
