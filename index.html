@@ -5748,6 +5748,148 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }
 })();
 </script>
+<!-- ==================== CONTROLE DE COMBOS + FUNDOS E CORES DO SITE ==================== -->
+<script>
+(function(){
+  'use strict';
+
+  function aplicarCombosEFundo() {
+    // 1. Ocultar/Mostrar os 3 combos
+    const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+      ? state.visibleCombos
+      : [true, true, true];
+
+    const cards = document.querySelectorAll('#comboGrid > *');
+    let algumVisivel = false;
+    cards.forEach((card, i) => {
+      const ativo = vis[i] !== false;
+      card.style.display = ativo ? '' : 'none';
+      if (ativo) algumVisivel = true;
+    });
+    const sec = document.getElementById('combosSection');
+    if (sec && cards.length) sec.style.display = algumVisivel ? '' : 'none';
+
+    // 2. Cor de fundo do site inteiro
+    const bg = (typeof state !== 'undefined' && state.branding?.bgColor) ? state.branding.bgColor : '';
+    if (!bg) return;
+
+    const r = document.documentElement.style;
+    r.setProperty('--bg', bg);
+    document.body.style.setProperty('background', bg, 'important');
+    document.body.style.setProperty('background-image', 'none', 'important');
+
+    // Detecta se o fundo escolhido é claro ou escuro para ajustar textos e cartões
+    const hex = bg.replace('#', '');
+    const lum = hex.length === 6
+      ? (0.299 * parseInt(hex.substr(0,2),16) + 0.587 * parseInt(hex.substr(2,2),16) + 0.114 * parseInt(hex.substr(4,2),16))
+      : 0;
+
+    if (lum > 165) {
+      // Modo Claro automático
+      r.setProperty('--panel', '#ffffff');
+      r.setProperty('--panel2', '#e4e4e7');
+      r.setProperty('--white', '#111827');
+      r.setProperty('--muted', '#4b5563');
+      r.setProperty('--line', '#d4d4d8');
+      document.body.style.color = '#111827';
+    } else {
+      // Modo Escuro (ajusta os cartões um pouco mais claros que o fundo escolhido)
+      r.setProperty('--panel', 'rgba(255, 255, 255, 0.05)');
+      r.setProperty('--panel2', 'rgba(255, 255, 255, 0.08)');
+      r.setProperty('--white', '#fcfbf8');
+      r.setProperty('--muted', '#b4ad98');
+      r.setProperty('--line', 'rgba(255, 255, 255, 0.12)');
+      document.body.style.color = '#fcfbf8';
+    }
+  }
+
+  setInterval(() => {
+    aplicarCombosEFundo();
+
+    const root = document.getElementById('adminContent');
+    if (!root || typeof currentTab === 'undefined') return;
+
+    // A) Controle dos 3 Combos na aba "Planos"
+    if (currentTab === 'planos' && !document.getElementById('cbCombosToggleBox')) {
+      const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+        ? state.visibleCombos
+        : [true, true, true];
+
+      const box = document.createElement('div');
+      box.id = 'cbCombosToggleBox';
+      box.className = 'panel';
+      box.style.marginTop = '16px';
+      box.innerHTML = `
+        <div class="sectionhead"><h2>👁️ Exibir Combos na Vitrine</h2></div>
+        <p class="small muted" style="margin-top:0">Escolha quantos combos devem aparecer no site (0, 1, 2 ou 3):</p>
+        <label class="choice"><input type="checkbox" id="visCombo0" ${vis !== false ? 'checked' : ''}> Mostrar Combo 1 (Mais Escolhido)</label>
+        <label class="choice"><input type="checkbox" id="visCombo1" ${vis !== false ? 'checked' : ''}> Mostrar Combo 2 (Experiência VIP)</label>
+        <label class="choice"><input type="checkbox" id="visCombo2" ${vis !== false ? 'checked' : ''}> Mostrar Combo 3 (Alto Padrão)</label>
+        <button type="button" class="btn full" id="btnSaveVisibleCombos" style="margin-top:10px">Salvar Visibilidade dos Combos</button>
+      `;
+      root.prepend(box);
+
+      document.getElementById('btnSaveVisibleCombos').onclick = () => {
+        state.visibleCombos = [
+          document.getElementById('visCombo0').checked,
+          document.getElementById('visCombo1').checked,
+          document.getElementById('visCombo2').checked
+        ];
+        aplicarCombosEFundo();
+        if (typeof save === 'function') save();
+        if (typeof toast === 'function') toast('Visibilidade dos combos atualizada!');
+      };
+    }
+
+    // B) 10 Cores Prontas + Paleta Livre para o FUNDO DO SITE na aba "Configurações"
+    if (currentTab === 'configuracoes' && !document.getElementById('cbExtraBgBox')) {
+      const form = document.getElementById('brandingForm');
+      if (!form) return;
+
+      const curBg = state.branding?.bgColor || '#0a0a0a';
+
+      const extra = document.createElement('div');
+      extra.id = 'cbExtraBgBox';
+      extra.className = 'field';
+      extra.style.marginTop = '14px';
+      extra.innerHTML = `
+        <label>Cor de fundo do site (10 opções prontas + paleta livre)</label>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px">
+          <button type="button" data-pick-bg="#0a0a0a" class="btn secondary" style="padding:7px 10px;font-size:11px">⚫ Preto Clássico</button>
+          <button type="button" data-pick-bg="#18181b" class="btn secondary" style="padding:7px 10px;font-size:11px">🔘 Grafite</button>
+          <button type="button" data-pick-bg="#0f172a" class="btn secondary" style="padding:7px 10px;font-size:11px">🔵 Azul Noturno</button>
+          <button type="button" data-pick-bg="#1e1b4b" class="btn secondary" style="padding:7px 10px;font-size:11px">🟣 Índigo Escuro</button>
+          <button type="button" data-pick-bg="#1f1224" class="btn secondary" style="padding:7px 10px;font-size:11px">🍇 Roxo VIP</button>
+          <button type="button" data-pick-bg="#1f0f12" class="btn secondary" style="padding:7px 10px;font-size:11px">🍷 Vinho Escuro</button>
+          <button type="button" data-pick-bg="#1a1110" class="btn secondary" style="padding:7px 10px;font-size:11px">🟤 Café Escuro</button>
+          <button type="button" data-pick-bg="#0d1914" class="btn secondary" style="padding:7px 10px;font-size:11px">🟢 Verde Esmeralda</button>
+          <button type="button" data-pick-bg="#161912" class="btn secondary" style="padding:7px 10px;font-size:11px">🫒 Verde Militar</button>
+          <button type="button" data-pick-bg="#f4f4f5" class="btn secondary" style="padding:7px 10px;font-size:11px">⚪ Branco Gelo</button>
+        </div>
+        <small class="muted">Ou toque no quadrado abaixo para escolher qualquer cor de fundo na paleta livre:</small>
+        <input type="color" id="cbFreeBgPicker" value="${curBg}" style="width:100%;height:46px;margin-top:6px;background:#0a0a0a;border:1px solid var(--line);border-radius:10px">
+      `;
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      form.insertBefore(extra, submitBtn);
+
+      extra.querySelectorAll('[data-pick-bg]').forEach(btn => {
+        btn.onclick = () => {
+          const bg = btn.getAttribute('data-pick-bg');
+          document.getElementById('cbFreeBgPicker').value = bg;
+          state.branding.bgColor = bg;
+          aplicarCombosEFundo();
+        };
+      });
+
+      document.getElementById('cbFreeBgPicker').oninput = (e) => {
+        state.branding.bgColor = e.target.value;
+        aplicarCombosEFundo();
+      };
+    }
+  }, 700);
+})();
+</script>
 
 </body>
 
