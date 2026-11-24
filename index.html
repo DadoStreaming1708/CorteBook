@@ -6421,30 +6421,119 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }, true); // 'true' garante que rode ANTES do evento de salvar original do seu site
 })();
 </script>
-<!-- ESTILO FULL-WIDTH PARA A PÁGINA INICIAL (HOME) NO COMPUTADOR -->
+<!-- LAYOUT TELA CHEIA ESTILO SAAS PROFISSIONAL PARA COMPUTADOR (DESKTOP) -->
 <style>
 @media (min-width: 900px) {
-  /* Remove a trava de largura estreita da página inicial */
-  body > div,
-  #landing,
-  .landing,
-  .home-wrap,
-  .landing-wrap {
+  /* 1. Destrava a largura estreita de todos os contêineres da landing page (.cb-*) */
+  body,
+  [class^="cb-"],
+  [class*=" cb-"] {
     max-width: 100% !important;
-    width: 100% !important;
   }
 
-  /* Centraliza o conteúdo interno da página inicial com largura confortável de computador */
-  .landing-hero,
-  .landing-section,
-  .landing-container,
-  .landing header,
-  .landing footer {
-    max-width: 1280px !important;
+  /* 2. Cabeçalho em faixa completa no topo: Logo na esquerda e Botões na direita */
+  .cb-header,
+  .cb-topbar,
+  .cb-nav {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 18px 6% !important;
+    box-sizing: border-box !important;
+    border-bottom: 1px solid rgba(243, 208, 107, 0.15) !important;
+    background: rgba(10, 10, 12, 0.95) !important;
+  }
+
+  /* Remove barras verticais entre os botões do topo */
+  .cb-header > div,
+  .cb-topbar > div,
+  .cb-nav-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .cb-header button,
+  .cb-header a,
+  .cb-topbar button,
+  .cb-topbar a {
+    border-left: none !important;
+    border-right: none !important;
+    border-radius: 10px !important;
+    padding: 10px 20px !important;
+  }
+
+  /* 3. Banner Principal (Hero) cobrindo 100% da largura da tela sem faixas pretas */
+  .cb-hero,
+  .cb-hero-wrap,
+  .cb-landing-hero {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 82vh !important;
+    padding: 80px 8% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-size: cover !important;
+    background-position: center !important;
+  }
+
+  .cb-hero h1 {
+    font-size: 52px !important;
+    line-height: 1.15 !important;
+    max-width: 960px !important;
+    margin: 18px auto !important;
+  }
+
+  .cb-hero > p {
+    font-size: 19px !important;
+    line-height: 1.6 !important;
+    max-width: 780px !important;
+    margin: 0 auto 28px auto !important;
+  }
+
+  .cb-exclusive-banner {
+    max-width: 860px !important;
+    margin: 24px auto !important;
+    padding: 20px 28px !important;
+  }
+
+  .cb-cta-group {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    margin-top: 24px !important;
+  }
+
+  /* 4. Seções de Recursos, Planos e Depoimentos em largura total confortável */
+  .cb-section,
+  .cb-features,
+  .cb-plans,
+  .cb-footer {
+    width: 100% !important;
+    max-width: 1380px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    padding-left: 40px !important;
-    padding-right: 40px !important;
+    padding: 60px 6% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 5. Organiza os cards de benefícios e planos lado a lado (3 colunas no PC) */
+  .cb-grid,
+  .cb-cards,
+  .cb-features-grid,
+  .cb-plans-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 24px !important;
+    width: 100% !important;
   }
 }
 </style>
