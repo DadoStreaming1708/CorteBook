@@ -7593,6 +7593,44 @@ button[onclick*="wa.me"]:not(.cb-zap-pulse-btn),
   setInterval(limparTudo, 200);
 })();
 </script>
+<!-- FIX FINAL: SITE VITRINE NA MESMA ABA + INSTALAR APP 100% BRANCO -->
+<style>
+button#cbInstallLandingBtn.btn,
+button#cbInstallLandingBtn {
+  background: #27272a !important;
+  background-color: #27272a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+</style>
+
+<script>
+(function() {
+  function ajustarVitrineEBotaoBranco() {
+    // 1. Faz "Ver Site Vitrine" abrir na mesma aba (remove target="_blank")
+    document.querySelectorAll('a[href*="?b="]').forEach(function(link) {
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+    });
+
+    // 2. Força o botão Instalar App a ter apenas texto branco sem cor amarela
+    var btn = document.getElementById('cbInstallLandingBtn');
+    if (btn) {
+      if (btn.textContent.trim() !== 'Instalar App' || btn.children.length > 0) {
+        btn.innerHTML = 'Instalar App';
+      }
+      btn.style.setProperty('color', '#ffffff', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      btn.style.setProperty('background', '#27272a', 'important');
+    }
+  }
+  ajustarVitrineEBotaoBranco();
+  setInterval(ajustarVitrineEBotaoBranco, 200);
+})();
+</script>
 
 </body>
   
