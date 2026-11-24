@@ -6292,6 +6292,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 })();
 </script>
 
+
 <script>
 (function(){
   'use strict';
@@ -6571,76 +6572,8 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   new MutationObserver(removerFlutuantes).observe(document.body, { childList: true, subtree: true });
 })();
 </script>
-
-<!-- AJUSTE VISUAL CORTEBOOK: CABEÇALHO EM 1 LINHA NO PC + CAPA SEM CAMADA ESCURA -->
+<!-- CORTEBOOK SAAS LANDING (FUNDO CLARO PROFISSIONAL) + VITRINE ESCURA VIP INTACTA -->
 <style>
-/* 1. Remove a camada escura (overlay) da capa e preserva as cores originais da foto */
-#publicView .hero.hero-vip,
-#publicView .hero,
-.hero.hero-vip,
-.hero {
-  background-image: var(--hero-bg, url('capa-imperium.png')) !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-/* Mantém a leitura dos textos nítida sem escurecer a foto de fundo */
-#publicView .hero.hero-vip h1,
-#publicView .hero.hero-vip p {
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95) !important;
-}
-
-/* 2. Cabeçalho em uma única faixa horizontal no computador (telas >= 900px) */
-@media (min-width: 900px) {
-  #cortebookLanding .cb-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 12px 4% !important;
-    gap: 24px !important;
-    background: rgba(10, 10, 12, 0.96) !important;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.35) !important;
-  }
-
-  /* Logomarca + nome CorteBook na esquerda */
-  #cortebookLanding .cb-logo {
-    flex: 0 0 auto !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    font-size: 24px !important;
-    white-space: nowrap !important;
-  }
-
-  /* Botões lado a lado na direita */
-  #cortebookLanding .cb-nav > div:last-child {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    width: auto !important;
-    max-width: none !important;
-    gap: 14px !important;
-  }
-
-  #cortebookLanding .cb-nav .btn {
-    flex: 0 1 auto !important;
-    min-width: 170px !important;
-    padding: 12px 22px !important;
-    font-size: 14px !important;
-    border-radius: 12px !important;
-    white-space: nowrap !important;
-  }
-}
-</style>
-<!-- PACOTE COMPLETO CORTEBOOK: VISUAL DESKTOP + CAPA LIMPA + CAIXA DE SUGESTÕES -->
-<style>
-/* 1. Remove camada escura (overlay) da capa das barbearias e mantém cores originais */
 #publicView .hero.hero-vip,
 #publicView .hero,
 .hero.hero-vip,
@@ -6654,172 +6587,81 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.92), 0 1px 3px rgba(0, 0, 0, 0.95) !important;
 }
 
-/* 2. Redesign exclusivo para Computador (Desktop >= 960px — celular fica 100% intacto) */
-@media (min-width: 960px) {
-  #cortebookLanding {
-    background: #09090b !important;
-    color: #fcfbf8 !important;
-  }
-
-  /* Cabeçalho em 1 linha sem cortar o botão da direita */
-  #cortebookLanding .cb-nav {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 14px 5% !important;
-    box-sizing: border-box !important;
-    background: rgba(9, 9, 11, 0.94) !important;
-    backdrop-filter: blur(14px) !important;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
-  }
-  #cortebookLanding .cb-nav * {
-    border-left: none !important;
-    border-right: none !important;
-  }
-  #cortebookLanding .cb-logo {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    font-size: 22px !important;
-    font-weight: 900 !important;
-    white-space: nowrap !important;
-  }
-  #cortebookLanding .cb-nav > div:last-child {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 10px !important;
-    width: auto !important;
-    max-width: none !important;
-  }
-  #cortebookLanding .cb-nav .btn {
-    padding: 10px 18px !important;
-    font-size: 13px !important;
-    border-radius: 10px !important;
-    white-space: nowrap !important;
-    min-width: auto !important;
-  }
-  #cortebookLanding #cbOpenRegister {
-    background: linear-gradient(135deg, #f3d06b, #d4af37) !important;
-    color: #09090b !important;
-    font-weight: 900 !important;
-    border: none !important;
-  }
-
-  /* Hero em 2 colunas profissionais no PC */
-  #cortebookLanding .cb-hero {
-    display: grid !important;
-    grid-template-columns: 1.15fr 0.85fr !important;
-    align-items: center !important;
-    gap: 44px !important;
-    text-align: left !important;
-    max-width: 1280px !important;
-    width: 100% !important;
-    min-height: auto !important;
-    margin: 0 auto !important;
-    padding: 56px 5% 44px !important;
-    background: radial-gradient(circle at 80% 30%, rgba(212, 175, 55, 0.14), transparent 55%), #09090b !important;
-  }
-  #cortebookLanding .cb-hero-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  #cortebookLanding .cb-hero h1 {
-    font-size: 46px !important;
-    line-height: 1.12 !important;
-    margin: 14px 0 16px !important;
-    max-width: 620px !important;
-    letter-spacing: -0.03em !important;
-  }
-  #cortebookLanding .cb-hero-left > p {
-    font-size: 16.5px !important;
-    line-height: 1.6 !important;
-    color: #a1a1aa !important;
-    margin: 0 0 24px !important;
-    max-width: 560px !important;
-  }
-  #cortebookLanding .cb-exclusive-banner {
-    margin: 0 0 26px !important;
-    max-width: 580px !important;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(20, 20, 24, 0.95)) !important;
-    border: 1px solid rgba(212, 175, 55, 0.45) !important;
-    padding: 16px 20px !important;
-  }
-  #cortebookLanding .cb-cta-group {
-    justify-content: flex-start !important;
-    margin: 0 0 18px !important;
-    gap: 14px !important;
-  }
-  #cortebookLanding .cb-trust-row {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 14px !important;
-    font-size: 12.5px !important;
-    color: #d4d4d8 !important;
-  }
-
-  /* Painel demonstrativo na direita */
-  .cb-hero-mockup {
-    background: linear-gradient(160deg, #16161a, #0e0e11);
-    border: 1px solid rgba(212, 175, 55, 0.4);
-    border-radius: 24px;
-    padding: 22px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(212, 175, 55, 0.08);
-  }
-
-  /* 4 cards alinhados na mesma altura */
-  #cortebookLanding .cb-features {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    align-items: stretch !important;
-    gap: 18px !important;
-    max-width: 1280px !important;
-    margin: 10px auto 44px !important;
-    padding: 0 5% !important;
-  }
-  #cortebookLanding .cb-feat {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    background: #121215 !important;
-    border: 1px solid #27272f !important;
-    border-radius: 18px !important;
-    padding: 22px 20px !important;
-  }
+#cortebookLanding {
+  background: #f5f5f7 !important;
+  color: #18181b !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
 }
+#cortebookLanding .cb-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 18px 5% !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-sizing: border-box !important;
+}
+#cortebookLanding .cb-nav * { border-left: none !important; border-right: none !important; }
+#cortebookLanding .cb-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: #111113 !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+}
+.cb-saas-links { display: flex; align-items: center; gap: 28px; }
+.cb-saas-links a { color: #3f3f46; text-decoration: none; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+.cb-badge-new { background: #18181b; color: #f3d06b; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 99px; margin-left: 4px; }
+#cortebookLanding .cb-nav > div:last-child { display: flex !important; align-items: center !important; gap: 12px !important; width: auto !important; }
+#cortebookLanding #cbOpenLogin { background: transparent !important; color: #18181b !important; border: none !important; font-weight: 700 !important; padding: 10px 16px !important; }
+#cortebookLanding #cbOpenRegister { background: #18181b !important; color: #ffffff !important; border: none !important; font-weight: 800 !important; padding: 11px 22px !important; border-radius: 10px !important; }
+#cortebookLanding #cbInstallLandingBtn { background: #e4e4e7 !important; color: #18181b !important; border: none !important; font-weight: 700 !important; padding: 10px 16px !important; border-radius: 10px !important; }
 
-/* 3. Caixa de Sugestões de Melhoria + Novidades */
-.cb-suggest-wrap {
-  width: min(100% - 32px, 1280px);
-  padding: 0 4%;
-  margin: 14px auto 28px;
-  box-sizing: border-box;
+#cortebookLanding .cb-hero {
+  display: grid !important;
+  grid-template-columns: 1fr 1.1fr !important;
+  align-items: center !important;
+  gap: 40px !important;
+  max-width: 1280px !important;
+  min-height: auto !important;
+  margin: 0 auto !important;
+  padding: 36px 5% 64px !important;
+  background: transparent !important;
+  text-align: left !important;
 }
-.cb-suggest-banner {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(18, 18, 22, 0.98));
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: 16px;
-  padding: 18px 22px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+#cortebookLanding .cb-hero h1 { color: #111113 !important; font-size: 52px !important; font-weight: 900 !important; line-height: 1.08 !important; letter-spacing: -0.03em !important; margin: 0 0 18px !important; }
+#cortebookLanding .cb-hero-sub { color: #52525b !important; font-size: 16.5px !important; line-height: 1.6 !important; margin: 0 0 28px !important; max-width: 500px !important; }
+.cb-saas-ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+.cb-btn-dark { background: #18181b !important; color: #ffffff !important; border: none !important; padding: 15px 26px !important; border-radius: 10px !important; font-size: 14.5px !important; font-weight: 800 !important; cursor: pointer; }
+.cb-btn-outline { background: #ffffff !important; color: #18181b !important; border: 1.5px solid #d4d4d8 !important; padding: 15px 26px !important; border-radius: 10px !important; font-size: 14.5px !important; font-weight: 700 !important; cursor: pointer; }
+
+.cb-devices-stage { position: relative; padding-left: 48px; padding-bottom: 24px; }
+.cb-laptop-frame { background: #18181b; border-radius: 16px; padding: 10px 10px 16px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.22); border: 1px solid #27272a; }
+.cb-laptop-screen { background: #0f0f12; border-radius: 10px; overflow: hidden; color: #fcfbf8; }
+.cb-phone-frame { position: absolute; left: 0; bottom: 0; width: 195px; background: #18181b; border-radius: 26px; padding: 8px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35); border: 2px solid #3f3f46; }
+.cb-phone-screen { background: #ffffff; color: #18181b; border-radius: 20px; padding: 12px 10px; font-size: 11px; }
+
+#cortebookLanding .cb-features { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 18px !important; max-width: 1280px !important; margin: 0 auto 44px !important; padding: 0 5% !important; }
+#cortebookLanding .cb-feat { background: #ffffff !important; border: 1px solid #e4e4e7 !important; border-radius: 16px !important; padding: 22px !important; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important; }
+#cortebookLanding .cb-feat h3 { color: #111113 !important; }
+#cortebookLanding .cb-feat p { color: #52525b !important; }
+
+.cb-wpp-float { position: fixed; right: 22px; bottom: 22px; width: 54px; height: 54px; border-radius: 50%; background: #25d366; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 26px; text-decoration: none; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); z-index: 9990; }
+
+@media (max-width: 920px) {
+  .cb-saas-links { display: none !important; }
+  #cortebookLanding .cb-hero { grid-template-columns: 1fr !important; text-align: center !important; padding: 28px 5% 40px !important; }
+  #cortebookLanding .cb-hero h1 { font-size: 34px !important; }
+  .cb-saas-ctas { justify-content: center !important; }
+  .cb-devices-stage { padding-left: 20px; margin-top: 16px; }
+  .cb-phone-frame { width: 150px; }
+  #cortebookLanding .cb-features { grid-template-columns: 1fr !important; }
 }
-.cb-suggest-title { color: #f3d06b; font-weight: 800; font-size: 15.5px; margin-bottom: 4px; }
-.cb-suggest-desc { color: #d4d4d8; font-size: 13px; margin: 0; line-height: 1.45; }
-.cb-news-box { background: #121215; border: 1px solid #27272f; border-radius: 16px; padding: 14px 20px; }
-.cb-news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 12px; }
-.cb-news-item { background: #18181d; border: 1px solid #2c2c35; border-radius: 12px; padding: 13px; }
 </style>
-
-<!-- Modal de Sugestões -->
 <div class="cb-modal" id="cbSuggestModal">
   <div class="cb-box" style="width:min(100%, 440px)">
     <div class="modalhead">
@@ -6842,162 +6684,133 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 (function() {
   'use strict';
 
-  function upgradeDesktopOnly() {
-    if (window.innerWidth < 960) return;
+  function buildSaasLanding() {
+    const landing = document.getElementById('cortebookLanding');
+    const nav = landing?.querySelector('.cb-nav');
+    const hero = landing?.querySelector('.cb-hero');
+    if (!nav || !hero || hero.dataset.saasReady === '1') return;
+    hero.dataset.saasReady = '1';
 
-    const hero = document.querySelector('#cortebookLanding .cb-hero');
-    if (!hero || hero.dataset.upgraded === '1') return;
-    hero.dataset.upgraded = '1';
-
-    const left = document.createElement('div');
-    left.className = 'cb-hero-left';
-
-    const badge = hero.querySelector('.cb-badge');
-    const h1 = hero.querySelector('h1');
-    const desc = Array.from(hero.children).find(el => el.tagName === 'P' && !el.classList.contains('small'));
-    const banner = hero.querySelector('.cb-exclusive-banner');
-    const ctas = hero.querySelector('.cb-cta-group');
-
-    if (badge) left.appendChild(badge);
-    if (h1) left.appendChild(h1);
-    if (desc) left.appendChild(desc);
-    if (banner) left.appendChild(banner);
-    if (ctas) {
-      left.appendChild(ctas);
-      const guideTrigger = document.querySelector('#cortebookLanding button[onclick*="cbGuideModal"]');
-      if (guideTrigger) {
-        guideTrigger.className = 'btn ghost';
-        guideTrigger.style.cssText = 'padding:14px 20px;font-size:14px;border-radius:12px;';
-        ctas.appendChild(guideTrigger);
-      }
+    if (!nav.querySelector('.cb-saas-links')) {
+      const links = document.createElement('div');
+      links.className = 'cb-saas-links';
+      links.innerHTML = `
+        <a onclick="document.querySelector('#cortebookLanding .cb-features')?.scrollIntoView({behavior:'smooth'})">Ferramentas <span class="cb-badge-new">New</span></a>
+        <a onclick="document.getElementById('cbGuideModal')?.classList.add('open')">Recursos</a>
+        <a href="https://wa.me" target="_blank" rel="noopener">Contato</a>
+      `;
+      nav.insertBefore(links, nav.lastElementChild);
     }
 
-    const trust = document.createElement('div');
-    trust.className = 'cb-trust-row';
-    trust.innerHTML = `
-      <span>✅ <b>15 dias grátis</b> sem cartão</span>
-      <span>✅ Plano completo <b>R$ 39,99/mês</b></span>
-      <span>✅ Suporte direto no WhatsApp</span>
+    hero.innerHTML = `
+      <div>
+        <h1>O Melhor Sistema<br>Para Barbearias</h1>
+        <p class="cb-hero-sub">Imagine seu cliente poder escolher o seu barbeiro preferido, visualizar os horários disponíveis e selecionar o que melhor se encaixa na sua rotina, tudo em questão de segundos.</p>
+        <div class="cb-saas-ctas">
+          <button type="button" class="cb-btn-dark" onclick="document.getElementById('cbOpenRegister')?.click()">Use agora gratuitamente!</button>
+          <button type="button" class="cb-btn-outline" onclick="document.getElementById('cbGuideModal')?.classList.add('open')">Conhecer os recursos</button>
+        </div>
+        <div style="margin-top:16px;font-size:12.5px;color:#52525b;font-weight:600">
+          ✓ 15 dias grátis sem cartão &nbsp;·&nbsp; ✓ Plano completo R$ 39,99/mês
+        </div>
+      </div>
+
+      <div class="cb-devices-stage">
+        <div class="cb-laptop-frame">
+          <div class="cb-laptop-screen">
+            <div style="background:#18181b;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #27272a;font-size:11px">
+              <strong style="color:#f3d06b">✂️ CorteBook · Painel Administrativo</strong>
+              <span style="color:#34d399;font-weight:700">● Online 24h</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;align-items:center">
+              <div style="background:#16161a;border:1px solid #27272a;border-radius:12px;padding:16px;text-align:center">
+                <div style="width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#f3d06b,#b8860b);color:#09090b;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">CB</div>
+                <strong style="font-size:13px;display:block">SUA BARBEARIA VIP</strong>
+                <span style="font-size:10px;color:#a1a1aa">Identidade Visual 100% Personalizada</span>
+              </div>
+              <div style="display:grid;gap:7px">
+                <div style="background:#10b981;color:#fff;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700">📅 Agenda Inteligente 24h</div>
+                <div style="background:#2563eb;color:#fff;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700">💰 Caixa & Comissões</div>
+                <div style="background:#d97706;color:#fff;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700">⭐ Cartão Fidelidade VIP</div>
+                <div style="background:#7c3aed;color:#fff;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700">📲 Lembrete WhatsApp</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cb-phone-frame">
+          <div class="cb-phone-screen">
+            <div style="font-weight:900;font-size:11px;border-bottom:1px solid #e4e4e7;padding-bottom:6px;margin-bottom:8px;display:flex;justify-content:space-between">
+              <span>Agendamentos</span>
+              <span style="color:#16a34a">Hoje</span>
+            </div>
+            <div style="background:#f4f4f5;padding:6px 8px;border-radius:8px;margin-bottom:6px">
+              <strong style="display:block">09:00 · Lucas M.</strong>
+              <span style="color:#71717a;font-size:10px">Corte Degradê · R$ 35</span>
+            </div>
+            <div style="background:#f4f4f5;padding:6px 8px;border-radius:8px;margin-bottom:6px">
+              <strong style="display:block">10:00 · Pedro H.</strong>
+              <span style="color:#71717a;font-size:10px">Corte + Barba · R$ 55</span>
+            </div>
+            <div style="background:#18181b;color:#f3d06b;text-align:center;padding:6px;border-radius:8px;font-weight:800;font-size:10px">
+              + Novo Horário
+            </div>
+          </div>
+        </div>
+      </div>
     `;
-    left.appendChild(trust);
 
-    const right = document.createElement('div');
-    right.className = 'cb-hero-mockup';
-    right.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #27272f;padding-bottom:12px;margin-bottom:16px">
-        <div style="display:flex;gap:6px">
-          <span style="width:10px;height:10px;border-radius:50%;background:#ef4444"></span>
-          <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b"></span>
-          <span style="width:10px;height:10px;border-radius:50%;background:#10b981"></span>
-        </div>
-        <span style="font-size:11px;color:#a1a1aa;font-family:monospace">cortebook.com.br/?b=sua-barbearia</span>
-        <span style="background:#10b98122;color:#34d399;border:1px solid #10b98155;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px">ONLINE</span>
-      </div>
-
-      <div style="background:#111114;border:1px solid #27272f;border-radius:14px;padding:14px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div>
-            <div style="font-size:10px;color:#d4af37;font-weight:800;letter-spacing:.12em">FATURAMENTO DO DIA</div>
-            <strong style="font-size:24px;color:#fcfbf8">R$ 845,00</strong>
-          </div>
-          <span style="background:#d4af3722;color:#f3d06b;padding:6px 10px;border-radius:10px;font-size:12px;font-weight:800">+14 cortes hoje</span>
-        </div>
-        <div style="height:6px;background:#222228;border-radius:99px;overflow:hidden">
-          <div style="width:78%;height:100%;background:linear-gradient(90deg,#b8860b,#f3d06b)"></div>
-        </div>
-      </div>
-
-      <div style="display:grid;gap:8px;margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#16161b;border:1px solid #27272f;padding:10px 12px;border-radius:12px;font-size:13px">
-          <div><strong>14:30 · Matheus Silva</strong><div style="font-size:11px;color:#a1a1aa">Corte Degradê + Barba · Barbeiro Lucas</div></div>
-          <span style="color:#34d399;font-weight:800;font-size:12px">Confirmado ✓</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#16161b;border:1px solid #27272f;padding:10px 12px;border-radius:12px;font-size:13px">
-          <div><strong>15:15 · Rafael Costa</strong><div style="font-size:11px;color:#a1a1aa">Corte + Sobrancelha · Cartão VIP (9/10)</div></div>
-          <span style="color:#f3d06b;font-weight:800;font-size:12px">VIP ★</span>
-        </div>
-      </div>
-
-      <div style="background:linear-gradient(135deg,#f3d06b,#d4af37);color:#09090b;text-align:center;font-weight:900;padding:11px;border-radius:12px;font-size:13px">
-        📲 Lembrete Automático no WhatsApp em 1 Clique
-      </div>
-    `;
-
-    Array.from(hero.children).forEach(ch => {
-      if (ch.id !== 'cbGuideModal') ch.remove();
-    });
-    hero.prepend(right);
-    hero.prepend(left);
-  }
-
-  function criarBlocoSugestoes(idUnico) {
-    const wrap = document.createElement('div');
-    wrap.id = idUnico;
-    wrap.className = 'cb-suggest-wrap';
-    wrap.innerHTML = `
-      <div class="cb-suggest-banner">
-        <div style="flex:1 1 280px">
-          <div class="cb-suggest-title">💡 Tem sugestões de melhorias?</div>
-          <p class="cb-suggest-desc">Envie sua sugestão e seu feedback, pois nossas melhorias são todas desenvolvidas levando em consideração o seu feedback.</p>
-        </div>
-        <button type="button" class="btn cb-open-suggest-btn" style="white-space:nowrap">Enviar sugestões</button>
-      </div>
-      <details class="cb-news-box">
-        <summary style="cursor:pointer;font-weight:800;color:#f3d06b;font-size:14px">
-          🚀 Últimas novidades do CorteBook <span class="small muted" style="font-weight:400">(Clique para ver)</span>
-        </summary>
-        <div class="cb-news-grid">
-          <div class="cb-news-item">
-            <strong style="color:#fcfbf8;font-size:13px;display:block;margin-bottom:4px">📸 Criador de Story Automático</strong>
-            <span class="small muted">Gere imagem pronta com seus horários livres e QR Code em 1 clique.</span>
-          </div>
-          <div class="cb-news-item">
-            <strong style="color:#fcfbf8;font-size:13px;display:block;margin-bottom:4px">🔥 Radar de Clientes Sumidos</strong>
-            <span class="small muted">Recupere clientes que não cortam há mais de 25 dias direto no WhatsApp.</span>
-          </div>
-          <div class="cb-news-item">
-            <strong style="color:#fcfbf8;font-size:13px;display:block;margin-bottom:4px">📲 Lembrete de 1 Clique</strong>
-            <span class="small muted">Confirme os horários do dia no WhatsApp sem precisar digitar nada.</span>
-          </div>
-        </div>
-      </details>
-    `;
-    return wrap;
-  }
-
-  function inserirSugestoes() {
-    const landingHero = document.querySelector('#cortebookLanding .cb-hero');
-    if (landingHero && !document.getElementById('cbSuggestLanding')) {
-      landingHero.insertAdjacentElement('afterend', criarBlocoSugestoes('cbSuggestLanding'));
+    if (!document.getElementById('cbWppFloatBtn')) {
+      const wpp = document.createElement('a');
+      wpp.id = 'cbWppFloatBtn';
+      wpp.className = 'cb-wpp-float';
+      wpp.href = 'https://wa.me';
+      wpp.target = '_blank';
+      wpp.rel = 'noopener';
+      wpp.title = 'Falar no WhatsApp';
+      wpp.innerHTML = '💬';
+      landing.appendChild(wpp);
     }
+  }
+
+  function injectAdminFeedback() {
     const adminHead = document.querySelector('#adminView .adminhead');
-    if (adminHead && !document.getElementById('cbSuggestAdmin')) {
-      adminHead.insertAdjacentElement('afterend', criarBlocoSugestoes('cbSuggestAdmin'));
-    }
-  }
-
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.cb-open-suggest-btn')) {
+    if (!adminHead || document.getElementById('cbSuggestAdmin')) return;
+    const box = document.createElement('div');
+    box.id = 'cbSuggestAdmin';
+    box.style.cssText = 'background:linear-gradient(135deg,rgba(212,175,55,.15),#141418);border:1px solid rgba(212,175,55,.45);border-radius:16px;padding:16px 20px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap';
+    box.innerHTML = `
+      <div style="flex:1 1 260px">
+        <strong style="color:#f3d06b;font-size:15px;display:block;margin-bottom:4px">💡 Tem sugestões de melhorias?</strong>
+        <span class="small muted">Envie sua sugestão e seu feedback, pois nossas melhorias são todas desenvolvidas levando em consideração o seu feedback.</span>
+      </div>
+      <button type="button" class="btn" id="cbOpenSuggestBtn">Enviar sugestões</button>
+    `;
+    adminHead.insertAdjacentElement('afterend', box);
+    document.getElementById('cbOpenSuggestBtn').onclick = () => {
       document.getElementById('cbSuggestText').value = '';
       document.getElementById('cbSuggestModal').classList.add('open');
-    }
-  });
+    };
+  }
 
   document.getElementById('cbSendSuggestBtn').onclick = function() {
     const msg = (document.getElementById('cbSuggestText').value || '').trim();
     if (msg.length < 5) { alert('Escreva sua sugestão antes de enviar.'); return; }
-    const origem = window.currentOwnerTenant?.name || document.querySelector('.brandname')?.textContent || 'Visitante / Barbearia';
-    const textoZap = `💡 *Sugestão de Melhoria — CorteBook*\n*Origem:* ${origem}\n\n*Ideia:* ${msg}`;
+    const origem = window.currentOwnerTenant?.name || 'Barbearia Parceira';
+    const textoZap = `💡 *Sugestão de Melhoria — CorteBook*\n*Barbearia:* ${origem}\n\n*Ideia:* ${msg}`;
     document.getElementById('cbSuggestModal').classList.remove('open');
-    if (typeof toast === 'function') toast('Abrindo WhatsApp para enviar sua sugestão!');
-    window.open(`https://wa.me{encodeURIComponent(textoZap)}`, '_blank', 'noopener');
+    window.open(`https://wa.me/5582987075016?text=${encodeURIComponent(textoZap)}`, '_blank', 'noopener');
   };
 
   setInterval(() => {
-    upgradeDesktopOnly();
-    inserirSugestoes();
+    buildSaasLanding();
+    injectAdminFeedback();
   }, 500);
 })();
 </script>
+
+
 </body>
 </html>
+
+
