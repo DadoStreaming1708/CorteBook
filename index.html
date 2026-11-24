@@ -7458,6 +7458,44 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   setInterval(limparBotaoInstalar, 500);
 })();
 </script>
+<!-- FIX DEFINITIVO: APENAS 1 WHATSAPP PISCANDO + INSTALAR APP SEMPRE BRANCO -->
+<style>
+/* Esconde qualquer botão duplicado e mantém só o .cb-zap-pulse-btn piscando */
+#cbZapFlutuanteFinal,
+#cbWppFloatBtn {
+  display: none !important;
+}
+
+/* Trava o botão Instalar App com fundo escuro e texto branco puro em qualquer estado */
+#cortebookLanding #cbInstallLandingBtn,
+#cortebookLanding #cbInstallLandingBtn * {
+  background: #27272a !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+  filter: none !important;
+}
+</style>
+
+<script>
+(function() {
+  function manterApenasUmZapEBotaoBranco() {
+    // 1. Remove botões de WhatsApp duplicados, mantendo apenas o .cb-zap-pulse-btn
+    ['cbZapFlutuanteFinal', 'cbWppFloatBtn'].forEach(function(id) {
+      var dup = document.getElementById(id);
+      if (dup) dup.remove();
+    });
+
+    // 2. Mantém o botão Instalar App sem ícone amarelo e com texto branco
+    var btn = document.getElementById('cbInstallLandingBtn');
+    if (btn && btn.textContent.trim() !== 'Instalar App') {
+      btn.textContent = 'Instalar App';
+    }
+  }
+  manterApenasUmZapEBotaoBranco();
+  setInterval(manterApenasUmZapEBotaoBranco, 250);
+})();
+</script>
 
 </body>
   
