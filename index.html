@@ -5748,19 +5748,682 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }
 })();
 </script>
+<!-- ==================== CONTROLE DE COMBOS + FUNDOS E CORES DO SITE ==================== -->
+<script>
+(function(){
+  'use strict';
+
+  function aplicarCombosEFundo() {
+    // 1. Ocultar/Mostrar os 3 combos
+    const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+      ? state.visibleCombos
+      : [true, true, true];
+
+    const cards = document.querySelectorAll('#comboGrid > *');
+    let algumVisivel = false;
+    cards.forEach((card, i) => {
+      const ativo = vis[i] !== false;
+      card.style.display = ativo ? '' : 'none';
+      if (ativo) algumVisivel = true;
+    });
+    const sec = document.getElementById('combosSection');
+    if (sec && cards.length) sec.style.display = algumVisivel ? '' : 'none';
+
+    // 2. Cor de fundo do site inteiro
+    const bg = (typeof state !== 'undefined' && state.branding?.bgColor) ? state.branding.bgColor : '';
+    if (!bg) return;
+
+    const r = document.documentElement.style;
+    r.setProperty('--bg', bg);
+    document.body.style.setProperty('background', bg, 'important');
+    document.body.style.setProperty('background-image', 'none', 'important');
+
+    // Detecta se o fundo escolhido é claro ou escuro para ajustar textos e cartões
+    const hex = bg.replace('#', '');
+    const lum = hex.length === 6
+      ? (0.299 * parseInt(hex.substr(0,2),16) + 0.587 * parseInt(hex.substr(2,2),16) + 0.114 * parseInt(hex.substr(4,2),16))
+      : 0;
+
+    if (lum > 165) {
+      // Modo Claro automático
+      r.setProperty('--panel', '#ffffff');
+      r.setProperty('--panel2', '#e4e4e7');
+      r.setProperty('--white', '#111827');
+      r.setProperty('--muted', '#4b5563');
+      r.setProperty('--line', '#d4d4d8');
+      document.body.style.color = '#111827';
+    } else {
+      // Modo Escuro (ajusta os cartões um pouco mais claros que o fundo escolhido)
+      r.setProperty('--panel', 'rgba(255, 255, 255, 0.05)');
+      r.setProperty('--panel2', 'rgba(255, 255, 255, 0.08)');
+      r.setProperty('--white', '#fcfbf8');
+      r.setProperty('--muted', '#b4ad98');
+      r.setProperty('--line', 'rgba(255, 255, 255, 0.12)');
+      document.body.style.color = '#fcfbf8';
+    }
+  }
+
+  setInterval(() => {
+    aplicarCombosEFundo();
+
+    const root = document.getElementById('adminContent');
+    if (!root || typeof currentTab === 'undefined') return;
+
+    // A) Controle dos 3 Combos na aba "Planos"
+    if (currentTab === 'planos' && !document.getElementById('cbCombosToggleBox')) {
+      const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+        ? state.visibleCombos
+        : [true, true, true];
+
+      const box = document.createElement('div');
+      box.id = 'cbCombosToggleBox';
+      box.className = 'panel';
+      box.style.marginTop = '16px';
+      box.innerHTML = `
+        <div class="sectionhead"><h2>👁️ Exibir Combos na Vitrine</h2></div>
+        <p class="small muted" style="margin-top:0">Escolha quantos combos devem aparecer no site (0, 1, 2 ou 3):</p>
+        <label class="choice"><input type="checkbox" id="visCombo0" ${vis !== false ? 'checked' : ''}> Mostrar Combo 1 (Mais Escolhido)</label>
+        <label class="choice"><input type="checkbox" id="visCombo1" ${vis !== false ? 'checked' : ''}> Mostrar Combo 2 (Experiência VIP)</label>
+        <label class="choice"><input type="checkbox" id="visCombo2" ${vis !== false ? 'checked' : ''}> Mostrar Combo 3 (Alto Padrão)</label>
+        <button type="button" class="btn full" id="btnSaveVisibleCombos" style="margin-top:10px">Salvar Visibilidade dos Combos</button>
+      `;
+      root.prepend(box);
+
+      document.getElementById('btnSaveVisibleCombos').onclick = () => {
+        state.visibleCombos = [
+          document.getElementById('visCombo0').checked,
+          document.getElementById('visCombo1').checked,
+          document.getElementById('visCombo2').checked
+        ];
+        aplicarCombosEFundo();
+        if (typeof save === 'function') save();
+        if (typeof toast === 'function') toast('Visibilidade dos combos atualizada!');
+      };
+    }
+
+    // B) 10 Cores Prontas + Paleta Livre para o FUNDO DO SITE na aba "Configurações"
+    if (currentTab === 'configuracoes' && !document.getElementById('cbExtraBgBox')) {
+      const form = document.getElementById('brandingForm');
+      if (!form) return;
+
+      const curBg = state.branding?.bgColor || '#0a0a0a';
+
+      const extra = document.createElement('div');
+      extra.id = 'cbExtraBgBox';
+      extra.className = 'field';
+      extra.style.marginTop = '14px';
+      extra.innerHTML = `
+        <label>Cor de fundo do site (10 opções prontas + paleta livre)</label>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px">
+          <button type="button" data-pick-bg="#0a0a0a" class="btn secondary" style="padding:7px 10px;font-size:11px">⚫ Preto Clássico</button>
+          <button type="button" data-pick-bg="#18181b" class="btn secondary" style="padding:7px 10px;font-size:11px">🔘 Grafite</button>
+          <button type="button" data-pick-bg="#0f172a" class="btn secondary" style="padding:7px 10px;font-size:11px">🔵 Azul Noturno</button>
+          <button type="button" data-pick-bg="#1e1b4b" class="btn secondary" style="padding:7px 10px;font-size:11px">🟣 Índigo Escuro</button>
+          <button type="button" data-pick-bg="#1f1224" class="btn secondary" style="padding:7px 10px;font-size:11px">🍇 Roxo VIP</button>
+          <button type="button" data-pick-bg="#1f0f12" class="btn secondary" style="padding:7px 10px;font-size:11px">🍷 Vinho Escuro</button>
+          <button type="button" data-pick-bg="#1a1110" class="btn secondary" style="padding:7px 10px;font-size:11px">🟤 Café Escuro</button>
+          <button type="button" data-pick-bg="#0d1914" class="btn secondary" style="padding:7px 10px;font-size:11px">🟢 Verde Esmeralda</button>
+          <button type="button" data-pick-bg="#161912" class="btn secondary" style="padding:7px 10px;font-size:11px">🫒 Verde Militar</button>
+          <button type="button" data-pick-bg="#f4f4f5" class="btn secondary" style="padding:7px 10px;font-size:11px">⚪ Branco Gelo</button>
+        </div>
+        <small class="muted">Ou toque no quadrado abaixo para escolher qualquer cor de fundo na paleta livre:</small>
+        <input type="color" id="cbFreeBgPicker" value="${curBg}" style="width:100%;height:46px;margin-top:6px;background:#0a0a0a;border:1px solid var(--line);border-radius:10px">
+      `;
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      form.insertBefore(extra, submitBtn);
+
+      extra.querySelectorAll('[data-pick-bg]').forEach(btn => {
+        btn.onclick = () => {
+          const bg = btn.getAttribute('data-pick-bg');
+          document.getElementById('cbFreeBgPicker').value = bg;
+          state.branding.bgColor = bg;
+          aplicarCombosEFundo();
+        };
+      });
+
+      document.getElementById('cbFreeBgPicker').oninput = (e) => {
+        state.branding.bgColor = e.target.value;
+        aplicarCombosEFundo();
+      };
+    }
+  }, 700);
+})();
+</script>
+<!-- ==================== SOLUÇÃO DIRETA: EDITAR NOMES + OCULTAR COMBOS + TEMA BRANCO ==================== -->
+<style id="cbMasterFixStyle">
+  body.cb-light-mode { background: #f4f4f5 !important; color: #111827 !important; }
+  body.cb-light-mode #publicServices .servicecard,
+  body.cb-light-mode .servicecard,
+  body.cb-light-mode .panel,
+  body.cb-light-mode .card {
+    background: #ffffff !important;
+    border: 1px solid #d4d4d8 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+  }
+  body.cb-light-mode #publicServices .servicecard h3,
+  body.cb-light-mode .servicecard h3,
+  body.cb-light-mode .servicecard .price,
+  body.cb-light-mode h1, body.cb-light-mode h2, body.cb-light-mode h3 {
+    color: #111827 !important;
+  }
+  body.cb-light-mode #publicServices .servicecard p,
+  body.cb-light-mode .servicecard p,
+  body.cb-light-mode .muted {
+    color: #4b5563 !important;
+  }
+  body.cb-light-mode #publicServices .svc-book,
+  body.cb-light-mode .servicecard .btn {
+    background: #111827 !important;
+    color: #ffffff !important;
+  }
+</style>
+
+<script>
+(function(){
+  'use strict';
+
+  function aplicarTudo() {
+    // 1. Troca o raio ⚡ pelo relógio 🕒
+    document.querySelectorAll('div, span, p, i, strong').forEach(el => {
+      if (el.children.length === 0 && el.textContent.trim() === '⚡') el.textContent = '🕒';
+    });
+
+    // 2. Aplica modo branco (quadrados brancos + nomes pretos) se o fundo for claro
+    const bg = (typeof state !== 'undefined' && state.branding?.bgColor) ? state.branding.bgColor : '';
+    const hex = bg.replace('#', '');
+    const lum = hex.length === 6
+      ? (0.299 * parseInt(hex.substr(0,2),16) + 0.587 * parseInt(hex.substr(2,2),16) + 0.114 * parseInt(hex.substr(4,2),16))
+      : 0;
+
+    if (lum > 165) {
+      document.body.classList.add('cb-light-mode');
+      document.querySelectorAll('div').forEach(box => {
+        const txt = box.textContent || '';
+        if (box.children.length >= 2 && box.children.length <= 4 &&
+           (txt.includes('Avaliação') || txt.includes('Cortes & Barba') || txt.includes('Agendamento'))) {
+          if (box.offsetHeight > 50 && box.offsetHeight < 160 && box.offsetWidth < 220) {
+            box.style.setProperty('background', '#ffffff', 'important');
+            box.style.setProperty('border', '1px solid #d4d4d8', 'important');
+            box.querySelectorAll('*').forEach(c => c.style.setProperty('color', '#111827', 'important'));
+          }
+        }
+      });
+    } else {
+      document.body.classList.remove('cb-light-mode');
+    }
+
+    // 3. Oculta/Mostra os 3 combos (primeira foto) baseado na escolha do dono
+    const vis = (typeof state !== 'undefined' && Array.isArray(state.visibleCombos))
+      ? state.visibleCombos : [true, true, true];
+
+    const comboCards = [];
+    document.querySelectorAll('div, article, section').forEach(el => {
+      const txt = el.textContent || '';
+      if ((txt.includes('MAIS ESCOLHIDO') || txt.includes('EXPERIÊNCIA VIP') || txt.includes('ALTO PADRÃO')) &&
+          txt.includes('Reservar Experiência') && el.offsetHeight > 150 && el.offsetHeight < 420) {
+        if (!comboCards.includes(el)) comboCards.push(el);
+      }
+    });
+
+    comboCards.forEach((card, idx) => {
+      if (idx < 3) {
+        card.style.display = (vis[idx] !== false) ? '' : 'none';
+      }
+    });
+
+    // 4. Barra de controle dos 3 combos visível APENAS quando o dono está logado
+    const isAdmin = (typeof state !== 'undefined' && (state.isAdmin || sessionStorage.getItem('cb_admin') || document.getElementById('adminContent')?.offsetParent !== null));
+    if (isAdmin && comboCards.length > 0 && !document.getElementById('cbOwnerComboBar')) {
+      const bar = document.createElement('div');
+      bar.id = 'cbOwnerComboBar';
+      bar.style.cssText = 'background:#18181b;border:1px solid #d4af37;border-radius:12px;padding:12px;margin:10px 0;color:#fff;font-size:13px';
+      bar.innerHTML = `
+        <div style="font-weight:700;color:#f3d06b;margin-bottom:8px">👁️ Controle do Dono: Quais combos mostrar?</div>
+        <label style="display:block;margin-bottom:6px"><input type="checkbox" id="chkC0" ${vis[0]!==false?'checked':''}> 1. Experiência Black Completa</label>
+        <label style="display:block;margin-bottom:6px"><input type="checkbox" id="chkC1" ${vis[1]!==false?'checked':''}> 2. Experiência Black Alisado</label>
+        <label style="display:block;margin-bottom:8px"><input type="checkbox" id="chkC2" ${vis[2]!==false?'checked':''}> 3. Experiência Black Progressiva</label>
+        <button type="button" id="btnSalvarVisCombos" style="width:100%;padding:9px;background:#d4af37;color:#000;font-weight:700;border:none;border-radius:8px">Salvar Escolha</button>
+      `;
+      comboCards[0].parentElement.insertBefore(bar, comboCards[0]);
+
+      document.getElementById('btnSalvarVisCombos').onclick = () => {
+        state.visibleCombos = [
+          document.getElementById('chkC0').checked,
+          document.getElementById('chkC1').checked,
+          document.getElementById('chkC2').checked
+        ];
+        if (typeof save === 'function') save();
+        alert('Pronto! Escolha dos combos salva.');
+      };
+    }
+
+    // 5. Transforma a coluna "Serviço" (segunda foto) em caixas editáveis
+    document.querySelectorAll('table').forEach(tbl => {
+      const cabecalho = tbl.querySelector('thead')?.textContent || '';
+      if (cabecalho.includes('Serviço') && cabecalho.includes('Tempo') && !tbl.dataset.editNomesAtivo) {
+        tbl.dataset.editNomesAtivo = '1';
+
+        const linhas = tbl.querySelectorAll('tbody tr');
+        linhas.forEach((tr, i) => {
+          const celulaNome = tr.querySelector('td:first-child');
+          if (!celulaNome || celulaNome.querySelector('input')) return;
+          const textoAtual = celulaNome.textContent.trim();
+          celulaNome.innerHTML = `<input type="text" data-nome-srv-idx="${i}" value="${textoAtual.replace(/"/g, '&quot;')}" style="width:100%;min-width:130px;padding:8px;border-radius:8px;border:1px solid #52525b;background:#09090b;color:#fff;font-weight:700;font-size:13px">`;
+        });
+
+        // Ao clicar em "Salvar Alterações", grava os novos nomes no sistema
+        document.querySelectorAll('button').forEach(btn => {
+          if (btn.textContent.includes('Salvar Alterações') && !btn.dataset.hookNome) {
+            btn.dataset.hookNome = '1';
+            btn.addEventListener('click', () => {
+              tbl.querySelectorAll('[data-nome-srv-idx]').forEach(inp => {
+                const idx = Number(inp.getAttribute('data-nome-srv-idx'));
+                const novo = inp.value.trim();
+                if (!novo) return;
+                if (typeof servicosDadoStreaming !== 'undefined' && servicosDadoStreaming[idx]) {
+                  servicosDadoStreaming[idx].nome = novo;
+                  servicosDadoStreaming[idx].name = novo;
+                }
+                if (typeof state !== 'undefined' && Array.isArray(state.services) && state.services[idx]) {
+                  state.services[idx].nome = novo;
+                  state.services[idx].name = novo;
+                }
+              });
+              if (typeof save === 'function') save();
+              if (typeof renderPublicServices === 'function') renderPublicServices();
+            }, true);
+          }
+        });
+      }
+    });
+  }
+
+  setInterval(aplicarTudo, 500);
+})();
+</script>
+<!-- ==================== PAINEL ÚNICO DE CORES + CONTROLES DO DONO ==================== -->
+<script>
+(function(){
+  'use strict';
+
+  // 1. Aplica todas as cores escolhidas em tempo real no site
+  function aplicarPainelDeCores() {
+    if (typeof state === 'undefined') return;
+    const c = state.customColors || {};
+
+    // Troca o raio ⚡ pelo relógio 🕒
+    document.querySelectorAll('div, span, p, i, strong').forEach(el => {
+      if (el.children.length === 0 && el.textContent.trim() === '⚡') el.textContent = '🕒';
+    });
+
+    // 1. Fundo do Site
+    if (c.siteBg) {
+      document.documentElement.style.setProperty('--bg', c.siteBg);
+      document.body.style.setProperty('background', c.siteBg, 'important');
+      document.body.style.setProperty('background-image', 'none', 'important');
+    }
+
+    // 2. Fundo dos Quadrados (Serviços e Cards)
+    if (c.cardBg) {
+      document.querySelectorAll('#publicServices .servicecard, .servicecard, .panel, .card').forEach(el => {
+        if (!el.closest('#cbUnifiedColorPanel')) {
+          el.style.setProperty('background', c.cardBg, 'important');
+          el.style.setProperty('border-color', c.cardBg === '#ffffff' ? '#d4d4d8' : 'rgba(255,255,255,0.12)', 'important');
+        }
+      });
+    }
+
+    // 3. Cor dos Nomes (Títulos e Nomes dos Cortes)
+    if (c.titleColor) {
+      document.querySelectorAll('h1, h2, h3, h4, #publicServices .servicecard h3, .servicecard h3, .sectionhead h2').forEach(el => {
+        if (!el.closest('#cbUnifiedColorPanel') && !el.closest('button')) {
+          el.style.setProperty('color', c.titleColor, 'important');
+        }
+      });
+    }
+
+    // 4. Cor dos Textos Secundários (Tempo, Descrições)
+    if (c.textColor) {
+      document.querySelectorAll('p, .muted, #publicServices .servicecard p, .servicecard p').forEach(el => {
+        if (!el.closest('#cbUnifiedColorPanel') && !el.closest('button')) {
+          el.style.setProperty('color', c.textColor, 'important');
+        }
+      });
+    }
+
+    // 5. Cor dos Preços
+    if (c.priceColor) {
+      document.querySelectorAll('#publicServices .servicecard .price, .servicecard .price').forEach(el => {
+        el.style.setProperty('color', c.priceColor, 'important');
+      });
+    }
+
+    // 6. Cor dos Botões ("Agendar")
+    if (c.btnBg) {
+      document.querySelectorAll('#publicServices .svc-book, .servicecard .btn').forEach(el => {
+        el.style.setProperty('background', c.btnBg, 'important');
+        el.style.setProperty('color', c.btnText || '#ffffff', 'important');
+      });
+    }
+
+    // 7. Visibilidade dos 3 Combos (Experiência Black...)
+    const vis = Array.isArray(state.visibleCombos) ? state.visibleCombos : [true, true, true];
+    const comboCards = [];
+    document.querySelectorAll('div, article, section').forEach(el => {
+      const txt = el.textContent || '';
+      if ((txt.includes('MAIS ESCOLHIDO') || txt.includes('EXPERIÊNCIA VIP') || txt.includes('ALTO PADRÃO')) &&
+          txt.includes('Reservar Experiência') && el.offsetHeight > 150 && el.offsetHeight < 420) {
+        if (!comboCards.includes(el)) comboCards.push(el);
+      }
+    });
+    comboCards.forEach((card, idx) => {
+      if (idx < 3) card.style.display = (vis[idx] !== false) ? '' : 'none';
+    });
+  }
+
+  // 2. Cria um botão flutuante "🎨 Cores do Site" visível APENAS para o Dono/ADM
+  function montarBotaoEPainelDono() {
+    if (typeof state === 'undefined') return;
+    const isAdmin = Boolean(state.isAdmin || sessionStorage.getItem('cb_admin') || document.getElementById('adminContent')?.offsetParent !== null);
+    if (!isAdmin) return;
+
+    if (!document.getElementById('cbFloatingColorBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'cbFloatingColorBtn';
+      btn.type = 'button';
+      btn.innerHTML = '🎨 Cores & Visual';
+      btn.style.cssText = 'position:fixed;bottom:76px;left:14px;z-index:99998;background:#f3d06b;color:#000;font-weight:800;font-size:13px;padding:10px 14px;border-radius:999px;border:2px solid #000;box-shadow:0 4px 14px rgba(0,0,0,0.5)';
+      btn.onclick = abrirModalCores;
+      document.body.appendChild(btn);
+    }
+
+    // Transforma os nomes dos serviços em campos editáveis na tabela ADM
+    document.querySelectorAll('table').forEach(tbl => {
+      const cab = tbl.querySelector('thead')?.textContent || '';
+      if (cab.includes('Serviço') && cab.includes('Tempo') && !tbl.dataset.editNomesOk) {
+        tbl.dataset.editNomesOk = '1';
+        tbl.querySelectorAll('tbody tr').forEach((tr, i) => {
+          const td = tr.querySelector('td:first-child');
+          if (!td || td.querySelector('input')) return;
+          const atual = td.textContent.trim();
+          td.innerHTML = `<input type="text" data-srv-nome-i="${i}" value="${atual.replace(/"/g, '&quot;')}" style="width:100%;min-width:130px;padding:8px;border-radius:8px;border:1px solid #52525b;background:#09090b;color:#fff;font-weight:700">`;
+        });
+        document.querySelectorAll('button').forEach(b => {
+          if (b.textContent.includes('Salvar Alterações') && !b.dataset.hookSrvNome) {
+            b.dataset.hookSrvNome = '1';
+            b.addEventListener('click', () => {
+              tbl.querySelectorAll('[data-srv-nome-i]').forEach(inp => {
+                const idx = Number(inp.getAttribute('data-srv-nome-i'));
+                const novo = inp.value.trim();
+                if (!novo) return;
+                if (typeof servicosDadoStreaming !== 'undefined' && servicosDadoStreaming[idx]) {
+                  servicosDadoStreaming[idx].nome = novo;
+                  servicosDadoStreaming[idx].name = novo;
+                }
+                if (Array.isArray(state.services) && state.services[idx]) {
+                  state.services[idx].nome = novo;
+                  state.services[idx].name = novo;
+                }
+              });
+              if (typeof save === 'function') save();
+              if (typeof renderPublicServices === 'function') renderPublicServices();
+            }, true);
+          }
+        });
+      }
+    });
+  }
+
+  // 3. Janela única organizada com cada cor identificada pelo nome
+  function abrirModalCores() {
+    let modal = document.getElementById('cbUnifiedColorPanel');
+    if (modal) { modal.remove(); return; }
+
+    if (!state.customColors) state.customColors = {};
+    const c = state.customColors;
+    const vis = Array.isArray(state.visibleCombos) ? state.visibleCombos : [true, true, true];
+
+    modal = document.createElement('div');
+    modal.id = 'cbUnifiedColorPanel';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:14px;overflow-y:auto';
+
+    modal.innerHTML = `
+      <div style="background:#141417;border:1px solid #f3d06b;border-radius:16px;padding:16px;width:100%;max-width:420px;color:#fff;font-family:sans-serif;max-height:90vh;overflow-y:auto">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <strong style="font-size:16px;color:#f3d06b">🎨 Central de Cores & Vitrine</strong>
+          <button type="button" id="cbCloseColorModal" style="background:#27272a;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:700">✕</button>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;color:#a1a1aa;margin-bottom:6px">Atalhos Prontos (1 Toque):</div>
+          <div style="display:flex;gap:8px">
+            <button type="button" id="presetWhiteMode" style="flex:1;padding:10px;border-radius:10px;border:1px solid #ccc;background:#ffffff;color:#111827;font-weight:800;font-size:12px">⚪ Tema Branco (Tudo Combinando)</button>
+            <button type="button" id="presetDarkMode" style="flex:1;padding:10px;border-radius:10px;border:1px solid #f3d06b;background:#0a0a0a;color:#f3d06b;font-weight:800;font-size:12px">⚫ Tema Preto & Ouro</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">1. Fundo do Site</span>
+            <input type="color" id="inpSiteBg" value="${c.siteBg || '#0a0a0a'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">2. Quadrados (Cards)</span>
+            <input type="color" id="inpCardBg" value="${c.cardBg || '#141414'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">3. Nomes dos Cortes</span>
+            <input type="color" id="inpTitleColor" value="${c.titleColor || '#fcfbf8'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">4. Textos e Tempo</span>
+            <input type="color" id="inpTextColor" value="${c.textColor || '#b4ad98'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+                    <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">5. Cor dos Preços</span>
+            <input type="color" id="inpPriceColor" value="${c.priceColor || '#f3d06b'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+          <label style="background:#1f1f23;padding:8px;border-radius:10px;font-size:12px">
+            <span style="display:block;margin-bottom:4px;font-weight:700">6. Fundo dos Botões</span>
+            <input type="color" id="inpBtnBg" value="${c.btnBg || '#d4af37'}" style="width:100%;height:36px;border:none;border-radius:6px">
+          </label>
+        </div>
+
+        <div style="background:#1f1f23;padding:10px;border-radius:10px;font-size:12px;margin-bottom:14px">
+          <div style="font-weight:700;color:#f3d06b;margin-bottom:6px">Combos Visíveis na Vitrine:</div>
+          <label style="display:block;margin-bottom:4px"><input type="checkbox" id="modVisC0" ${vis[0] !== false ? 'checked' : ''}> Combo 1 (Mais Escolhido)</label>
+          <label style="display:block;margin-bottom:4px"><input type="checkbox" id="modVisC1" ${vis[1] !== false ? 'checked' : ''}> Combo 2 (Experiência VIP)</label>
+          <label style="display:block"><input type="checkbox" id="modVisC2" ${vis[2] !== false ? 'checked' : ''}> Combo 3 (Alto Padrão)</label>
+        </div>
+
+        <button type="button" id="btnSaveUnifiedColors" style="width:100%;padding:12px;background:#f3d06b;color:#000;font-weight:900;border:none;border-radius:10px;font-size:14px">Salvar Alterações</button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('cbCloseColorModal').onclick = () => modal.remove();
+
+    document.getElementById('presetWhiteMode').onclick = () => {
+      document.getElementById('inpSiteBg').value = '#f4f4f5';
+      document.getElementById('inpCardBg').value = '#ffffff';
+      document.getElementById('inpTitleColor').value = '#111827';
+      document.getElementById('inpTextColor').value = '#4b5563';
+      document.getElementById('inpPriceColor').value = '#111827';
+      document.getElementById('inpBtnBg').value = '#111827';
+    };
+
+    document.getElementById('presetDarkMode').onclick = () => {
+      document.getElementById('inpSiteBg').value = '#0a0a0a';
+      document.getElementById('inpCardBg').value = '#141414';
+      document.getElementById('inpTitleColor').value = '#fcfbf8';
+      document.getElementById('inpTextColor').value = '#b4ad98';
+      document.getElementById('inpPriceColor').value = '#f3d06b';
+      document.getElementById('inpBtnBg').value = '#d4af37';
+    };
+
+    document.getElementById('btnSaveUnifiedColors').onclick = () => {
+      state.customColors = {
+        siteBg: document.getElementById('inpSiteBg').value,
+        cardBg: document.getElementById('inpCardBg').value,
+        titleColor: document.getElementById('inpTitleColor').value,
+        textColor: document.getElementById('inpTextColor').value,
+        priceColor: document.getElementById('inpPriceColor').value,
+        btnBg: document.getElementById('inpBtnBg').value,
+        btnText: document.getElementById('inpBtnBg').value === '#111827' ? '#ffffff' : '#0a0a0a'
+      };
+      state.visibleCombos = [
+        document.getElementById('modVisC0').checked,
+        document.getElementById('modVisC1').checked,
+        document.getElementById('modVisC2').checked
+      ];
+      aplicarPainelDeCores();
+      if (typeof save === 'function') save();
+      if (typeof toast === 'function') toast('Cores e vitrine atualizadas!');
+      modal.remove();
+    };
+  }
+
+  setInterval(() => {
+    aplicarPainelDeCores();
+    montarBotaoEPainelDono();
+  }, 600);
+})();
+</script>
+    setInterval(() => {
+    aplicarPainelDeCores();
+    montarBotaoEPainelDono();
+  }, 600);
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+
+  function limparOpcoesDuplicadas() {
+    // 1. Remove o botão flutuante "Cores & Visual" que fica por cima da tela
+    document.getElementById('cbFloatingColorBtn')?.remove();
+    document.getElementById('cbUnifiedColorPanel')?.remove();
+
+    // 2. Remove o bloco extra de "10 opções prontas + paleta livre" em Configurações
+    document.getElementById('cbExtraBgBox')?.remove();
+
+    // 3. Em "Identidade visual White Label" (Configurações), esconde os seletores repetidos e deixa só a Logomarca
+    const brandingForm = document.getElementById('brandingForm');
+    if (brandingForm) {
+      const primeiroCampo = brandingForm.querySelector('.field');
+      if (primeiroCampo && primeiroCampo.textContent.includes('Cor principal do estabelecimento')) {
+        primeiroCampo.style.display = 'none';
+      }
+    }
+
+    // 4. Troca o raio ⚡ pelo relógio 🕒
+    document.querySelectorAll('div, span, p, i, strong').forEach(el => {
+      if (el.children.length === 0 && el.textContent.trim() === '⚡') el.textContent = '🕒';
+    });
+  }
+
+  setInterval(limparOpcoesDuplicadas, 500);
+})();
+</script>
+  <!-- SCRIPT OFICIAL: EDIÇÃO DE NOME DOS SERVIÇOS (MULTI-BARBEARIA) -->
+<script>
+(function() {
+  // 1. Transforma o nome do serviço na tabela em um campo editável vinculado ao ID
+  function ativarCamposNomeServico() {
+    const form = document.getElementById('servicesPricesForm');
+    if (!form) return;
+
+    const linhas = form.querySelectorAll('tbody tr');
+    linhas.forEach(tr => {
+      const inputPreco = tr.querySelector('input[name^="preco_"]');
+      const tdNome = tr.querySelector('td:first-child');
+
+      if (inputPreco && tdNome && !tdNome.querySelector('input')) {
+        const servicoId = inputPreco.name.replace('preco_', '');
+        const nomeAtual = tdNome.textContent.trim();
+
+        const inputNome = document.createElement('input');
+        inputNome.type = 'text';
+        inputNome.name = `nome_${servicoId}`;
+        inputNome.value = nomeAtual;
+        inputNome.dataset.servicoId = servicoId;
+        inputNome.required = true;
+        inputNome.setAttribute('aria-label', `Nome do serviço ${nomeAtual}`);
+        inputNome.style.cssText = `
+          background: rgba(255, 255, 255, 0.06);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 8px;
+          padding: 8px 10px;
+          width: 100%;
+          min-width: 145px;
+          font-size: 14px;
+          font-family: inherit;
+        `;
+
+        tdNome.textContent = '';
+        tdNome.appendChild(inputNome);
+      }
+    });
+  }
+
+  // Observa a tela para aplicar os inputs sempre que a aba Serviços for aberta
+  const observer = new MutationObserver(ativarCamposNomeServico);
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // 2. Antes do formulário salvar, atualiza os nomes na memória (state.services e servicosDadoStreaming)
+  document.addEventListener('submit', async function(e) {
+    if (e.target && e.target.id === 'servicesPricesForm') {
+      const inputsNome = e.target.querySelectorAll('input[name^="nome_"]');
+
+      inputsNome.forEach(input => {
+        const id = String(input.dataset.servicoId);
+        const novoNome = input.value.trim();
+        if (!novoNome) return;
+
+        // Atualiza na lista servicosDadoStreaming (usada na renderização)
+        if (typeof servicosDadoStreaming !== 'undefined' && Array.isArray(servicosDadoStreaming)) {
+          const s1 = servicosDadoStreaming.find(item => String(item.id) === id);
+          if (s1) {
+            s1.nome = novoNome;
+            s1.name = novoNome;
+          }
+        }
+
+        // Atualiza no state.services (usado pelo seu upsert na linha 2664)
+        if (typeof state !== 'undefined' && Array.isArray(state.services)) {
+          const s2 = state.services.find(item => String(item.id) === id);
+          if (s2) {
+            s2.name = novoNome;
+            s2.nome = novoNome;
+          }
+        }
+      });
+
+      // Garantia extra: envia direto para a tabela 'services' do Supabase filtrando pelo ID
+      const client = window.supabaseDataClient;
+      if (client) {
+        for (const input of inputsNome) {
+          const id = input.dataset.servicoId;
+          const novoNome = input.value.trim();
+          if (id && novoNome) {
+            await client
+              .from('services')
+              .update({ name: novoNome })
+              .eq('id', id);
+          }
+        }
+      }
+    }
+  }, true); // 'true' garante que rode ANTES do evento de salvar original do seu site
+})();
+</script>
 
 </body>
-
 </html>
 
-
-      
-
-
-    
-
-        
-
-
-
-
+</body>
+</html>
