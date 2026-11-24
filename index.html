@@ -6421,6 +6421,92 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }, true); // 'true' garante que rode ANTES do evento de salvar original do seu site
 })();
 </script>
+<!-- ESTILO RESPONSIVO EXCLUSIVO PARA COMPUTADOR (DESKTOP) -->
+<style>
+@media (min-width: 900px) {
+  /* 1. Limita a largura máxima do conteúdo e centraliza tudo na tela */
+  body > header,
+  body > main,
+  body > section,
+  body > footer,
+  .container,
+  .wrap,
+  .hero,
+  .topbar {
+    max-width: 1140px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* 2. Alinha o topo na horizontal: Logo na esquerda e Botões na direita */
+  header,
+  .topbar,
+  nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 16px 28px !important;
+    gap: 20px !important;
+  }
+
+  /* 3. Organiza os botões do cabeçalho sem barras verticais apertadas */
+  header > div:last-child,
+  .topbar-actions,
+  .nav-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  header button,
+  header a,
+  .topbar button,
+  .topbar a {
+    border-left: none !important;
+    border-right: none !important;
+    white-space: nowrap !important;
+    padding: 10px 18px !important;
+    border-radius: 10px !important;
+  }
+
+  /* 4. Ajusta o tamanho do título principal e dos cards no desktop */
+  .hero h1,
+  h1 {
+    font-size: 44px !important;
+    line-height: 1.15 !important;
+    max-width: 820px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero p {
+    max-width: 680px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 17px !important;
+  }
+
+  /* 5. Deixa os cards de benefícios lado a lado em grade no computador */
+  .features-grid,
+  .cards-grid,
+  .grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  /* 6. Deixa o painel administrativo e tabelas confortáveis no PC */
+  .panel,
+  .card,
+  .sectionhead {
+    max-width: 960px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+</style>
 
 </body>
 </html>
