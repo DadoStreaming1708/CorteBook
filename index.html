@@ -6537,6 +6537,46 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   }
 }
 </style>
+<!-- REMOVER BOTÕES FLUTUANTES -->
+<style>
+  /* Oculta o botão flutuante "Cores & Visual" e o botão flutuante do WhatsApp */
+  #floatingThemeBtn,
+  .floating-theme-btn,
+  .whatsapp-float,
+  a.whatsapp-float,
+  [id*="floating"],
+  [class*="floating"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+</style>
+
+<script>
+(function() {
+  // Garante a remoção mesmo se o botão for criado dinamicamente via JavaScript
+  function removerFlutuantes() {
+    document.querySelectorAll('button, a, div').forEach(el => {
+      const texto = (el.textContent || '').trim();
+      const estilo = window.getComputedStyle(el);
+      
+      // Remove o botão "Cores & Visual"
+      if (texto.includes('Cores & Visual')) {
+        el.remove();
+      }
+      
+      // Remove o botão flutuante redondo do WhatsApp (fixed no canto inferior)
+      if (estilo.position === 'fixed' && (el.innerHTML.includes('whatsapp') || (el.getAttribute('href') || '').includes('wa.me'))) {
+        el.remove();
+      }
+    });
+  }
+
+  removerFlutuantes();
+  new MutationObserver(removerFlutuantes).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
 
 
 </body>
