@@ -8066,13 +8066,22 @@ setInterval(function() {
 
 <script>
 (function() {
-  function atualizarLogosModais() {
-    // Busca a logomarca atual da barbearia no cabeçalho
+  function atualizarLogosERemoverCoresExtras() {
+    // 1. Remove a caixa de cores extras de "Identidade visual White Label"
+    const extraCores = document.getElementById('cbExtraBgBox');
+    if (extraCores) extraCores.remove();
+
+    // 2. Atualiza Logo à esquerda + Nome da barbearia ao lado nos modais
     const imgCabecalho = document.querySelector('#brandLogo img, .brand-logo img, header img');
     const logoAtual = (imgCabecalho && imgCabecalho.src) ? imgCabecalho.src : '';
     if (!logoAtual) return;
 
-    // Caixas exatas do seu site: Agendamento, Acesso da Equipe e Área do Cliente
+    const nomeEl = document.querySelector('#brandName, .brand-name, #siteBrandTitle, header .brand span');
+    const nomeAtual = (nomeEl && nomeEl.textContent.trim())
+      || (window.currentTenant && window.currentTenant.name)
+      || (window.currentOwnerTenant && window.currentOwnerTenant.name)
+      || 'CorteBook';
+
     const seletoresModais = [
       '#bookingModal .modalbox',
       '#loginModal .modalbox',
@@ -8087,19 +8096,25 @@ setInterval(function() {
       if (!wrap) {
         wrap = document.createElement('div');
         wrap.className = 'modal-brand-logo-wrap';
-        wrap.style.cssText = 'text-align:center; margin-bottom:10px; padding-top:4px;';
-        wrap.innerHTML = `<img src="${logoAtual}" alt="Logo Barbearia" style="width:68px; height:68px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 14px rgba(0,0,0,0.45); display:inline-block;">`;
+        wrap.style.cssText = 'display:flex; align-items:center; justify-content:flex-start; gap:12px; margin-bottom:14px; padding-top:2px;';
+        wrap.innerHTML = `
+          <img src="${logoAtual}" alt="Logo" style="width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 12px rgba(0,0,0,0.45); flex-shrink:0;">
+          <span class="modal-brand-title" style="font-size:19px; font-weight:800; color:#f3d06b; letter-spacing:0.3px;">${nomeAtual}</span>
+        `;
         box.prepend(wrap);
       } else {
         const img = wrap.querySelector('img');
+        const titulo = wrap.querySelector('.modal-brand-title');
         if (img && img.src !== logoAtual) img.src = logoAtual;
+        if (titulo && titulo.textContent !== nomeAtual) titulo.textContent = nomeAtual;
       }
     });
   }
 
-  setInterval(atualizarLogosModais, 800);
+  setInterval(atualizarLogosERemoverCoresExtras, 300);
 })();
 </script>
+
 <script>
 (function() {
   function adicionarOlhoSenha() {
