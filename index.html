@@ -7856,6 +7856,63 @@ body.cb-light-theme #publicView .hero p {
   setInterval(organizarPainelEVitrine, 400);
 })();
 </script>
+<!-- FIX FINAL EDITOR DE SITE (7ª OPÇÃO BRANCA) + REMOVE CAIXA DE CORES DE CONFIGURAÇÕES SEM PISCAR -->
+<style>
+/* 1. Esconde definitivamente qualquer bloco de "Cor de fundo do site" em Configurações sem piscar */
+#adminView [id*="bgColor"],
+#adminView [id*="BgColor"],
+#adminView .cb-bg-picker-wrap {
+  display: none !important;
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  function fixEditorEConfig() {
+    // 1. Esconde permanentemente o seletor de 10 cores em Configurações (via atributo hidden + CSS)
+    document.querySelectorAll('#adminView label, #adminView div, #adminView strong').forEach(function(el) {
+      if (el.children.length === 0 && el.textContent && el.textContent.indexOf('Cor de fundo do site') !== -1) {
+        var alvo = el.closest('.field') || el.parentElement;
+        if (alvo && alvo.id !== 'adminView' && alvo.textContent.length < 600) {
+          alvo.style.setProperty('display', 'none', 'important');
+        }
+      }
+    });
+
+    // 2. Insere a 7ª opção "☀️ Fundo Branco + Letras Pretas" logo abaixo do botão "Branco Gelo" no Editor de Site
+    if (!document.getElementById('cbOptTemaBranco')) {
+      var btnBrancoGelo = Array.from(document.querySelectorAll('#adminView button')).find(function(b) {
+        return b.textContent && b.textContent.indexOf('Branco Gelo') !== -1;
+      });
+      if (btnBrancoGelo && btnBrancoGelo.parentElement) {
+        var grade = btnBrancoGelo.parentElement;
+        var btnTemaBranco = document.createElement('button');
+        btnTemaBranco.type = 'button';
+        btnTemaBranco.id = 'cbOptTemaBranco';
+        btnTemaBranco.innerHTML = '☀️ Fundo Branco + Letras Pretas';
+        btnTemaBranco.style.cssText = 'grid-column:1 / -1;width:100%;padding:13px 16px;border-radius:12px;border:2px solid #ffffff;background:#f5f5f7;color:#111113;font-weight:800;font-size:14px;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;';
+
+        btnTemaBranco.onclick = function() {
+          var ativo = !document.body.classList.contains('cb-light-theme');
+          document.body.classList.toggle('cb-light-theme', ativo);
+          try {
+            var slug = window.currentOwnerTenant?.slug || window.currentTenant?.slug || 'default';
+            localStorage.setItem('cb_light_' + slug, ativo ? '1' : '0');
+          } catch(e) {}
+          btnTemaBranco.innerHTML = ativo ? '✅ Fundo Branco Ativado (Clique p/ Escuro)' : '☀️ Fundo Branco + Letras Pretas';
+        };
+
+        grade.appendChild(btnTemaBranco);
+      }
+    }
+  }
+
+  fixEditorEConfig();
+  setInterval(fixEditorEConfig, 250);
+})();
+</script>
 
 </body>
   
