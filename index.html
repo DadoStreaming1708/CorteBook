@@ -8062,39 +8062,7 @@ setInterval(function() {
   }, true);
 })();
 </script>
-<script>
-(function() {
-  function atualizarLogosModais() {
-    // Pega a logo atual da barbearia (ou usa a padrão do CorteBook)
-    const logoAtual = document.querySelector('.brand-logo img, .cb-brand img')?.src 
-                      || 'https://cortebook.com.br';
 
-    // IDs ou classes dos modais de Agendamento, Login Equipe e Login Cliente
-    const seletoresModais = [
-      '#bookingModal .modal-content',
-      '#loginModal .modal-content',
-      '#clientAuthModal .modal-content'
-    ];
-
-    seletoresModais.forEach((seletor, index) => {
-      const box = document.querySelector(seletor);
-      if (box && !box.querySelector('.modal-brand-logo-wrap')) {
-        const wrap = document.createElement('div');
-        wrap.className = 'modal-brand-logo-wrap';
-        wrap.style.cssText = 'text-align:center; margin-bottom:12px; padding-top:4px;';
-        wrap.innerHTML = `<img src="${logoAtual}" alt="Logo Barbearia" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 12px rgba(0,0,0,0.4);">`;
-        box.prepend(wrap);
-      } else if (box) {
-        // Atualiza caso o ADM mude a logo em tempo real no editor
-        const img = box.querySelector('.modal-brand-logo-wrap img');
-        if (img && img.src !== logoAtual) img.src = logoAtual;
-      }
-    });
-  }
-
-  setInterval(atualizarLogosModais, 1000);
-})();
-</script>
 <script>
 (function() {
   function atualizarLogosModais() {
@@ -8129,6 +8097,39 @@ setInterval(function() {
   }
 
   setInterval(atualizarLogosModais, 800);
+})();
+</script>
+<script>
+(function() {
+  function adicionarOlhoSenha() {
+    document.querySelectorAll('input[type="password"]').forEach((input) => {
+      if (input.dataset.hasEye) return;
+      input.dataset.hasEye = '1';
+
+      const pai = input.parentElement;
+      if (getComputedStyle(pai).position === 'static') {
+        pai.style.position = 'relative';
+      }
+
+      input.style.paddingRight = '42px';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Mostrar ou ocultar senha');
+      btn.textContent = '👁️';
+      btn.style.cssText = 'position:absolute; right:10px; bottom:9px; background:none; border:none; cursor:pointer; font-size:17px; line-height:1; padding:4px; opacity:0.8; z-index:5;';
+
+      btn.addEventListener('click', () => {
+        const oculto = input.type === 'password';
+        input.type = oculto ? 'text' : 'password';
+        btn.textContent = oculto ? '🙈' : '👁️';
+      });
+
+      pai.appendChild(btn);
+    });
+  }
+
+  setInterval(adicionarOlhoSenha, 800);
 })();
 </script>
 
