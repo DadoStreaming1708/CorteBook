@@ -4102,18 +4102,7 @@ setInterval(()=>{
 
  // 4. Adiciona o botão "📲 Instalar App" no topo da Landing Page e no Painel
  setInterval(() => {
-  const nav = document.querySelector('#cortebookLanding .cb-nav > div:last-child');
-  if (nav && !document.getElementById('cbNavInstallBtn')) {
-   const btn = document.createElement('button');
-   btn.id = 'cbNavInstallBtn';
-   btn.type = 'button';
-   btn.className = 'btn secondary';
-   btn.style.borderColor = '#d4af37';
-   btn.style.color = '#f3d06b';
-   btn.textContent = '📲 Instalar App';
-   btn.onclick = window.installCorteBookApp;
-   nav.prepend(btn);
-  }
+
 
   const dashCard = document.querySelector('#cbProDashboardTools .inline-actions');
   if (dashCard && !document.getElementById('cbDashInstallBtn')) {
