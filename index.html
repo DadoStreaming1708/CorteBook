@@ -3052,7 +3052,7 @@ renderPublicServices();renderPublicStore();renderPublicSettings();renderPublicBu
  const COMBOS=[
   {tag:'MAIS ESCOLHIDO',name:'Experiência Black Completa',includes:'Corte + Barba Terapia + Toalha Quente + Espresso',serviceIds:['ds3'],extrasValue:20},
   {tag:'EXPERIÊNCIA VIP',name:'Experiência Black Alisado',includes:'Corte + Barba + Alisamento + Toalha Quente + Whisky Cortesia',serviceIds:['ds6'],extrasValue:25},
-  {tag:'ALTO PADRÃO',name:'Experiência Black Progressiva',includes:'Corte + Barba + Progressiva + Aromaterapia + Espresso',serviceIds:['ds8'],extrasValue:30}
+  
  ];
  const money2=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
  const escH=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -3066,7 +3066,8 @@ renderPublicServices();renderPublicStore();renderPublicSettings();renderPublicBu
    return {...c,price,old:price+c.extrasValue,minutes:svcs.reduce((n,x)=>n+Number(x.duracao||0),0)};
   }).filter(Boolean);
   section.classList.toggle('hidden',!items.length);
-  grid.innerHTML=items.map((c,i)=>`<article class="combo-card"><span class="combo-tag">${escH(c.tag)}</span><h3>${escH(c.name)}</h3><p class="combo-includes">${escH(c.includes)}</p><div class="combo-prices"><span class="combo-old" aria-label="Preço antigo">${money2(c.old)}</span><span class="combo-price">${money2(c.price)}</span></div><span class="combo-meta">Duração aproximada: ${c.minutes} min</span><button class="gold-cta" type="button" data-combo="${i}">Reservar Experiência</button></article>`).join('');
+    grid.innerHTML=items.map((c,i)=>`<article class="combo-card"><span class="combo-tag">${escH(c.tag)}</span><h3>${escH(c.name)}</h3><p class="combo-includes">${escH(c.includes)}</p><div class="combo-prices"><span class="combo-price">${money2(c.price)}</span></div><span class="combo-meta">Duração aproximada: ${c.minutes} min</span><button class="gold-cta" type="button" data-combo="${i}">Reservar Experiência</button></article>`).join('');
+
   grid.querySelectorAll('[data-combo]').forEach(btn=>btn.addEventListener('click',()=>{
    const c=items[Number(btn.dataset.combo)];if(!c)return;
    startBooking();booking.selectedServiceIds=[...c.serviceIds];renderBookingServiceCards();
@@ -8059,6 +8060,75 @@ setInterval(function() {
       }
     }, 700);
   }, true);
+})();
+</script>
+<script>
+(function() {
+  function atualizarLogosModais() {
+    // Pega a logo atual da barbearia (ou usa a padrão do CorteBook)
+    const logoAtual = document.querySelector('.brand-logo img, .cb-brand img')?.src 
+                      || 'https://cortebook.com.br';
+
+    // IDs ou classes dos modais de Agendamento, Login Equipe e Login Cliente
+    const seletoresModais = [
+      '#bookingModal .modal-content',
+      '#loginModal .modal-content',
+      '#clientAuthModal .modal-content'
+    ];
+
+    seletoresModais.forEach((seletor, index) => {
+      const box = document.querySelector(seletor);
+      if (box && !box.querySelector('.modal-brand-logo-wrap')) {
+        const wrap = document.createElement('div');
+        wrap.className = 'modal-brand-logo-wrap';
+        wrap.style.cssText = 'text-align:center; margin-bottom:12px; padding-top:4px;';
+        wrap.innerHTML = `<img src="${logoAtual}" alt="Logo Barbearia" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 12px rgba(0,0,0,0.4);">`;
+        box.prepend(wrap);
+      } else if (box) {
+        // Atualiza caso o ADM mude a logo em tempo real no editor
+        const img = box.querySelector('.modal-brand-logo-wrap img');
+        if (img && img.src !== logoAtual) img.src = logoAtual;
+      }
+    });
+  }
+
+  setInterval(atualizarLogosModais, 1000);
+})();
+</script>
+<script>
+(function() {
+  function atualizarLogosModais() {
+    // Busca a logomarca atual da barbearia no cabeçalho
+    const imgCabecalho = document.querySelector('#brandLogo img, .brand-logo img, header img');
+    const logoAtual = (imgCabecalho && imgCabecalho.src) ? imgCabecalho.src : '';
+    if (!logoAtual) return;
+
+    // Caixas exatas do seu site: Agendamento, Acesso da Equipe e Área do Cliente
+    const seletoresModais = [
+      '#bookingModal .modalbox',
+      '#loginModal .modalbox',
+      '#clientAccountModal .modalbox'
+    ];
+
+    seletoresModais.forEach((seletor) => {
+      const box = document.querySelector(seletor);
+      if (!box) return;
+
+      let wrap = box.querySelector('.modal-brand-logo-wrap');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.className = 'modal-brand-logo-wrap';
+        wrap.style.cssText = 'text-align:center; margin-bottom:10px; padding-top:4px;';
+        wrap.innerHTML = `<img src="${logoAtual}" alt="Logo Barbearia" style="width:68px; height:68px; border-radius:50%; object-fit:cover; border:2px solid #d4af37; box-shadow:0 4px 14px rgba(0,0,0,0.45); display:inline-block;">`;
+        box.prepend(wrap);
+      } else {
+        const img = wrap.querySelector('img');
+        if (img && img.src !== logoAtual) img.src = logoAtual;
+      }
+    });
+  }
+
+  setInterval(atualizarLogosModais, 800);
 })();
 </script>
 
