@@ -3482,7 +3482,8 @@ setInterval(()=>{
   <div class="cb-feat"><h3>💳 Assinatura no Cartão</h3><p>Ative planos mensais com cobrança automática no cartão de crédito dos seus clientes VIP direto na sua conta.</p></div>
   <div class="cb-feat"><h3>✂ Painel Para Equipe</h3><p>Cada barbeiro acessa apenas a própria agenda, comandas e selos de fidelidade, sem ver o faturamento da casa.</p></div>
  </section>
- <footer class="footer">CorteBook Tecnologia · Suporte WhatsApp: (82) 98707-5016 · Todos os direitos reservados 2026</footer>
+  <footer class="footer">CorteBook Tecnologia · CNPJ: 69.954.457/0001-31 · Suporte WhatsApp: (82) 98707-5016 · Todos os direitos reservados 2026</footer>
+
 </div>
 
 <div class="cb-modal" id="cbRegisterModal">
@@ -3493,7 +3494,7 @@ setInterval(()=>{
    <div class="field"><label>Seu Nome (Proprietário)</label><input name="ownerName" required maxlength="60" placeholder="Seu nome completo"></div>
    <div class="field"><label>WhatsApp da Barbearia</label><input name="phone" type="tel" required placeholder="(82) 99999-9999"></div>
    <div class="field"><label>E-mail de acesso</label><input name="email" type="email" required placeholder="seu@email.com"></div>
-   <div class="field"><label>Crie uma senha (mínimo 10 caracteres)</label><input name="password" type="password" minlength="10" required placeholder="••••••••••"></div>
+<div class="field"><label>Crie uma senha (mínimo 6 caracteres)</label><input name="password" type="password" minlength="6" required placeholder="••••••"></div>
    <button class="btn full" type="submit" id="cbRegSubmit">Criar minha barbearia agora</button>
   </form>
  </div>
@@ -3507,11 +3508,14 @@ setInterval(()=>{
   <div class="panel" style="padding:14px;margin:14px 0">
    <div class="small muted">Valor mensal (30 dias)</div>
    <strong style="font-size:26px;color:#f3d06b">R$ 39,99 / mês</strong>
-   <div class="small muted" style="margin-top:10px">Chave Pix (E-mail):</div>
-   <strong style="display:block;margin:4px 0 10px;user-select:all">dadosupport@gmail.com</strong>
-   <button class="btn secondary full" type="button" onclick="navigator.clipboard?.writeText('dadosupport@gmail.com');toast('Chave Pix copiada!')">Copiar Chave Pix</button>
+      <div class="small muted" style="margin-top:10px">Chave Pix (CNPJ Oficial):</div>
+   <strong style="display:block;margin:4px 0 10px;user-select:all">69.954.457/0001-31</strong>
+   <button class="btn secondary full" type="button" onclick="navigator.clipboard?.writeText('69.954.457/0001-31');toast('Chave Pix CNPJ copiada!')">Copiar Chave Pix (CNPJ)</button>
   </div>
-  <a class="btn full" style="display:block;text-decoration:none;margin-bottom:10px" target="_blank" href="https://wa.me">Enviar comprovante e ativar agora</a>
+      <a class="btn full" style="display:block;text-decoration:none;margin-bottom:10px" target="_blank" href="https://wa.me/5582987075016.">Enviar comprovante e ativar agora</a>
+
+
+
   <button class="btn ghost full" type="button" onclick="document.getElementById('cbPaywallModal').classList.remove('open')">Fechar aviso</button>
  </div>
 </div>
@@ -6727,7 +6731,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 <script>
 (function() {
   'use strict';
-  const WPP_URL = 'https://wa.me';
+  const WPP_URL = 'https://wa.me/5582987075016';
 
   function buildFullSaasLanding() {
     const landing = document.getElementById('cortebookLanding');
@@ -6750,8 +6754,9 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 
     hero.innerHTML = `
       <div>
-        <h1>Sua Barbearia Cheia e Organizada no Piloto Automático</h1>
-        <p class="cb-hero-sub">Ofereça um site exclusivo com a marca da sua barbearia para seus clientes agendarem em segundos, enquanto você controla horários, equipe, caixa e fidelidade em um só lugar.</p>
+                <h1>Pare de Perder Clientes no WhatsApp: Tenha Sua Agenda Online 24h</h1>
+        <p class="cb-hero-sub">Chega de parar o corte para responder mensagens. Coloque o link exclusivo da sua barbearia na bio do Instagram e deixe seus clientes agendarem sozinhos em 15 segundos.</p>
+
         <div class="cb-saas-ctas">
           <button type="button" class="cb-btn-dark" onclick="document.getElementById('cbOpenRegister')?.click()">Testar 15 dias grátis</button>
           <a href="?b=imperium" target="_blank" rel="noopener" class="cb-btn-outline">👁️ Ver Site Vitrine</a>
