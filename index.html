@@ -7790,13 +7790,13 @@ body.cb-light-theme #publicView .hero p {
   'use strict';
 
   function organizarPainelEVitrine() {
-    // 1. Esconde o bloco duplicado "Cor de fundo do site (10 opções prontas + paleta livre)" em Configurações
-    document.querySelectorAll('#adminView label, #adminView div, #adminView strong').forEach(function(el) {
-      if (el.textContent && el.textContent.indexOf('Cor de fundo do site (10 opções prontas') !== -1) {
-        var box = el.closest('.field, .card, div[style*="border"]') || el.parentElement;
-        if (box && box.id !== 'adminView') box.style.display = 'none';
+    document.querySelectorAll('#adminView label').forEach(function(lbl) {
+      if (lbl.textContent && lbl.textContent.indexOf('Cor de fundo do site') !== -1) {
+        var campo = lbl.closest('.field');
+        if (campo) campo.style.display = 'none';
       }
     });
+
 
     // 2. Adiciona a 7ª opção "Fundo Branco + Letras Pretas" na grade de "Cor de destaque" do Editor de Site
     document.querySelectorAll('#adminView label, #adminView div').forEach(function(el) {
