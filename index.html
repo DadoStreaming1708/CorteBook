@@ -7969,6 +7969,104 @@ setInterval(function() {
   }
 }, 200);
 </script>
+<!-- FIX FINAL: BOTÃO INSTALAR APP 100% BRANCO + SELO FIDELIDADE FUNCIONANDO PARA QUALQUER CLIENTE -->
+<script>
+(function() {
+  'use strict';
+
+  // 1. Substitui o botão Instalar App por uma versão sem as classes antigas que pintavam de amarelo
+  function travarBotaoInstalarBranco() {
+    var oldBtn = document.getElementById('cbInstallLandingBtn');
+    if (oldBtn && oldBtn.dataset.clonado !== '1') {
+      var novoBtn = document.createElement('button');
+      novoBtn.type = 'button';
+      novoBtn.id = 'cbInstallLandingBtn';
+      novoBtn.dataset.clonado = '1';
+      novoBtn.textContent = 'Instalar App';
+      novoBtn.style.cssText = 'background:#18181b !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;border:none !important;border-radius:9px !important;font-weight:800 !important;padding:9px 12px !important;font-size:12px !important;cursor:pointer !important;white-space:nowrap !important;';
+      novoBtn.onclick = function() {
+        if (window.deferredPrompt) {
+          window.deferredPrompt.prompt();
+        } else {
+          alert('Para instalar o aplicativo CorteBook, toque no menu do navegador (⋮) e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
+        }
+      };
+      oldBtn.parentNode.replaceChild(novoBtn, oldBtn);
+    }
+  }
+
+  travarBotaoInstalarBranco();
+  setInterval(travarBotaoInstalarBranco, 300);
+
+  // 2. Faz o "+1 Selo Fidelidade" criar/inserir o cliente no Supabase automaticamente caso ele tenha só agendado sem cadastro
+  document.addEventListener('click', async function(e) {
+    var btnSelo = e.target.closest('button');
+    if (!btnSelo || btnSelo.textContent.indexOf('+1 Selo Fidelidade') === -1) return;
+
+    var card = btnSelo.parentElement;
+    while (card && card.textContent.indexOf('Fidelidade:') === -1 && card.parentElement) {
+      card = card.parentElement;
+    }
+    if (!card) return;
+
+    var linhas = (card.innerText || '').split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+    var nomeCliente = linhas || 'Cliente';
+    var matchTel = (card.innerText || '').match(/\+?\d{10,15}/);
+    var matchSelos = (card.innerText || '').match(/Fidelidade:\s*(\d+)\s*\/\s*(\d+)/i);
+    if (!matchTel || !matchSelos) return;
+
+    var telLimpo = matchTel.replace(/\D/g, '');
+    var atual = parseInt(matchSelos, 10) || 0;
+    var meta = parseInt(matchSelos, 10) || 10;
+    var novoTotal = (atual + 1 >= meta) ? 0 : (atual + 1);
+
+    setTimeout(async function() {
+      // Se o código original falhou e manteve o número antigo na tela, cria/atualiza no banco agora
+      if ((card.innerText || '').indexOf('Fidelidade: ' + atual + '/') !== -1) {
+        try {
+          var sb = window.supabaseClient || window._supabase || window.sb;
+          var tenantId = window.currentOwnerTenant?.id || window.currentTenant?.id;
+          if (sb && tenantId) {
+            var tabelas = ['clients', 'customers', 'clientes'];
+            for (var i = 0; i < tabelas.length; i++) {
+              var tb = tabelas[i];
+              // Tenta atualizar primeiro
+              var upd = await sb.from(tb)
+                .update({ stamps: novoTotal, selos: novoTotal })
+                .eq('tenant_id', tenantId)
+                .ilike('phone', '%' + telLimpo.slice(-8) + '%')
+                .select();
+
+              if (upd && upd.data && upd.data.length > 0) {
+                card.innerHTML = card.innerHTML.replace('Fidelidade: ' + atual + '/' + meta, 'Fidelidade: ' + novoTotal + '/' + meta);
+                break;
+              }
+
+              // Se não existia cadastro (cliente só agendou), insere o registro na tabela agora
+              var ins = await sb.from(tb)
+                .insert([{
+                  tenant_id: tenantId,
+                  name: nomeCliente,
+                  phone: '+' + telLimpo,
+                  stamps: novoTotal,
+                  selos: novoTotal
+                }])
+                .select();
+
+              if (ins && !ins.error) {
+                card.innerHTML = card.innerHTML.replace('Fidelidade: ' + atual + '/' + meta, 'Fidelidade: ' + novoTotal + '/' + meta);
+                break;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Erro ao criar registro de fidelidade:', err);
+        }
+      }
+    }, 700);
+  }, true);
+})();
+</script>
 
 </body>
   
