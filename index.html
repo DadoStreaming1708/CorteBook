@@ -8244,6 +8244,77 @@ setInterval(function() {
   }, 900);
 })();
 </script>
+<script>
+(function() {
+  function organizarMenuLateralAdmin() {
+    const adminView = document.getElementById('adminView');
+    if (!adminView) return;
+
+    // 1. Esconde a barra horizontal repetida de abas no painel ADM
+    const barraAbas = adminView.querySelector('#adminTabs, .admin-tabs, .tabs');
+    if (barraAbas && barraAbas.style.display !== 'none') {
+      barraAbas.style.display = 'none';
+    }
+
+    // 2. Deixa o botão ☰ do topo mais claro ("☰ Menu")
+    const btnMenu = document.querySelector('#menuToggleBtn, .menu-toggle, button[aria-label*="Menu"]');
+    if (btnMenu && !btnMenu.dataset.labeled) {
+      btnMenu.dataset.labeled = '1';
+      btnMenu.style.width = 'auto';
+      btnMenu.style.padding = '8px 12px';
+      btnMenu.style.gap = '6px';
+      btnMenu.innerHTML = '☰ <span style="font-size:13px;font-weight:700;">Menu</span>';
+    }
+
+    // 3. Garante que Financeiro, Configurações e Editor do site estejam no menu lateral
+    const drawer = document.querySelector('#sideDrawer, #mobileMenu, .side-drawer, .drawer-body, nav');
+    if (!drawer || drawer.dataset.adminExtrasAdded) return;
+
+    // Só adiciona se o menu lateral estiver exibindo itens do proprietário
+    if (drawer.textContent && drawer.textContent.includes('Radar de Retorno')) {
+      drawer.dataset.adminExtrasAdded = '1';
+
+      const extras = [
+        { label: '💰 Financeiro', tab: 'finance' },
+        { label: '⚙️ Configurações', tab: 'settings' },
+        { label: '🎨 Editor do site', tab: 'site' }
+      ];
+
+      const secTitle = document.createElement('div');
+      secTitle.textContent = 'GESTÃO & SITE';
+      secTitle.style.cssText = 'font-size:11px;font-weight:800;letter-spacing:1px;color:#d4af37;margin:16px 12px 6px;';
+      drawer.appendChild(secTitle);
+
+      extras.forEach((item) => {
+        // Evita duplicar se já existir no menu lateral
+        if (drawer.textContent.includes(item.label.replace(/^[^\wÀ-ú]+/, ''))) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = item.label;
+        btn.style.cssText = 'width:100%;text-align:left;padding:12px 14px;margin-bottom:6px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;';
+
+        btn.addEventListener('click', () => {
+          // Simula o clique na aba original correspondente (mesmo oculta)
+          const abaOriginal = Array.from(adminView.querySelectorAll('button, [data-tab]')).find(b =>
+            (b.dataset && b.dataset.tab === item.tab) ||
+            (b.textContent && b.textContent.trim().toLowerCase().includes(item.label.replace(/^[^\wÀ-ú]+/, '').toLowerCase()))
+          );
+          if (abaOriginal) abaOriginal.click();
+
+          // Fecha o menu lateral
+          const fecharBtn = drawer.querySelector('button[aria-label*="Fechar"], .close-drawer, button');
+          if (fecharBtn && fecharBtn.textContent.trim() === '×') fecharBtn.click();
+        });
+
+        drawer.appendChild(btn);
+      });
+    }
+  }
+
+  setInterval(organizarMenuLateralAdmin, 700);
+})();
+</script>
 
 </body>
   
