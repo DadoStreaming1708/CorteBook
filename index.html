@@ -8244,30 +8244,64 @@ setInterval(function() {
   }, 900);
 })();
 </script>
-<script>
-setInterval(function(){
-  var av=document.getElementById('adminView');
-  if(av){var t=av.querySelector('#adminTabs,.admin-tabs,.tabs');if(t)t.style.display='none';}
-  var bm=document.querySelector('#menuToggleBtn,.menu-toggle,button[aria-label*="Menu"]');
-  if(bm&&!bm.dataset.ok){bm.dataset.ok='1';bm.style.width='auto';bm.style.padding='8px 12px';bm.innerHTML='☰ <b>Menu</b>';}
-  if(!document.getElementById('cbMenuEditorSiteBtn')){
-    var bc=Array.from(document.querySelectorAll('button,a,div[role="button"]')).find(function(e){return e.textContent&&e.textContent.includes('Configurações gerais');});
-    if(bc&&bc.parentElement){
-      var be=bc.cloneNode(true);
-      be.id='cbMenuEditorSiteBtn';
-      be.innerHTML=be.innerHTML.replace('Configurações gerais','Editor do site');
-      be.onclick=function(ev){
-        ev.preventDefault();ev.stopPropagation();
-        var r=bc.closest('aside,nav,[class*="drawer"],[id*="drawer"],[id*="menu"]')||bc.parentElement.parentElement;
-        var fx=r&&Array.from(r.querySelectorAll('button')).find(function(b){return b.textContent.trim()==='×'||b.textContent.trim()==='✕';});
-        if(fx)fx.click();
-        if(typeof renderAdmin==='function')renderAdmin('site');
-      };
-      bc.parentElement.insertBefore(be,bc.nextSibling);
+<style>
+  /* Deixa os botões do Painel ADM grandes, legíveis e organizados em grade (sem arrastar) */
+  #adminView #adminTabs,
+  #adminView .admin-tabs,
+  #adminView .tabs {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    padding: 8px 0 !important;
+    margin-bottom: 16px !important;
+  }
+
+  #adminView #adminTabs button,
+  #adminView .admin-tabs button,
+  #adminView .tabs button {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 12px 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
+  }
+
+  /* No computador: organiza em 5 colunas alinhadas e centraliza o painel */
+  @media (min-width: 768px) {
+    #adminView #adminTabs,
+    #adminView .admin-tabs,
+    #adminView .tabs {
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 12px !important;
+    }
+
+    #adminView #adminTabs button,
+    #adminView .admin-tabs button,
+    #adminView .tabs button {
+      font-size: 15px !important;
+      min-height: 52px !important;
+    }
+
+    #adminView,
+    #cortebookLanding,
+    main,
+    .container {
+      max-width: 1120px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
   }
-},600);
-</script>
+</style>
+
 
 </body>
   
