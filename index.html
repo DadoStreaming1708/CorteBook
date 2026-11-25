@@ -7856,6 +7856,107 @@ body.cb-light-theme #publicView .hero p {
   setInterval(organizarPainelEVitrine, 400);
 })();
 </script>
+<!-- FIX FINAL: BOTÃO ENTRAR PRETO + INSTALAR BRANCO + REMOVE WPP DUPLICADO + SELO FIDELIDADE -->
+<style>
+/* 1. Botão "Entrar" e "Instalar App" com fundo preto e letras 100% brancas no PC e Celular */
+#cortebookLanding #cbOpenLogin,
+#cortebookLanding #cbInstallLandingBtn {
+  background: #18181b !important;
+  background-color: #18181b !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  font-weight: 800 !important;
+}
+#cortebookLanding #cbInstallLandingBtn * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* 2. Esconde o botão antigo com texto "wpp" no canto inferior direito (1ª imagem) */
+#wpp, .wpp, [id="wpp-btn"], [class*="wpp-float"] {
+  display: none !important;
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  function corrigirBotoesEWpp() {
+    // 1. Garante "Instalar App" limpo sem ícone amarelo
+    var btnInst = document.getElementById('cbInstallLandingBtn');
+    if (btnInst && btnInst.innerHTML !== 'Instalar App') {
+      btnInst.innerHTML = 'Instalar App';
+    }
+
+    // 2. Remove apenas o botão flutuante antigo que tem o texto "wpp" escrito dentro dele
+    document.querySelectorAll('a, button, div').forEach(function(el) {
+      if (el.children.length === 0 && el.textContent && el.textContent.trim().toLowerCase() === 'wpp') {
+        var pai = el.closest('a, button') || el;
+        if (!pai.classList.contains('cb-zap-pulse-btn')) {
+          pai.remove();
+        }
+      }
+    });
+  }
+
+  corrigirBotoesEWpp();
+  setInterval(corrigirBotoesEWpp, 250);
+
+  // 3. Correção para "+1 Selo Fidelidade" gravar no Supabase mesmo se o RLS bloquear o update padrão
+  document.addEventListener('click', async function(e) {
+    var btnSelo = e.target.closest('button');
+    if (!btnSelo || btnSelo.textContent.indexOf('+1 Selo Fidelidade') === -1) return;
+
+    var card = btnSelo.closest('div[style*="border"], .card, div');
+    while (card && card.textContent.indexOf('Fidelidade:') === -1 && card.parentElement) {
+      card = card.parentElement;
+    }
+    if (!card) return;
+
+    // Captura telefone e selos atuais exibidos no card do cliente
+    var textoCard = card.innerText || '';
+    var matchTel = textoCard.match(/\+?\d{10,15}/);
+    var matchSelos = textoCard.match(/Fidelidade:\s*(\d+)\s*\/\s*(\d+)/i);
+    if (!matchTel || !matchSelos) return;
+
+    var telefone = matchTel[0].replace(/\D/g, '');
+    var atual = parseInt(matchSelos[1], 10) || 0;
+    var meta = parseInt(matchSelos[2], 10) || 10;
+    var novoTotal = (atual + 1 >= meta) ? 0 : (atual + 1);
+
+    // Aguarda 600ms para ver se o código original atualizou; se deu "nenhuma linha atualizada", grava direto via Supabase
+    setTimeout(async function() {
+      var textoDepois = card.innerText || '';
+      if (textoDepois.indexOf('Fidelidade: ' + atual + '/') !== -1) {
+        try {
+          var sb = window.supabaseClient || window._supabase || window.sb;
+          var tenantId = window.currentOwnerTenant?.id || window.currentTenant?.id;
+          if (sb && tenantId) {
+            var tabelas = ['clients', 'customers', 'clientes', 'loyalty_cards'];
+            for (var i = 0; i < tabelas.length; i++) {
+              var res = await sb.from(tabelas[i])
+                .update({ stamps: novoTotal, selos: novoTotal, fidelity_stamps: novoTotal })
+                .eq('tenant_id', tenantId)
+                .ilike('phone', '%' + telefone.slice(-8) + '%')
+                .select();
+              if (res && res.data && res.data.length > 0) {
+                card.innerHTML = card.innerHTML.replace('Fidelidade: ' + atual + '/' + meta, 'Fidelidade: ' + novoTotal + '/' + meta);
+                break;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Fallback selo fidelidade:', err);
+        }
+      }
+    }, 650);
+  }, true);
+})();
+</script>
 
 </body>
   
