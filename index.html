@@ -8274,6 +8274,9 @@ setInterval(function() {
     line-height: 1.2 !important;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
   }
+  #cbExtraBgBox {
+    display: none !important;
+  }
 
   /* No computador: organiza em 5 colunas alinhadas e centraliza o painel */
   @media (min-width: 768px) {
@@ -8303,40 +8306,7 @@ setInterval(function() {
 </style>
 
 
-  <script>
-(function() {
-  function removerCorDeFundoWhiteLabel() {
-    const adminView = document.getElementById('adminView');
-    if (!adminView) return;
 
-    // Localiza os textos exatos da seção de cor de fundo dentro de Identidade visual White Label
-    const elementos = Array.from(adminView.querySelectorAll('label, p, div, span, strong'));
-    elementos.forEach((el) => {
-      const txt = (el.textContent || '').trim();
-      if (
-        txt.startsWith('Cor de fundo do site (10 opções prontas') ||
-        txt.startsWith('Ou toque no quadrado abaixo para escolher qualquer cor de fundo')
-      ) {
-        // Esconde o rótulo e o container imediato dos botões/input de cor logo abaixo dele
-        el.style.display = 'none';
-        if (el.nextElementSibling && !el.nextElementSibling.textContent.includes('Salvar identidade visual')) {
-          el.nextElementSibling.style.display = 'none';
-        }
-      }
-    });
-
-    // Garante que o input de paleta livre também fique oculto
-    adminView.querySelectorAll('input[type="color"]').forEach((inp) => {
-      inp.style.display = 'none';
-      if (inp.parentElement && inp.parentElement.children.length === 1) {
-        inp.parentElement.style.display = 'none';
-      }
-    });
-  }
-
-  setInterval(removerCorDeFundoWhiteLabel, 500);
-})();
-</script>
 
 </body>
   
