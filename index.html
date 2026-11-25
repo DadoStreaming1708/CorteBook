@@ -8315,6 +8315,67 @@ setInterval(function() {
   setInterval(organizarMenuLateralAdmin, 700);
 })();
 </script>
+<script>
+(function() {
+  function organizarMenuLateralAdmin() {
+    const adminView = document.getElementById('adminView');
+    if (!adminView) return;
+
+    // 1. Esconde a barra horizontal repetida de abas no painel ADM
+    const barraAbas = adminView.querySelector('#adminTabs, .admin-tabs, .tabs');
+    if (barraAbas && barraAbas.style.display !== 'none') {
+      barraAbas.style.display = 'none';
+    }
+
+    // 2. Deixa o botão ☰ do topo mais claro ("☰ Menu")
+    const btnMenu = document.querySelector('#menuToggleBtn, .menu-toggle, button[aria-label*="Menu"]');
+    if (btnMenu && !btnMenu.dataset.labeled) {
+      btnMenu.dataset.labeled = '1';
+      btnMenu.style.width = 'auto';
+      btnMenu.style.padding = '8px 12px';
+      btnMenu.style.gap = '6px';
+      btnMenu.innerHTML = '☰ <span style="font-size:13px;font-weight:700;">Menu</span>';
+    }
+
+    // 3. Acha o botão "Configurações gerais" dentro do menu lateral e insere "Editor do site" logo abaixo
+    if (document.getElementById('cbMenuEditorSiteBtn')) return;
+    const todosBotoes = Array.from(document.querySelectorAll('button, a, div[role="button"]'));
+    const btnConfig = todosBotoes.find(el =>
+      el.textContent && el.textContent.trim() === 'Configurações gerais'
+    );
+
+    if (btnConfig && btnConfig.parentElement) {
+      const btnEditor = btnConfig.cloneNode(true);
+      btnEditor.id = 'cbMenuEditorSiteBtn';
+      btnEditor.innerHTML = btnEditor.innerHTML.replace('Configurações gerais', 'Editor do site');
+      if (!btnEditor.textContent.includes('Editor do site')) {
+        btnEditor.textContent = '🎨 Editor do site';
+      }
+
+      btnEditor.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Ativa a aba "Editor do site" original do painel ADM
+        const abaEditor = Array.from(adminView.querySelectorAll('button, [data-tab]')).find(b =>
+          (b.dataset && b.dataset.tab === 'site') ||
+          (b.textContent && b.textContent.trim().toLowerCase().includes('editor do site'))
+        );
+        if (abaEditor) abaEditor.click();
+
+        // Fecha o menu lateral clicando no botão X dele
+        const drawerRoot = btnConfig.closest('aside, nav, [class*="drawer"], [id*="drawer"], [id*="menu"]') || btnConfig.parentElement.parentElement;
+        const btnFechar = drawerRoot && Array.from(drawerRoot.querySelectorAll('button')).find(b => b.textContent.trim() === '×' || b.textContent.trim() === '✕');
+        if (btnFechar) btnFechar.click();
+      });
+
+      btnConfig.parentElement.insertBefore(btnEditor, btnConfig.nextSibling);
+    }
+  }
+
+  setInterval(organizarMenuLateralAdmin, 600);
+})();
+</script>
 
 </body>
   
