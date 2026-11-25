@@ -7717,6 +7717,145 @@ setInterval(function() {
   });
 }, 300);
 </script>
+<!-- AJUSTES FINAIS VITRINE & PAINEL ADM: TEMA BRANCO + SERVIÇOS 2x2 + GALERIA 3x3 -->
+<style>
+/* 1. Esconde a seção antiga de "Cor de fundo do site (10 opções prontas + paleta livre)" em Configurações (1ª foto) */
+#cbBgColorBox,
+.cb-bg-picker-wrap {
+  display: none !important;
+}
+
+/* 2. Tema Branco Completo quando o dono escolher "Fundo Branco" no Editor de Site */
+body.cb-light-theme #publicView {
+  background: #f5f5f7 !important;
+  color: #111113 !important;
+}
+body.cb-light-theme #publicView h1,
+body.cb-light-theme #publicView h2,
+body.cb-light-theme #publicView h3,
+body.cb-light-theme #publicView strong,
+body.cb-light-theme #publicView .sec-title {
+  color: #111113 !important;
+}
+body.cb-light-theme #publicView p,
+body.cb-light-theme #publicView span,
+body.cb-light-theme #publicView .muted {
+  color: #3f3f46 !important;
+}
+body.cb-light-theme #publicView .card,
+body.cb-light-theme #publicView [class*="service"],
+body.cb-light-theme #publicView [class*="card"] {
+  background: #ffffff !important;
+  border: 1px solid #e4e4e7 !important;
+  color: #111113 !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04) !important;
+}
+body.cb-light-theme #publicView .hero h1,
+body.cb-light-theme #publicView .hero p {
+  color: #ffffff !important;
+}
+
+@media (min-width: 920px) {
+  /* 3. Serviços em grade 2 colunas (2 na esquerda + 2 na direita) sem poluir a tela (3ª foto) */
+  #publicView #servicesGrid,
+  #publicView .services-grid,
+  #publicView [id*="service"][class*="grid"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  /* 4. Galeria de Cortes em grade 3x3 (3 colunas por linha no PC - 4ª foto) */
+  #publicView #galleryGrid,
+  #publicView .gallery-grid,
+  #publicView [id*="gallery"][class*="grid"],
+  #publicView [class*="galeria"] {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+  #publicView #galleryGrid > *,
+  #publicView .gallery-grid > *,
+  #publicView [id*="gallery"][class*="grid"] > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+  }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  function organizarPainelEVitrine() {
+    // 1. Esconde o bloco duplicado "Cor de fundo do site (10 opções prontas + paleta livre)" em Configurações
+    document.querySelectorAll('#adminView label, #adminView div, #adminView strong').forEach(function(el) {
+      if (el.textContent && el.textContent.indexOf('Cor de fundo do site (10 opções prontas') !== -1) {
+        var box = el.closest('.field, .card, div[style*="border"]') || el.parentElement;
+        if (box && box.id !== 'adminView') box.style.display = 'none';
+      }
+    });
+
+    // 2. Adiciona a 7ª opção "Fundo Branco + Letras Pretas" na grade de "Cor de destaque" do Editor de Site
+    document.querySelectorAll('#adminView label, #adminView div').forEach(function(el) {
+      if (el.textContent && el.textContent.trim() === 'Cor de destaque') {
+        var grid = el.nextElementSibling;
+        if (grid && !grid.querySelector('#cbOptTemaBranco')) {
+          var btnBranco = document.createElement('button');
+          btnBranco.type = 'button';
+          btnBranco.id = 'cbOptTemaBranco';
+          btnBranco.innerHTML = '☀️ Fundo Branco + Letras Pretas';
+          btnBranco.style.cssText = 'grid-column:1 / -1;padding:12px 16px;border-radius:12px;border:2px solid #ffffff;background:#f5f5f7;color:#111113;font-weight:800;font-size:13.5px;cursor:pointer;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;';
+          btnBranco.onclick = function() {
+            var ativo = !document.body.classList.contains('cb-light-theme');
+            document.body.classList.toggle('cb-light-theme', ativo);
+            try {
+              var slug = window.currentOwnerTenant?.slug || window.currentTenant?.slug || 'default';
+              localStorage.setItem('cb_light_' + slug, ativo ? '1' : '0');
+            } catch(e) {}
+            btnBranco.innerHTML = ativo ? '✅ Fundo Branco Ativado (Clique p/ Escuro)' : '☀️ Fundo Branco + Letras Pretas';
+          };
+          grid.appendChild(btnBranco);
+        }
+      }
+    });
+
+    // Aplica o tema branco automaticamente se a barbearia tiver salvo essa preferência
+    try {
+      var slugAtual = window.currentTenant?.slug || window.currentOwnerTenant?.slug || new URLSearchParams(location.search).get('b');
+      if (slugAtual && localStorage.getItem('cb_light_' + slugAtual) === '1') {
+        document.body.classList.add('cb-light-theme');
+      }
+    } catch(e) {}
+
+    // 3. Limita a exibição inicial dos serviços a 4 itens (2 na esquerda + 2 na direita) com botão "+ Ver todos"
+    var srvGrid = document.querySelector('#publicView #servicesGrid, #publicView .services-grid');
+    if (srvGrid && window.innerWidth >= 920 && !srvGrid.dataset.limitado4) {
+      var cards = Array.from(srvGrid.children);
+      if (cards.length > 4) {
+        srvGrid.dataset.limitado4 = '1';
+        cards.slice(4).forEach(function(c) { c.style.display = 'none'; });
+        var verMais = document.createElement('button');
+        verMais.type = 'button';
+        verMais.className = 'btn ghost';
+        verMais.textContent = 'Ver todos os ' + cards.length + ' serviços ▾';
+        verMais.style.cssText = 'grid-column:1 / -1;margin:6px auto 0;padding:10px 22px;border-radius:10px;font-weight:700;cursor:pointer;';
+        verMais.onclick = function() {
+          var ocultos = cards[4].style.display === 'none';
+          cards.slice(4).forEach(function(c) { c.style.display = ocultos ? '' : 'none'; });
+          verMais.textContent = ocultos ? 'Mostrar menos serviços ▴' : 'Ver todos os ' + cards.length + ' serviços ▾';
+        };
+        srvGrid.appendChild(verMais);
+      }
+    }
+  }
+
+  organizarPainelEVitrine();
+  setInterval(organizarPainelEVitrine, 400);
+})();
+</script>
 
 </body>
   
