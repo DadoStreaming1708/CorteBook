@@ -7498,18 +7498,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 </script>
 <!-- FIX FINAL PC + CELULAR: REMOVE BOTÃO WPP DUPLICADO + TIRA AMARELO DO INSTALAR APP -->
 <style>
-/* 1. Esconde e bloqueia qualquer botão de WhatsApp duplicado no PC e no Celular */
-a[href*="wa.me"]:not(.cb-zap-pulse-btn):not(.cb-menu-contato),
-button[onclick*="wa.me"]:not(.cb-zap-pulse-btn),
-[id*="wpp"]:not(.cb-zap-pulse-btn),
-[class*="wpp"]:not(.cb-zap-pulse-btn),
-[id*="whatsapp"]:not(.cb-zap-pulse-btn),
-[class*="whatsapp"]:not(.cb-zap-pulse-btn) {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+
 
 /* 2. Garante texto 100% branco no botão Instalar App no PC e no Celular */
 #cortebookLanding #cbInstallLandingBtn,
@@ -7692,6 +7681,41 @@ setInterval(function() {
     btn.style.setProperty('display', naTelaInicial ? 'flex' : 'none', 'important');
   });
 }, 250);
+</script>
+<script>
+setInterval(function() {
+  var landing = document.getElementById('cortebookLanding');
+  var naTelaInicial = landing && getComputedStyle(landing).display !== 'none';
+  document.querySelectorAll('.cb-zap-pulse-btn').forEach(function(btn) {
+    btn.style.setProperty('display', naTelaInicial ? 'flex' : 'none', 'important');
+  });
+
+  document.querySelectorAll('div, section').forEach(function(box) {
+    if (box.textContent && box.textContent.indexOf('Horário Reservado!') !== -1 && box.querySelector('button, a')) {
+      var jaTemZap = Array.from(box.querySelectorAll('a, button')).some(function(el) {
+        return el.textContent.toLowerCase().indexOf('whatsapp') !== -1 || (el.getAttribute('href') || '').indexOf('wa.me') !== -1;
+      });
+      if (!jaTemZap && box.children.length >= 3 && box.children.length <= 8) {
+        var refBtn = Array.from(box.querySelectorAll('button, a')).find(function(b) {
+          return b.textContent.indexOf('Salvar na Agenda') !== -1;
+        });
+        if (refBtn && !box.dataset.zapInjetado) {
+          box.dataset.zapInjetado = '1';
+          var zap = document.createElement('a');
+          var tel = (window.currentTenant?.whatsapp || window.tenant?.whatsapp || '5582987075016').replace(/\D/g, '');
+          if (tel.length <= 11) tel = '55' + tel;
+          var resumo = box.innerText.split('\n').filter(Boolean).slice(1, 4).join(' - ');
+          zap.href = 'https://wa.me' + tel + '?text=' + encodeURIComponent('Olá! Acabei de agendar pelo CorteBook: ' + resumo);
+          zap.target = '_blank';
+          zap.rel = 'noopener';
+          zap.textContent = '📲 Confirmar no WhatsApp';
+          zap.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;padding:13px 16px;margin-top:10px;border-radius:12px;background:#25d366;color:#ffffff;font-weight:800;font-size:14.5px;text-decoration:none;box-sizing:border-box;';
+          refBtn.insertAdjacentElement('afterend', zap);
+        }
+      }
+    }
+  });
+}, 300);
 </script>
 
 </body>
