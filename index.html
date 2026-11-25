@@ -7957,6 +7957,18 @@ body.cb-light-theme #publicView .hero p {
   }, true);
 })();
 </script>
+<script>
+setInterval(function() {
+  var btn = document.getElementById('cbInstallLandingBtn');
+  if (btn) {
+    btn.removeAttribute('style');
+    btn.style.cssText = 'background:#18181b !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;border:none !important;border-radius:9px !important;font-weight:800 !important;padding:9px 12px !important;font-size:12px !important;';
+    if (btn.textContent.trim() !== 'Instalar App') {
+      btn.textContent = 'Instalar App';
+    }
+  }
+}, 200);
+</script>
 
 </body>
   
