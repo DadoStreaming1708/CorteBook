@@ -8259,8 +8259,9 @@ setInterval(function() {
   }, 900);
 })();
 </script>
+
 <style>
-  /* Deixa os botões do Painel ADM grandes, legíveis e organizados em grade (sem arrastar) */
+  /* Botões do Painel ADM organizados em grade (sem arrastar) */
   #adminView #adminTabs,
   #adminView .admin-tabs,
   #adminView .tabs {
@@ -8289,16 +8290,42 @@ setInterval(function() {
     line-height: 1.2 !important;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
   }
+
   #cbExtraBgBox {
     display: none !important;
   }
 
-  /* No computador: centraliza o Site Vitrine, fecha o menu na área pública e deixa a Galeria em grade 3 colunas */
-  @media (min-width: 768px) {
+  /* AJUSTES EXCLUSIVOS PARA COMPUTADOR (MIN-WIDTH: 900PX) */
+  @media (min-width: 900px) {
     html, body {
       overflow-x: hidden !important;
+      padding-left: 0 !important;
     }
 
+    /* 1. Recolhe o menu lateral esquerdo por padrão no PC e libera o botão ☰ no topo */
+    #menuBtn, #closeSidebar {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    #sidebar {
+      width: 310px !important;
+      transform: translateX(-105%) !important;
+      transition: transform 0.25s ease !important;
+      z-index: 950 !important;
+    }
+
+    #sidebar.open {
+      transform: translateX(0) !important;
+    }
+
+    #sidebarShade.open {
+      display: block !important;
+      z-index: 940 !important;
+    }
+
+    /* 2. Tela inicial cobrindo 100% da largura sem vazar nada */
     #cortebookLanding {
       width: 100% !important;
       max-width: 100% !important;
@@ -8308,59 +8335,40 @@ setInterval(function() {
       margin: 0 !important;
     }
 
-    #cortebookLanding > div,
-    #cortebookLanding section,
-    #cortebookLanding .cb-nav {
-      max-width: 1180px !important;
+    /* 3. Centraliza o Site Vitrine e o Painel ADM com largura elegante no PC */
+    .topinner,
+    #publicView > .wrap,
+    #publicView > section.wrap,
+    #storeView > .wrap,
+    #adminView > .wrap {
+      width: min(calc(100% - 48px), 1120px) !important;
+      max-width: 1120px !important;
       margin-left: auto !important;
       margin-right: auto !important;
-    }
-
-    /* Centraliza o Site Vitrine com elegância no PC quando o ADM não está aberto */
-    body:not(.admin-open) main,
-    body:not(.admin-open) .container,
-    body:not(.admin-open) .main-content,
-    body:not(.admin-open) .content-wrap {
-      max-width: 1080px !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-      padding-left: 24px !important;
-      padding-right: 24px !important;
       box-sizing: border-box !important;
     }
 
-    /* Transforma a Galeria de Cortes (6 lado a lado) em grade organizada de 3 colunas no PC */
-    #galleryGrid,
-    .gallery-grid,
-    .cuts-grid {
+    /* 4. Galeria de Cortes em grade organizada de 3 colunas (3x3) no PC */
+    #cbPublicGallery .cb-gallery-grid,
+    .cb-gallery-grid {
       display: grid !important;
-      grid-template-columns: repeat(3, 1fr) !important;
-      gap: 16px !important;
-      overflow: visible !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 18px !important;
     }
 
-    #galleryGrid > *,
-    .gallery-grid > *,
-    .cuts-grid > * {
+    #cbPublicGallery .cb-gallery-item,
+    .cb-gallery-item {
       width: 100% !important;
-      min-width: 0 !important;
-      max-width: 100% !important;
+      aspect-ratio: 4 / 3 !important;
+      border-radius: 14px !important;
     }
 
-    #galleryGrid img,
-    .gallery-grid img,
-    .cuts-grid img {
-      height: 240px !important;
-      object-fit: cover !important;
+    /* 5. Limita a largura da caixa de WhatsApp do Cartão Fidelidade Digital */
+    #cbLoyaltyPhoneInput {
+      max-width: 380px !important;
     }
 
-    /* Centraliza e limita o campo do Cartão Fidelidade Digital */
-    #fidelityPhoneInput,
-    input[placeholder*="99999-9999"] {
-      max-width: 420px !important;
-    }
-
-    /* Deixa os botões do ADM em 5 colunas alinhadas */
+    /* 6. Botões do Painel ADM em 5 colunas alinhadas no PC */
     #adminView #adminTabs,
     #adminView .admin-tabs,
     #adminView .tabs {
@@ -8375,28 +8383,8 @@ setInterval(function() {
       min-height: 52px !important;
     }
   }
-
-
-
 </style>
 
-<script>
-(function() {
-  function recolherMenuNoComputador() {
-    if (window.innerWidth < 768 || window._pcMenuRecolhido) return;
-    const btnFechar = Array.from(document.querySelectorAll('button')).find(b => {
-      const t = (b.textContent || '').trim();
-      return (t === '×' || t === '✕') && b.offsetParent !== null;
-    });
-    if (btnFechar) {
-      btnFechar.click();
-      window._pcMenuRecolhido = true;
-    }
-  }
-  setTimeout(recolherMenuNoComputador, 400);
-  setTimeout(recolherMenuNoComputador, 1000);
-})();
-</script>
 
 
 
