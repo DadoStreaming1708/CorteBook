@@ -8842,101 +8842,66 @@ setInterval(function() {
 </script>
 <script>
 (function() {
-  function gerenciarEquipeEPainelBarbeiro() {
-    // 1. Limpa botões exclusivos do Dono quando o Barbeiro estiver logado
+  // 1. Limpa botões exclusivos do Dono quando o Barbeiro estiver logado
+  function limparPainelBarbeiro() {
     const barberView = document.getElementById('barberView');
     const isBarberScreen = (barberView && barberView.offsetParent !== null) ||
       (window.currentProfile && window.currentProfile.role === 'barber');
 
-    if (isBarberScreen) {
-      const abasSomenteDono = [
-        'Serviços', 'Financeiro', 'Clientes', 'Radar de Retorno',
-        'Equipe', 'Produtos', 'Configurações', 'Editor do site'
-      ];
-      document.querySelectorAll('#adminTabs button, .admin-tabs button, .tabs button').forEach((btn) => {
-        const txt = (btn.textContent || '').trim();
-        if (abasSomenteDono.includes(txt)) btn.style.display = 'none';
-      });
+    if (!isBarberScreen) return;
 
-      document.querySelectorAll('section, .card, div').forEach((el) => {
-        if (el.id === 'barberView' || el.contains(barberView)) return;
-        const txt = el.textContent || '';
-        if ((txt.includes('Adicionar Novo Serviço ou Combo') || txt.includes('VISÃO DO SEU CLIENTE')) && txt.length < 2200) {
-          el.style.display = 'none';
-        }
-      });
-    }
+    const abasSomenteDono = [
+      'Serviços', 'Financeiro', 'Clientes', 'Radar de Retorno',
+      'Equipe', 'Produtos', 'Configurações', 'Editor do site'
+    ];
+    document.querySelectorAll('#adminTabs button, .admin-tabs button, .tabs button').forEach((btn) => {
+      const txt = (btn.textContent || '').trim();
+      if (abasSomenteDono.includes(txt)) btn.style.display = 'none';
+    });
 
-    // 2. Adiciona o botão "Excluir" ao lado de "Desativar" / "Ativar" na aba Equipe do ADM
-    const adminView = document.getElementById('adminView');
-    if (adminView && adminView.offsetParent !== null) {
-      adminView.querySelectorAll('button').forEach((btnToggle) => {
-        const label = (btnToggle.textContent || '').trim();
-        if (label !== 'Desativar' && label !== 'Ativar') return;
-        const parent = btnToggle.parentElement;
-        if (!parent || parent.querySelector('.cb-del-barber-btn')) return;
-
-        parent.style.display = 'flex';
-        parent.style.gap = '8px';
-        parent.style.alignItems = 'center';
-
-        const btnDel = document.createElement('button');
-        btnDel.type = 'button';
-        btnDel.className = 'cb-del-barber-btn';
-        btnDel.textContent = 'Excluir';
-        btnDel.style.cssText = 'background:#dc2626; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;';
-
-        btnDel.onclick = async function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          const card = btnToggle.closest('.servicecard, .card, div[style*="border"]') || parent.parentElement;
-          const nomeEl = card && card.querySelector('strong, h4, h3, .name, b');
-          const nomeBarbeiro = nomeEl ? nomeEl.textContent.trim() : '';
-          if (!nomeBarbeiro) return;
-
-          if (!confirm(`Tem certeza que deseja EXCLUIR definitivamente o barbeiro "${nomeBarbeiro}"?`)) return;
-
-          btnDel.disabled = true;
-          btnDel.textContent = '...';
-
-          try {
-            const db = window.supabaseDataClient;
-            const tenantId = (window.currentOwnerTenant && window.currentOwnerTenant.id) || window.BARBER_TENANT_ID;
-
-            if (window.state && Array.isArray(window.state.barbers)) {
-              const alvo = window.state.barbers.find(b => (b.name || '').trim() === nomeBarbeiro);
-              if (alvo && db && tenantId) {
-                if (alvo.id && /^[0-9a-f-]{36}$/i.test(alvo.id)) {
-                  await db.from('barbers').delete().eq('id', alvo.id).eq('tenant_id', tenantId);
-                } else {
-                  await db.from('barbers').delete().eq('name', nomeBarbeiro).eq('tenant_id', tenantId);
-                }
-                if (alvo.email) {
-                  await db.from('profiles').delete().eq('email', alvo.email).eq('role', 'barber').eq('tenant_id', tenantId);
-                }
-              }
-              window.state.barbers = window.state.barbers.filter(b => (b.name || '').trim() !== nomeBarbeiro);
-              if (typeof window.save === 'function') window.save();
-            }
-
-            if (card) card.remove();
-            if (typeof window.toast === 'function') window.toast('Barbeiro excluído com sucesso.');
-          } catch (err) {
-            btnDel.disabled = false;
-            btnDel.textContent = 'Excluir';
-            alert('Erro ao excluir barbeiro: ' + err.message);
-          }
-        };
-
-        parent.appendChild(btnDel);
-      });
-    }
+    document.querySelectorAll('section, .card, div').forEach((el) => {
+      if (el.id === 'barberView' || el.contains(barberView)) return;
+      const txt = el.textContent || '';
+      if ((txt.includes('Adicionar Novo Serviço ou Combo') || txt.includes('VISÃO DO SEU CLIENTE')) && txt.length < 2200) {
+        el.style.display = 'none';
+      }
+    });
   }
 
-  setInterval(gerenciarEquipeEPainelBarbeiro, 500);
+  // 2. Garante que ao clicar no botão "Excluir" nativo da aba Equipe, também apague no Supabase
+  document.addEventListener('click', async function(e) {
+    const btn = e.target && e.target.closest('button');
+    if (!btn) return;
+    const txt = (btn.textContent || '').trim();
+    if (txt !== 'Excluir') return;
+
+    const adminView = document.getElementById('adminView');
+    if (!adminView || !adminView.contains(btn)) return;
+
+    // Pega o nome do barbeiro na mesma linha do botão clicado
+    const row = btn.closest('.servicecard, .card, tr, li, div[style*="justify-content"]') || btn.parentElement?.parentElement;
+    if (!row) return;
+    const rowText = row.innerText || '';
+    if (!rowText.includes('Ativo') && !rowText.includes('Inativo') && !rowText.includes('login')) return;
+
+    const linhas = rowText.split('\n').map(s => s.trim()).filter(Boolean);
+    const nomeBarbeiro = linhas.find(l => l !== 'Desativar' && l !== 'Ativar' && l !== 'Excluir' && !l.includes('Ativo') && !l.includes('Inativo'));
+    if (!nomeBarbeiro) return;
+
+    try {
+      const db = window.supabaseDataClient;
+      const tenantId = (window.currentOwnerTenant && window.currentOwnerTenant.id) || window.BARBER_TENANT_ID;
+      if (db && tenantId) {
+        await db.from('barbers').delete().eq('name', nomeBarbeiro).eq('tenant_id', tenantId);
+        await db.from('profiles').delete().eq('name', nomeBarbeiro).eq('role', 'barber').eq('tenant_id', tenantId);
+      }
+    } catch (_) {}
+  }, true);
+
+  setInterval(limparPainelBarbeiro, 500);
 })();
 </script>
+
 
 
 </body>
