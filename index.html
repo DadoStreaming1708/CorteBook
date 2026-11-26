@@ -9318,6 +9318,60 @@ setInterval(function() {
       if (!state.settings || typeof state.settings !== 'object') state.settings = {};
     }
   });
+  // Sincroniza barbeiros da vitrine (app_settings / tabela barbers) para a aba Equipe do ADM
+  async function sincronizarEquipeNoADM() {
+    if (typeof state !== 'object' || !state) return;
+    const { db, tid } = getLojaAtiva();
+    if (!db || !tid) return;
+
+    // Se o painel já tem barbeiros carregados, não precisa buscar
+    if (Array.isArray(state.barbers) && state.barbers.length > 0) return;
+
+    try {
+      let lista = [];
+
+      // 1. Tenta buscar na tabela 'barbers' do Supabase
+      const { data: rowsBarbers } = await db
+        .from('barbers')
+        .select('*')
+        .eq('tenant_id', tid);
+
+      if (Array.isArray(rowsBarbers) && rowsBarbers.length > 0) {
+        lista = rowsBarbers.map(b => ({
+          id: b.id,
+          name: b.name || b.nome || 'Barbeiro',
+          role: b.role || b.specialty || 'Barbeiro profissional',
+          photo: b.photo || b.avatar_url || '',
+          commission: Number(b.commission ?? 50),
+          active: b.active !== false
+        }));
+      } else {
+        // 2. Se não achar na tabela, busca do JSON público da vitrine (app_settings)
+        const { data: pubRow } = await db
+          .from('app_settings')
+          .select('data')
+          .eq('tenant_id', tid)
+          .maybeSingle();
+
+        if (pubRow?.data?.barbers && Array.isArray(pubRow.data.barbers)) {
+          lista = pubRow.data.barbers;
+        }
+      }
+
+      if (lista.length > 0) {
+        state.barbers = lista;
+        if (typeof renderAdmin === 'function') renderAdmin('equipe');
+      }
+    } catch (_) {}
+  }
+
+  // Roda assim que o painel abrir e sempre que clicar na aba Equipe
+  setTimeout(sincronizarEquipeNoADM, 1500);
+  document.addEventListener('click', function(e) {
+    if (e.target && /equipe/i.test(e.target.textContent || '')) {
+      setTimeout(sincronizarEquipeNoADM, 200);
+    }
+  });
 
 })();
 </script>
