@@ -8293,8 +8293,12 @@ setInterval(function() {
     display: none !important;
   }
 
-  /* No computador: faz a tela inicial cobrir 100% da tela sem vazar o site vitrine nas laterais */
+  /* No computador: corrige largura ao lado do menu lateral e alinha Vitrine + VIP Club */
   @media (min-width: 768px) {
+    html, body {
+      overflow-x: hidden !important;
+    }
+
     #cortebookLanding {
       width: 100% !important;
       max-width: 100% !important;
@@ -8312,6 +8316,25 @@ setInterval(function() {
       margin-right: auto !important;
     }
 
+    /* Ajusta o conteúdo principal do Vitrine e ADM para não cortar na borda direita */
+    #adminView,
+    main,
+    .container,
+    .main-content,
+    .content-wrap {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      padding-right: 28px !important;
+    }
+
+    /* Centraliza e limita o campo do Cartão Fidelidade Digital */
+    #fidelityPhoneInput,
+    input[placeholder*="99999-9999"] {
+      max-width: 420px !important;
+    }
+
+    /* Deixa os botões do ADM em 5 colunas alinhadas */
     #adminView #adminTabs,
     #adminView .admin-tabs,
     #adminView .tabs {
@@ -8325,15 +8348,8 @@ setInterval(function() {
       font-size: 15px !important;
       min-height: 52px !important;
     }
-
-    #adminView,
-    main,
-    .container {
-      max-width: 1120px !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-    }
   }
+
 
 </style>
 
