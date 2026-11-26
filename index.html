@@ -9007,6 +9007,83 @@ setInterval(function() {
 })();
 </script>
 
+<!-- CORREÇÃO DEFINITIVA: COMPRESSÃO E SALVAMENTO DA LOGOMARCA NO SUPABASE -->
+<script>
+(function() {
+  'use strict';
+
+  function comprimirLogo(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Erro ao ler imagem.'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Imagem inválida.'));
+        img.onload = () => {
+          const max = 250;
+          const scale = Math.min(max / img.width, max / img.height, 1);
+          const w = Math.max(1, Math.round(img.width * scale));
+          const h = Math.max(1, Math.round(img.height * scale));
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/png', 0.85));
+        };
+        img.src = String(reader.result || '');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.addEventListener('change', async function(e) {
+    if (!e.target || e.target.id !== 'brandLogoFile') return;
+    e.stopImmediatePropagation();
+
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+      alert('Escolha uma imagem PNG, JPG ou WEBP.');
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      const logoLeve = await comprimirLogo(file);
+      if (!state.branding) state.branding = {};
+      state.branding.logo = logoLeve;
+      const prev = document.getElementById('logoPreview');
+      if (prev) {
+        prev.innerHTML = `<img src="${logoLeve}" alt="Prévia da logo" style="width:76px;height:76px;object-fit:cover;border-radius:50%">`;
+      }
+      if (typeof toast === 'function') toast('Logo otimizada! Clique em "Salvar identidade visual".');
+    } catch (err) {
+      alert(err.message || 'Não foi possível processar a logomarca.');
+    }
+  }, true);
+
+  document.addEventListener('submit', async function(e) {
+    if (!e.target || e.target.id !== 'brandingForm') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Salvando logo...'; }
+
+    try {
+      if (typeof save === 'function') await save();
+      if (typeof window.syncBarberState === 'function') await window.syncBarberState();
+      if (typeof applyBranding === 'function') applyBranding();
+      if (typeof toast === 'function') toast('Logomarca salva com sucesso no banco!');
+    } catch (err) {
+      alert('Erro ao salvar logo: ' + (err?.message || 'tente novamente.'));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Salvar identidade visual'; }
+    }
+  }, true);
+})();
+</script>
 
 
 </body>
