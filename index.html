@@ -8897,6 +8897,48 @@ setInterval(function() {
       }
     } catch (_) {}
   }, true);
+  // 3. Cria o botão vermelho Excluir ao lado de Desativar / Ativar
+  function adicionarBotaoExcluirBarbeiro() {
+    const adminView = document.getElementById('adminView');
+    if (!adminView || adminView.offsetParent === null) return;
+
+    adminView.querySelectorAll('button').forEach((btnToggle) => {
+      const label = (btnToggle.textContent || '').trim();
+      if (label !== 'Desativar' && label !== 'Ativar') return;
+      const boxBotoes = btnToggle.parentElement;
+      if (!boxBotoes || boxBotoes.querySelector('.cb-del-barber')) return;
+
+      const card = boxBotoes.parentElement;
+      const titulo = card && card.querySelector('strong, h4, h3, b, div');
+      const nomeBarbeiro = titulo ? titulo.innerText.split('\n').trim() : '';
+      if (!nomeBarbeiro || nomeBarbeiro === 'Desativar' || nomeBarbeiro === 'Ativar') return;
+
+      const btnDel = document.createElement('button');
+      btnDel.type = 'button';
+      btnDel.className = 'cb-del-barber';
+      btnDel.textContent = 'Excluir';
+      btnDel.style.cssText = 'background:#dc2626;color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:700;font-size:13px;margin-left:8px;cursor:pointer;';
+
+      btnDel.onclick = async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!confirm(`Excluir definitivamente "${nomeBarbeiro}"?`)) return;
+        const db = window.supabaseDataClient;
+        const tenantId = (window.currentOwnerTenant && window.currentOwnerTenant.id) || window.BARBER_TENANT_ID;
+        if (db && tenantId) {
+          await db.from('barbers').delete().eq('name', nomeBarbeiro).eq('tenant_id', tenantId);
+          await db.from('profiles').delete().eq('name', nomeBarbeiro).eq('role', 'barber').eq('tenant_id', tenantId);
+        }
+        if (window.state && Array.isArray(window.state.barbers)) {
+          window.state.barbers = window.state.barbers.filter(b => (b.name || '').trim() !== nomeBarbeiro);
+          if (typeof window.save === 'function') window.save();
+        }
+        card.remove();
+      };
+      boxBotoes.appendChild(btnDel);
+    });
+  }
+  setInterval(adicionarBotaoExcluirBarbeiro, 600);
 
   setInterval(limparPainelBarbeiro, 500);
 })();
