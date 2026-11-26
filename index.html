@@ -9007,11 +9007,82 @@ setInterval(function() {
 })();
 </script>
 
-<!-- CORREÇÃO DEFINITIVA: COMPRESSÃO E SALVAMENTO DA LOGOMARCA NO SUPABASE -->
+<!-- CORREÇÃO DEFINITIVA MULTI-BARBEARIA: LOGOMARCA + SERVIÇOS NO SUPABASE -->
 <script>
 (function() {
   'use strict';
 
+  function getLojaAtiva() {
+    const db = window.supabaseDataClient || window.supabaseClient;
+    const tid = (typeof window.getCurrentTenantId === 'function')
+      ? window.getCurrentTenantId()
+      : (window.authProfile?.tenant_id || window.activeTenant?.id || '1081308f-588b-4cd8-a750-99a038fad2b6');
+    const slug = window.currentOwnerTenant?.slug || window.activeTenant?.slug || new URLSearchParams(location.search).get('b') || '';
+    const rowId = (tid === '1081308f-588b-4cd8-a750-99a038fad2b6')
+      ? 'barber_on_studio_main'
+      : ('settings_' + (slug || tid));
+    return { db, tid, slug, rowId };
+  }
+
+  async function salvarTudoNoBanco(camposExtras) {
+    const { db, tid, rowId } = getLojaAtiva();
+    if (!db || !tid) throw new Error('Conexão com o banco indisponível.');
+
+    // Garante que os IDs dos serviços sejam exclusivos desta barbearia
+    if (tid !== '1081308f-588b-4cd8-a750-99a038fad2b6' && Array.isArray(state.services)) {
+      const prefixo = tid.slice(0, 8) + '_';
+      state.services = state.services.map(s => {
+        const novoId = String(s.id).startsWith(prefixo) ? s.id : (prefixo + s.id);
+        return { ...s, id: novoId };
+      });
+      if (typeof servicosDadoStreaming !== 'undefined') {
+        servicosDadoStreaming.splice(0, servicosDadoStreaming.length, ...state.services.map(s => ({
+          id: s.id, nome: s.nome || s.name, duracao: Number(s.duracao || 30), preco: Number(s.preco ?? s.price ?? 0)
+        })));
+      }
+    }
+
+    if (camposExtras) Object.assign(state, camposExtras);
+
+    // Lê o registro atual do app_settings para não apagar outras configurações
+    const { data: atual } = await db.from('app_settings').select('id, data').eq('tenant_id', tid).maybeSingle();
+    const targetRowId = atual?.id || rowId;
+
+    const publicKeys = ['services', 'barbers', 'gallery', 'products', 'plans', 'settings', 'branding', 'hours', 'weeklySchedule', 'siteContent', 'vipTexts'];
+    const pubData = Object.assign({}, atual?.data || {});
+    for (const k of publicKeys) {
+      if (state[k] !== undefined) pubData[k] = state[k];
+    }
+    pubData.barbers = (pubData.barbers || []).map(({ password, username, login_handle, ...b }) => b);
+
+    const { error: errPub } = await db.from('app_settings').upsert({
+      id: targetRowId,
+      tenant_id: tid,
+      data: pubData,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'tenant_id,id' });
+
+    if (errPub) throw new Error('Erro ao salvar vitrine: ' + errPub.message);
+
+    // Salva também no painel privado (barber_data)
+    const privData = JSON.parse(JSON.stringify(state));
+    delete privData.reviews;
+    delete privData.appointments;
+
+    const { error: errPriv } = await db.from('barber_data').upsert({
+      id: 'main',
+      tenant_id: tid,
+      dados: privData,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'tenant_id,id' });
+
+    if (errPriv) throw new Error('Erro ao salvar painel: ' + errPriv.message);
+
+    // Salva no cache local
+    try { localStorage.setItem('barberOnStudioPublicCache', JSON.stringify(pubData)); } catch (_) {}
+  }
+
+  // 1. Comprime a logo para 250x250px
   function comprimirLogo(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -9027,8 +9098,7 @@ setInterval(function() {
           const canvas = document.createElement('canvas');
           canvas.width = w;
           canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           resolve(canvas.toDataURL('image/png', 0.85));
         };
         img.src = String(reader.result || '');
@@ -9037,6 +9107,7 @@ setInterval(function() {
     });
   }
 
+  // 2. Ao escolher a imagem da logo
   document.addEventListener('change', async function(e) {
     if (!e.target || e.target.id !== 'brandLogoFile') return;
     e.stopImmediatePropagation();
@@ -9057,33 +9128,123 @@ setInterval(function() {
       if (prev) {
         prev.innerHTML = `<img src="${logoLeve}" alt="Prévia da logo" style="width:76px;height:76px;object-fit:cover;border-radius:50%">`;
       }
-      if (typeof toast === 'function') toast('Logo otimizada! Clique em "Salvar identidade visual".');
+      if (typeof toast === 'function') toast('Logo pronta! Agora toque em "Salvar identidade visual".');
     } catch (err) {
-      alert(err.message || 'Não foi possível processar a logomarca.');
+      alert(err.message || 'Erro ao processar imagem.');
     }
   }, true);
 
+  // 3. Ao clicar em "Salvar identidade visual" (Logomarca)
   document.addEventListener('submit', async function(e) {
     if (!e.target || e.target.id !== 'brandingForm') return;
     e.preventDefault();
     e.stopImmediatePropagation();
 
     const btn = e.target.querySelector('button[type="submit"]');
-    if (btn) { btn.disabled = true; btn.textContent = 'Salvando logo...'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Gravando no banco...'; }
 
     try {
-      if (typeof save === 'function') await save();
-      if (typeof window.syncBarberState === 'function') await window.syncBarberState();
+      await salvarTudoNoBanco();
       if (typeof applyBranding === 'function') applyBranding();
-      if (typeof toast === 'function') toast('Logomarca salva com sucesso no banco!');
+      alert('✅ Logomarca salva com sucesso na sua barbearia!');
     } catch (err) {
-      alert('Erro ao salvar logo: ' + (err?.message || 'tente novamente.'));
+      alert('❌ Falha ao salvar logomarca: ' + (err?.message || err));
     } finally {
       if (btn) { btn.disabled = false; btn.textContent = 'Salvar identidade visual'; }
     }
   }, true);
+
+  // 4. Ao clicar em "Salvar Alterações" na aba Serviços
+  document.addEventListener('submit', async function(e) {
+    if (!e.target || e.target.id !== 'servicesPricesForm') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Gravando serviços...'; }
+
+    try {
+      const linhas = e.target.querySelectorAll('tbody tr');
+      const listaAtualizada = [];
+
+      linhas.forEach((tr, idx) => {
+        const inpNome = tr.querySelector('input[name^="nome_"]');
+        const inpPreco = tr.querySelector('input[name^="preco_"]');
+        const inpDur = tr.querySelector('.cb-dur-input');
+        if (!inpPreco) return;
+
+        const id = String(inpPreco.name.replace('preco_', ''));
+        const antigo = (typeof servicosDadoStreaming !== 'undefined' && servicosDadoStreaming[idx]) || {};
+        const nome = inpNome ? inpNome.value.trim() : (antigo.nome || 'Serviço');
+        const preco = Number(parseFloat(inpPreco.value || 0).toFixed(2));
+        const duracao = inpDur ? (Number(inpDur.value) || 30) : (Number(antigo.duracao) || 30);
+
+        listaAtualizada.push({
+          id, nome, name: nome, duracao, preco, price: preco,
+          description: `Duração: ${duracao} minutos`, active: true
+        });
+      });
+
+      if (typeof servicosDadoStreaming !== 'undefined') {
+        servicosDadoStreaming.splice(0, servicosDadoStreaming.length, ...listaAtualizada);
+      }
+      state.services = listaAtualizada;
+
+      await salvarTudoNoBanco();
+      if (typeof renderPublicServices === 'function') renderPublicServices();
+      if (typeof renderAdmin === 'function') renderAdmin('servicos');
+      alert('✅ Serviços, tempos e preços salvos com sucesso!');
+    } catch (err) {
+      alert('❌ Falha ao salvar serviços: ' + (err?.message || err));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Salvar Alterações'; }
+    }
+  }, true);
+
+  // 5. Ao clicar em "+ Adicionar Serviço na Lista"
+  document.addEventListener('click', async function(e) {
+    if (!e.target || e.target.id !== 'cbAddSrvBtn') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const nome = (document.getElementById('cbNewSrvName')?.value || '').trim();
+    const duracao = Number(document.getElementById('cbNewSrvTime')?.value) || 30;
+    const preco = Number(parseFloat(document.getElementById('cbNewSrvPrice')?.value || 0).toFixed(2));
+
+    if (!nome || preco <= 0) {
+      alert('Preencha o nome e um preço maior que zero.');
+      return;
+    }
+
+    const btn = e.target;
+    btn.disabled = true;
+    btn.textContent = 'Adicionando...';
+
+    try {
+      const novo = {
+        id: 'srv_' + Date.now(),
+        nome, name: nome, duracao, preco, price: preco,
+        description: `Duração: ${duracao} minutos`, active: true
+      };
+
+      if (typeof servicosDadoStreaming !== 'undefined') servicosDadoStreaming.push(novo);
+      if (!Array.isArray(state.services)) state.services = [];
+      state.services.push(novo);
+
+      await salvarTudoNoBanco();
+      if (typeof renderPublicServices === 'function') renderPublicServices();
+      if (typeof renderAdmin === 'function') renderAdmin('servicos');
+      alert(`✅ Serviço "${nome}" adicionado e salvo!`);
+    } catch (err) {
+      alert('❌ Erro ao adicionar serviço: ' + (err?.message || err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '+ Adicionar Serviço na Lista';
+    }
+  }, true);
 })();
 </script>
+
 
 
 </body>
