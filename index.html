@@ -8293,7 +8293,7 @@ setInterval(function() {
     display: none !important;
   }
 
-  /* No computador: corrige largura ao lado do menu lateral e alinha Vitrine + VIP Club */
+  /* No computador: centraliza o Site Vitrine, fecha o menu na área pública e deixa a Galeria em grade 3 colunas */
   @media (min-width: 768px) {
     html, body {
       overflow-x: hidden !important;
@@ -8316,16 +8316,42 @@ setInterval(function() {
       margin-right: auto !important;
     }
 
-    /* Ajusta o conteúdo principal do Vitrine e ADM para não cortar na borda direita */
-    #adminView,
-    main,
-    .container,
-    .main-content,
-    .content-wrap {
-      width: 100% !important;
-      max-width: 100% !important;
+    /* Centraliza o Site Vitrine com elegância no PC quando o ADM não está aberto */
+    body:not(.admin-open) main,
+    body:not(.admin-open) .container,
+    body:not(.admin-open) .main-content,
+    body:not(.admin-open) .content-wrap {
+      max-width: 1080px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-left: 24px !important;
+      padding-right: 24px !important;
       box-sizing: border-box !important;
-      padding-right: 28px !important;
+    }
+
+    /* Transforma a Galeria de Cortes (6 lado a lado) em grade organizada de 3 colunas no PC */
+    #galleryGrid,
+    .gallery-grid,
+    .cuts-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 16px !important;
+      overflow: visible !important;
+    }
+
+    #galleryGrid > *,
+    .gallery-grid > *,
+    .cuts-grid > * {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+
+    #galleryGrid img,
+    .gallery-grid img,
+    .cuts-grid img {
+      height: 240px !important;
+      object-fit: cover !important;
     }
 
     /* Centraliza e limita o campo do Cartão Fidelidade Digital */
@@ -8351,8 +8377,26 @@ setInterval(function() {
   }
 
 
+
 </style>
 
+<script>
+(function() {
+  function recolherMenuNoComputador() {
+    if (window.innerWidth < 768 || window._pcMenuRecolhido) return;
+    const btnFechar = Array.from(document.querySelectorAll('button')).find(b => {
+      const t = (b.textContent || '').trim();
+      return (t === '×' || t === '✕') && b.offsetParent !== null;
+    });
+    if (btnFechar) {
+      btnFechar.click();
+      window._pcMenuRecolhido = true;
+    }
+  }
+  setTimeout(recolherMenuNoComputador, 400);
+  setTimeout(recolherMenuNoComputador, 1000);
+})();
+</script>
 
 
 
