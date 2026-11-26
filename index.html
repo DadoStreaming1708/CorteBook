@@ -8908,9 +8908,9 @@ setInterval(function() {
       const boxBotoes = btnToggle.parentElement;
       if (!boxBotoes || boxBotoes.querySelector('.cb-del-barber')) return;
 
-      const card = boxBotoes.parentElement;
-      const titulo = card && card.querySelector('strong, h4, h3, b, div');
-      const nomeBarbeiro = titulo ? (titulo.innerText.split('\n')[0] || '').trim() : '';
+            const card = btnToggle.closest('.listrow') || boxBotoes;
+      const nomeBarbeiro = ((card.querySelector('strong, b, h4')?.textContent) || '').trim();
+
 
       if (!nomeBarbeiro || nomeBarbeiro === 'Desativar' || nomeBarbeiro === 'Ativar') return;
 
