@@ -8293,8 +8293,25 @@ setInterval(function() {
     display: none !important;
   }
 
-  /* No computador: organiza em 5 colunas alinhadas e centraliza o painel */
+  /* No computador: faz a tela inicial cobrir 100% da tela sem vazar o site vitrine nas laterais */
   @media (min-width: 768px) {
+    #cortebookLanding {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: 100vh !important;
+      left: 0 !important;
+      right: 0 !important;
+      margin: 0 !important;
+    }
+
+    #cortebookLanding > div,
+    #cortebookLanding section,
+    #cortebookLanding .cb-nav {
+      max-width: 1180px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
     #adminView #adminTabs,
     #adminView .admin-tabs,
     #adminView .tabs {
@@ -8310,7 +8327,6 @@ setInterval(function() {
     }
 
     #adminView,
-    #cortebookLanding,
     main,
     .container {
       max-width: 1120px !important;
@@ -8318,6 +8334,7 @@ setInterval(function() {
       margin-right: auto !important;
     }
   }
+
 </style>
 
 
