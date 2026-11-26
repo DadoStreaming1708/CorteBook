@@ -9309,6 +9309,16 @@ setInterval(function() {
       btn.textContent = '+ Adicionar Serviço na Lista';
     }
   }, true);
+    // Proteção contra dados incompletos (null) em barbearias antigas
+  window.addEventListener('error', function() {
+    if (typeof state === 'object' && state) {
+      if (!Array.isArray(state.services)) state.services = [];
+      if (!Array.isArray(state.barbers)) state.barbers = [];
+      if (!state.branding || typeof state.branding !== 'object') state.branding = {};
+      if (!state.settings || typeof state.settings !== 'object') state.settings = {};
+    }
+  });
+
 })();
 </script>
 
