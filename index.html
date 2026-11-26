@@ -9252,10 +9252,65 @@ setInterval(function() {
         });
       });
 
-      if (typeof servicosDadoStreaming !== 'undefined') {
+            if (typeof servicosDadoStreaming !== 'undefined') {
+        servicosDadoStreaming.splice(0, servicosDadoStreaming.length, ...listaAtualizada);
+      }
+      state.services = listaAtualizada;
 
-        
+      await salvarTudoNoBanco();
+      if (typeof renderPublicServices === 'function') renderPublicServices();
+      if (typeof renderAdmin === 'function') renderAdmin('servicos');
+      alert('✅ Serviços, tempos e preços salvos com sucesso!');
+    } catch (err) {
+      alert('❌ Falha ao salvar serviços: ' + (err?.message || err));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Salvar Alterações'; }
+    }
+  }, true);
 
+  // 6. Ao clicar em "+ Adicionar Serviço na Lista"
+  document.addEventListener('click', async function(e) {
+    if (!e.target || e.target.id !== 'cbAddSrvBtn') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const nome = (document.getElementById('cbNewSrvName')?.value || '').trim();
+    const duracao = Number(document.getElementById('cbNewSrvTime')?.value) || 30;
+    const preco = Number(parseFloat(document.getElementById('cbNewSrvPrice')?.value || 0).toFixed(2));
+
+    if (!nome || preco <= 0) {
+      alert('Preencha o nome e um preço maior que zero.');
+      return;
+    }
+
+    const btn = e.target;
+    btn.disabled = true;
+    btn.textContent = 'Adicionando...';
+
+    try {
+      const novo = {
+        id: 'srv_' + Date.now(),
+        nome, name: nome, duracao, preco, price: preco,
+        description: `Duração: ${duracao} minutos`, active: true
+      };
+
+      if (typeof servicosDadoStreaming !== 'undefined') servicosDadoStreaming.push(novo);
+      if (!Array.isArray(state.services)) state.services = [];
+      state.services.push(novo);
+
+      await salvarTudoNoBanco();
+      if (typeof renderPublicServices === 'function') renderPublicServices();
+      if (typeof renderAdmin === 'function') renderAdmin('servicos');
+      alert(`✅ Serviço "${nome}" adicionado e salvo!`);
+    } catch (err) {
+      alert('❌ Erro ao adicionar serviço: ' + (err?.message || err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '+ Adicionar Serviço na Lista';
+    }
+  }, true);
+})();
+</script>
 
 </body>
   
