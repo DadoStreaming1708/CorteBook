@@ -8426,6 +8426,55 @@ setInterval(function() {
   }
 </style>
 
+<script>
+(function() {
+  function limparPainelAdm() {
+    const adminView = document.getElementById('adminView');
+    const admAberto = adminView && adminView.offsetParent !== null && !adminView.classList.contains('hidden');
+    if (!admAberto) return;
+
+    // 1. Esconde blocos de venda/depoimentos/FAQ da Landing Page quando o ADM estiver aberto
+    const textosMarketing = [
+      'VISÃO DO SEU CLIENTE',
+      'O que os Donos de Barbearia Dizem',
+      'Dúvidas Frequentes'
+    ];
+    document.querySelectorAll('section, .card, .wrap, div').forEach((el) => {
+      if (el.id === 'adminView' || el.contains(adminView)) return;
+      const txt = el.textContent || '';
+      if (textosMarketing.some((t) => txt.includes(t)) && txt.length < 2500) {
+        el.style.display = 'none';
+      }
+    });
+
+    // 2. Remove o segundo card repetido de link ("Link Exclusivo da Barbearia & QR Code")
+    Array.from(adminView.querySelectorAll('.card, .admin-card, section, div')).forEach((el) => {
+      const h = el.querySelector('h2, h3, h4, strong');
+      if (h && h.textContent && h.textContent.includes('Link Exclusivo da Barbearia & QR Code')) {
+        if (el.textContent.length < 400) el.style.display = 'none';
+      }
+    });
+
+    // 3. Move o botão flutuante "Excluir Cancelados" para a barra de ações da Agenda
+    const btnExcluir = Array.from(document.querySelectorAll('button')).find(
+      (b) => b.textContent && b.textContent.trim() === 'Excluir Cancelados'
+    );
+    const btnBloqueio = Array.from(adminView.querySelectorAll('button')).find(
+      (b) => b.textContent && b.textContent.includes('Bloquear Horário')
+    );
+
+    if (btnExcluir && btnBloqueio && btnBloqueio.parentElement && btnExcluir.parentElement !== btnBloqueio.parentElement) {
+      btnExcluir.style.position = 'static';
+      btnExcluir.style.inset = 'auto';
+      btnExcluir.style.margin = '0';
+      btnExcluir.style.boxShadow = 'none';
+      btnBloqueio.parentElement.appendChild(btnExcluir);
+    }
+  }
+
+  setInterval(limparPainelAdm, 500);
+})();
+</script>
 
 
 
