@@ -2328,25 +2328,32 @@ $s('#adminContent').addEventListener('click',async e=>{
  if(!confirm('Tem certeza que deseja excluir este cliente?'))return;
  btn.disabled=true;
  const db=window.supabaseDataClient,isUuid=/^[0-9a-f-]{36}$/i.test(id);
- try{
-      const cleanPhone=String(client.phone||'').replace(/\D/g,'');
+   try{
+    const cleanPhone=String(client.phone||'').replace(/\D/g,'');
+    const uid=client.userId||client.user_id||id;
+
+    // 1. Apaga na tabela 'clients' (por ID e por telefone)
     if(isUuid){
       const {error}=await db.from('clients').delete().eq('id',id).eq('tenant_id',BARBER_TENANT_ID);
       if(error)throw new Error(error.message);
-    }else if(cleanPhone){
+    }
+    if(cleanPhone){
       const {error}=await db.from('clients').delete().eq('phone',cleanPhone).eq('tenant_id',BARBER_TENANT_ID);
       if(error)throw new Error(error.message);
     }
 
-  const uid=client.userId||client.user_id;
-  if(uid&&uid!==window.authUser?.id){
-   // Só apaga perfis de cliente: o proprietário e os barbeiros nunca são removidos.
-   const {error}=await db.from('profiles').delete().eq('id',uid).eq('role','client').eq('tenant_id',BARBER_TENANT_ID);
-   if(error)console.warn('Cliente removido, mas o perfil não pôde ser apagado:',error.message);
-  }
-  state.clients=state.clients.filter(c=>c.id!==id);
-  save();renderAdmin('clientes');toast('Cliente excluído.');
- }catch(err){btn.disabled=false;toast('Não foi possível excluir o cliente: '+err.message);}
+    // 2. Apaga também na tabela 'profiles' (apenas role = 'client', nunca dono ou barbeiro)
+    if(uid && uid!==window.authUser?.id && /^[0-9a-f-]{36}$/i.test(uid)){
+      await db.from('profiles').delete().eq('id',uid).eq('role','client').eq('tenant_id',BARBER_TENANT_ID);
+    }
+    if(cleanPhone){
+      await db.from('profiles').delete().eq('phone',cleanPhone).eq('role','client').eq('tenant_id',BARBER_TENANT_ID);
+    }
+
+    state.clients=state.clients.filter(c=>c.id!==id && String(c.phone||'').replace(/\D/g,'')!==cleanPhone);
+    save();renderAdmin('clientes');toast('Cliente excluído definitivamente.');
+  }catch(err){btn.disabled=false;toast('Não foi possível excluir o cliente: '+err.message);}
+
 });
 function optimizeGalleryImage(file){
  return new Promise((resolve,reject)=>{
