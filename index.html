@@ -9318,60 +9318,128 @@ setInterval(function() {
       if (!state.settings || typeof state.settings !== 'object') state.settings = {};
     }
   });
-  // Sincroniza barbeiros da vitrine (app_settings / tabela barbers) para a aba Equipe do ADM
+    // Sincroniza e mostra tanto os barbeiros reais quanto os barbeiros vitrine para permitir excluir
   async function sincronizarEquipeNoADM() {
     if (typeof state !== 'object' || !state) return;
     const { db, tid } = getLojaAtiva();
     if (!db || !tid) return;
 
-    // Se o painel já tem barbeiros carregados, não precisa buscar
-    if (Array.isArray(state.barbers) && state.barbers.length > 0) return;
-
     try {
-      let lista = [];
+      let lista = Array.isArray(state.barbers) ? [...state.barbers] : [];
+      let ocultouVitrine = false;
 
-      // 1. Tenta buscar na tabela 'barbers' do Supabase
-      const { data: rowsBarbers } = await db
-        .from('barbers')
-        .select('*')
-        .eq('tenant_id', tid);
+      // 1. Busca na tabela 'barbers' do Supabase
+      if (lista.length === 0) {
+        const { data: rowsBarbers } = await db
+          .from('barbers')
+          .select('*')
+          .eq('tenant_id', tid);
 
-      if (Array.isArray(rowsBarbers) && rowsBarbers.length > 0) {
-        lista = rowsBarbers.map(b => ({
-          id: b.id,
-          name: b.name || b.nome || 'Barbeiro',
-          role: b.role || b.specialty || 'Barbeiro profissional',
-          photo: b.photo || b.avatar_url || '',
-          commission: Number(b.commission ?? 50),
-          active: b.active !== false
-        }));
-      } else {
-        // 2. Se não achar na tabela, busca do JSON público da vitrine (app_settings)
-        const { data: pubRow } = await db
-          .from('app_settings')
-          .select('data')
-          .eq('tenant_id', tid)
-          .maybeSingle();
-
-        if (pubRow?.data?.barbers && Array.isArray(pubRow.data.barbers)) {
-          lista = pubRow.data.barbers;
+        if (Array.isArray(rowsBarbers) && rowsBarbers.length > 0) {
+          lista = rowsBarbers.map(b => ({
+            id: b.id,
+            name: b.name || b.nome || 'Barbeiro',
+            role: b.role || b.specialty || 'Barbeiro profissional',
+            photo: b.photo || b.avatar_url || '',
+            commission: Number(b.commission ?? 50),
+            active: b.active !== false
+          }));
         }
       }
 
-      if (lista.length > 0) {
-        state.barbers = lista;
-        if (typeof renderAdmin === 'function') renderAdmin('equipe');
+      // 2. Busca no JSON da vitrine (app_settings)
+      const { data: pubRow } = await db
+        .from('app_settings')
+        .select('data')
+        .eq('tenant_id', tid)
+        .maybeSingle();
+
+      if (pubRow?.data?.hideDemoBarbers) ocultouVitrine = true;
+
+      if (lista.length === 0 && pubRow?.data?.barbers && Array.isArray(pubRow.data.barbers) && pubRow.data.barbers.length > 0) {
+        lista = pubRow.data.barbers;
       }
+
+      // 3. Se ainda estiver vazio e não tiver sido excluído antes, carrega os 2 barbeiros vitrine padrão para permitir excluir
+      if (lista.length === 0 && !ocultouVitrine) {
+        lista = [
+          { id: 'demo_gold', name: 'CorteBook Gold', role: 'Barbeiro profissional (Vitrine)', commission: 50, isDemo: true },
+          { id: 'demo_black', name: 'CorteBook Black', role: 'Barbeiro profissional (Vitrine)', commission: 50, isDemo: true }
+        ];
+      }
+
+      state.barbers = lista;
+
+      // Localiza o card "Gerenciar profissionais e acessos" na tela
+      const titulos = Array.from(document.querySelectorAll('h2, h3, h4'));
+      const hGerenciar = titulos.find(el => /Gerenciar profissionais e acessos/i.test(el.textContent || ''));
+      if (!hGerenciar) return;
+
+      const card = hGerenciar.closest('div');
+      if (!card) return;
+
+      let boxLista = document.getElementById('cbListaEquipeReal');
+      if (!boxLista) {
+        boxLista = document.createElement('div');
+        boxLista.id = 'cbListaEquipeReal';
+        boxLista.style.cssText = 'margin-top:14px;display:flex;flex-direction:column;gap:10px;';
+        card.appendChild(boxLista);
+      }
+
+      if (lista.length === 0) {
+        boxLista.innerHTML = `<div style="padding:12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px dashed rgba(212,175,55,0.35);color:#cbd5e1;font-size:13px;text-align:center;">Nenhum barbeiro na vitrine. Toque em <b>+ Cadastrar barbeiro</b> abaixo para adicionar sua equipe!</div>`;
+        return;
+      }
+
+      boxLista.innerHTML = lista.map((b, idx) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);">
+          <div>
+            <div style="font-weight:700;color:#fff;font-size:15px;">
+              ${b.name || b.nome || 'Profissional'}
+              ${b.isDemo ? '<span style="font-size:10px;background:#eab308;color:#000;padding:2px 6px;border-radius:6px;margin-left:6px;">VITRINE</span>' : ''}
+            </div>
+            <div style="font-size:12px;color:#eab308;">${b.role || 'Barbeiro profissional'} • Comissão: ${b.commission ?? 50}%</div>
+          </div>
+          <button type="button" data-del-barber="${b.id || idx}" style="background:#dc2626;color:#fff;border:none;border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;" title="Excluir barbeiro">🗑️</button>
+        </div>
+      `).join('');
+
+      boxLista.querySelectorAll('[data-del-barber]').forEach(btn => {
+        btn.onclick = async () => {
+          const idDel = btn.getAttribute('data-del-barber');
+          if (!confirm('Deseja realmente excluir este barbeiro da vitrine e do painel?')) return;
+
+          btn.disabled = true;
+          btn.textContent = '⏳';
+
+          state.barbers = (state.barbers || []).filter((item, i) => String(item.id || i) !== String(idDel));
+          if (!state.settings) state.settings = {};
+          state.settings.hideDemoBarbers = true;
+
+          await salvarTudoNoBanco();
+
+          // Grava também a flag hideDemoBarbers no app_settings para a vitrine nunca mais mostrar os exemplos
+          const { data: atual } = await db.from('app_settings').select('id, data').eq('tenant_id', tid).maybeSingle();
+          if (atual) {
+            const novoData = Object.assign({}, atual.data || {}, { barbers: state.barbers, hideDemoBarbers: true });
+            await db.from('app_settings').update({ data: novoData }).eq('tenant_id', tid);
+          }
+
+          await db.from('barbers').delete().eq('id', idDel).eq('tenant_id', tid);
+          sincronizarEquipeNoADM();
+          if (typeof toast === 'function') toast('Barbeiro removido da vitrine!');
+        };
+      });
     } catch (_) {}
   }
 
-  // Roda assim que o painel abrir e sempre que clicar na aba Equipe
   setTimeout(sincronizarEquipeNoADM, 1500);
   document.addEventListener('click', function(e) {
     if (e.target && /equipe/i.test(e.target.textContent || '')) {
-      setTimeout(sincronizarEquipeNoADM, 200);
+      setTimeout(sincronizarEquipeNoADM, 250);
     }
   });
+
 
 })();
 </script>
