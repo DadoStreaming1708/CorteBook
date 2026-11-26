@@ -2329,10 +2329,15 @@ $s('#adminContent').addEventListener('click',async e=>{
  btn.disabled=true;
  const db=window.supabaseDataClient,isUuid=/^[0-9a-f-]{36}$/i.test(id);
  try{
-  if(isUuid){
-   const {error}=await db.from('clients').delete().eq('id',id).eq('tenant_id',BARBER_TENANT_ID);
-   if(error)throw new Error(error.message);
-  }
+      const cleanPhone=String(client.phone||'').replace(/\D/g,'');
+    if(isUuid){
+      const {error}=await db.from('clients').delete().eq('id',id).eq('tenant_id',BARBER_TENANT_ID);
+      if(error)throw new Error(error.message);
+    }else if(cleanPhone){
+      const {error}=await db.from('clients').delete().eq('phone',cleanPhone).eq('tenant_id',BARBER_TENANT_ID);
+      if(error)throw new Error(error.message);
+    }
+
   const uid=client.userId||client.user_id;
   if(uid&&uid!==window.authUser?.id){
    // Só apaga perfis de cliente: o proprietário e os barbeiros nunca são removidos.
@@ -8508,7 +8513,7 @@ setInterval(function() {
     return origAlert.call(this, msg);
   };
 
-  // 2. Enxuga itens repetidos do menu lateral e oculta opções de ADM quando for visitante público
+  // 2. Organiza os itens do menu lateral sem brigar com o script nativo (zero piscadas)
   function organizarItensMenu() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -8516,43 +8521,59 @@ setInterval(function() {
     const adminView = document.getElementById('adminView');
     const isAdminLogado = adminView && !adminView.classList.contains('hidden');
 
-    const botoes = Array.from(sidebar.querySelectorAll('button, a'));
-    botoes.forEach((btn) => {
+    sidebar.querySelectorAll('button, a').forEach((btn) => {
       const txt = (btn.textContent || '').trim();
 
-      // Remove duplicações dentro do próprio menu
+      // Remove apenas os dois itens realmente duplicados
       if (txt.includes('Expedientes / Horários') || txt === 'Assinaturas') {
-        btn.style.display = 'none';
+        btn.style.setProperty('display', 'none', 'important');
         return;
       }
 
-      // Se for visitante público (não logado no ADM), mostra apenas o que interessa ao cliente
+      // Na Área Pública, mantém "Área do proprietário / ADM" visível sem piscar!
       if (!isAdminLogado) {
-        const permitidosPublico = ['Agenda', 'Novo agendamento', 'Loja de produtos', 'Área do barbeiro', 'Instalar Aplicativo'];
+        const permitidosPublico = [
+          'Agenda',
+          'Novo agendamento',
+          'Loja de produtos',
+          'Área do proprietário',
+          'Área do barbeiro',
+          'Instalar Aplicativo'
+        ];
         const manter = permitidosPublico.some((p) => txt.includes(p));
         if (!manter && !btn.id.includes('close')) {
-          btn.style.display = 'none';
+          btn.style.setProperty('display', 'none', 'important');
         }
       } else {
-        // Se for ADM logado, garante que os itens de gestão apareçam
         if (!txt.includes('Expedientes / Horários') && txt !== 'Assinaturas') {
-          btn.style.display = '';
+          btn.style.removeProperty('display');
         }
       }
     });
 
-    // Esconde títulos de seção vazios quando for visitante público
     sidebar.querySelectorAll('div, span, p, small').forEach((lbl) => {
       const t = (lbl.textContent || '').trim();
       if (['ATENDIMENTO', 'CADASTROS', 'FINANCEIRO'].includes(t)) {
-        lbl.style.display = isAdminLogado ? '' : 'none';
+        if (isAdminLogado) {
+          lbl.style.removeProperty('display');
+        } else {
+          lbl.style.setProperty('display', 'none', 'important');
+        }
       }
     });
   }
 
-  setInterval(organizarItensMenu, 500);
+  // Executa ao carregar e toda vez que o botão de abrir o menu (☰) for clicado
+  document.addEventListener('DOMContentLoaded', organizarItensMenu);
+  document.addEventListener('click', function(e) {
+    if (e.target && (e.target.id === 'menuBtn' || e.target.closest('#menuBtn'))) {
+      setTimeout(organizarItensMenu, 50);
+    }
+  });
+  setTimeout(organizarItensMenu, 600);
 })();
 </script>
+
 
 
 </body>
