@@ -8910,7 +8910,8 @@ setInterval(function() {
 
       const card = boxBotoes.parentElement;
       const titulo = card && card.querySelector('strong, h4, h3, b, div');
-      const nomeBarbeiro = titulo ? titulo.innerText.split('\n').trim() : '';
+      const nomeBarbeiro = titulo ? (titulo.innerText.split('\n')[0] || '').trim() : '';
+
       if (!nomeBarbeiro || nomeBarbeiro === 'Desativar' || nomeBarbeiro === 'Ativar') return;
 
       const btnDel = document.createElement('button');
