@@ -6330,10 +6330,10 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
   setInterval(limparOpcoesDuplicadas, 500);
 })();
 </script>
-  <!-- SCRIPT OFICIAL: EDIÇÃO DE NOME DOS SERVIÇOS (MULTI-BARBEARIA) -->
+<!-- SCRIPT OFICIAL CORRIGIDO: EDIÇÃO, ADIÇÃO E SALVAMENTO REAL DOS SERVIÇOS -->
 <script>
 (function() {
-  // 1. Transforma o nome do serviço na tabela em um campo editável vinculado ao ID
+  // 1. Transforma o nome e garante que tempo e preço estejam sincronizados na tabela
   function ativarCamposNomeServico() {
     const form = document.getElementById('servicesPricesForm');
     if (!form) return;
@@ -6353,18 +6353,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
         inputNome.value = nomeAtual;
         inputNome.dataset.servicoId = servicoId;
         inputNome.required = true;
-        inputNome.setAttribute('aria-label', `Nome do serviço ${nomeAtual}`);
-        inputNome.style.cssText = `
-          background: rgba(255, 255, 255, 0.06);
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 8px;
-          padding: 8px 10px;
-          width: 100%;
-          min-width: 145px;
-          font-size: 14px;
-          font-family: inherit;
-        `;
+        inputNome.style.cssText = 'background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:8px 10px;width:100%;min-width:145px;font-size:14px;';
 
         tdNome.textContent = '';
         tdNome.appendChild(inputNome);
@@ -6372,57 +6361,130 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
     });
   }
 
-  // Observa a tela para aplicar os inputs sempre que a aba Serviços for aberta
-  const observer = new MutationObserver(ativarCamposNomeServico);
-  observer.observe(document.body, { childList: true, subtree: true });
+  new MutationObserver(ativarCamposNomeServico).observe(document.body, { childList: true, subtree: true });
 
-  // 2. Antes do formulário salvar, atualiza os nomes na memória (state.services e servicosDadoStreaming)
+  // 2. Intercepta o botão "Salvar Alterações" e sincroniza state.services + Supabase
   document.addEventListener('submit', async function(e) {
-    if (e.target && e.target.id === 'servicesPricesForm') {
-      const inputsNome = e.target.querySelectorAll('input[name^="nome_"]');
+    if (!e.target || e.target.id !== 'servicesPricesForm') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-      inputsNome.forEach(input => {
-        const id = String(input.dataset.servicoId);
-        const novoNome = input.value.trim();
-        if (!novoNome) return;
+    const form = e.target;
+    const tid = (typeof window.getCurrentTenantId === 'function')
+      ? window.getCurrentTenantId()
+      : (window.authProfile?.tenant_id || window.activeTenant?.id || '1081308f-588b-4cd8-a750-99a038fad2b6');
 
-        // Atualiza na lista servicosDadoStreaming (usada na renderização)
-        if (typeof servicosDadoStreaming !== 'undefined' && Array.isArray(servicosDadoStreaming)) {
-          const s1 = servicosDadoStreaming.find(item => String(item.id) === id);
-          if (s1) {
-            s1.nome = novoNome;
-            s1.name = novoNome;
-          }
-        }
+    const linhas = form.querySelectorAll('tbody tr');
+    const listaAtualizada = [];
 
-        // Atualiza no state.services (usado pelo seu upsert na linha 2664)
-        if (typeof state !== 'undefined' && Array.isArray(state.services)) {
-          const s2 = state.services.find(item => String(item.id) === id);
-          if (s2) {
-            s2.name = novoNome;
-            s2.nome = novoNome;
-          }
-        }
+    linhas.forEach((tr, idx) => {
+      const inpNome = tr.querySelector('input[name^="nome_"]');
+      const inpPreco = tr.querySelector('input[name^="preco_"]');
+      const inpDur = tr.querySelector('.cb-dur-input');
+      if (!inpPreco) return;
+
+      const id = String(inpPreco.name.replace('preco_', ''));
+      const antigo = (typeof servicosDadoStreaming !== 'undefined' && servicosDadoStreaming[idx]) || {};
+      const nome = inpNome ? inpNome.value.trim() : (antigo.nome || 'Serviço');
+      const preco = Number(parseFloat(inpPreco.value || 0).toFixed(2));
+      const duracao = inpDur ? (Number(inpDur.value) || 30) : (Number(antigo.duracao) || 30);
+
+      listaAtualizada.push({
+        id,
+        nome,
+        name: nome,
+        duracao,
+        preco,
+        price: preco,
+        description: `Duração: ${duracao} minutos`,
+        active: true
       });
+    });
 
-      // Garantia extra: envia direto para a tabela 'services' do Supabase filtrando pelo ID
-      const client = window.supabaseDataClient;
-      if (client) {
-        for (const input of inputsNome) {
-          const id = input.dataset.servicoId;
-          const novoNome = input.value.trim();
-          if (id && novoNome) {
-            await client
-              .from('services')
-              .update({ name: novoNome })
-              .eq('id', id);
-          }
-        }
-      }
+    // Atualiza ambas as listas em memória antes de salvar
+    if (typeof servicosDadoStreaming !== 'undefined') {
+      servicosDadoStreaming.splice(0, servicosDadoStreaming.length, ...listaAtualizada);
     }
-  }, true); // 'true' garante que rode ANTES do evento de salvar original do seu site
+    if (typeof state !== 'undefined') {
+      state.services = listaAtualizada;
+    }
+
+    // Salva no localStorage e dispara o syncBarberState (app_settings + barber_data)
+    if (typeof save === 'function') await save();
+
+    // Grava também na tabela 'services' do Supabase com tenant_id correto
+    const db = window.supabaseDataClient || window.supabaseClient;
+    if (db && tid) {
+      const rows = listaAtualizada.map(s => ({
+        id: s.id,
+        tenant_id: tid,
+        name: s.nome,
+        duration_minutes: s.duracao,
+        price: s.preco,
+        active: true
+      }));
+      await db.from('services').upsert(rows, { onConflict: 'id' });
+    }
+
+    if (typeof renderPublicServices === 'function') renderPublicServices();
+    if (typeof renderAdmin === 'function') renderAdmin('servicos');
+    if (typeof toast === 'function') toast('Serviços, tempos e preços salvos com sucesso!');
+  }, true);
+
+  // 3. Corrige o botão "+ Adicionar Serviço na Lista" para salvar no banco imediatamente
+  document.addEventListener('click', async function(e) {
+    if (!e.target || e.target.id !== 'cbAddSrvBtn') return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const nome = (document.getElementById('cbNewSrvName')?.value || '').trim();
+    const duracao = Number(document.getElementById('cbNewSrvTime')?.value) || 30;
+    const preco = Number(parseFloat(document.getElementById('cbNewSrvPrice')?.value || 0).toFixed(2));
+
+    if (!nome || preco <= 0) {
+      alert('Preencha o nome e um preço maior que zero.');
+      return;
+    }
+
+    const novo = {
+      id: 'srv_' + Date.now(),
+      nome,
+      name: nome,
+      duracao,
+      preco,
+      price: preco,
+      description: `Duração: ${duracao} minutos`,
+      active: true
+    };
+
+    if (typeof servicosDadoStreaming !== 'undefined') servicosDadoStreaming.push(novo);
+    if (typeof state !== 'undefined') {
+      if (!Array.isArray(state.services)) state.services = [];
+      state.services.push(novo);
+    }
+
+    if (typeof save === 'function') await save();
+
+    const db = window.supabaseDataClient || window.supabaseClient;
+    const tid = (typeof window.getCurrentTenantId === 'function') ? window.getCurrentTenantId() : window.authProfile?.tenant_id;
+    if (db && tid) {
+      await db.from('services').upsert({
+        id: novo.id,
+        tenant_id: tid,
+        name: novo.nome,
+        duration_minutes: novo.duracao,
+        price: novo.preco,
+        active: true
+      }, { onConflict: 'id' });
+    }
+
+    if (typeof renderPublicServices === 'function') renderPublicServices();
+    if (typeof renderAdmin === 'function') renderAdmin('servicos');
+    if (typeof toast === 'function') toast(`Serviço "${nome}" salvo na vitrine!`);
+  }, true);
 })();
 </script>
+
 <!-- LAYOUT TELA CHEIA ESTILO SAAS PROFISSIONAL PARA COMPUTADOR (DESKTOP) -->
 <style>
 @media (min-width: 900px) {
