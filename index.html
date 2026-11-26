@@ -8574,6 +8574,265 @@ setInterval(function() {
 })();
 </script>
 
+<!-- ESTÚDIO DE ARTES EXCLUSIVO CORTEBOOK (8 MODELOS + STORY/POST + TABELA DE PREÇOS) -->
+<div id="cbArtStudioModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.86); z-index:9999; overflow-y:auto; padding:16px;">
+  <div style="max-width:780px; margin:16px auto; background:#12141a; border:1px solid rgba(212,175,55,0.35); border-radius:18px; padding:20px; color:#f5f5f7; font-family:inherit; box-shadow:0 20px 50px rgba(0,0,0,0.7);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px;">
+      <div>
+        <h3 style="margin:0; font-size:18px; color:#f3d06b;">🎨 Estúdio de Divulgação CorteBook</h3>
+        <small style="color:#a1a1aa;">Escolha o tipo, o formato e um dos 8 fundos exclusivos para baixar</small>
+      </div>
+      <button type="button" id="cbCloseArtStudio" style="background:#232733; color:#fff; border:none; width:36px; height:36px; border-radius:10px; font-size:18px; cursor:pointer;">✕</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; align-items:start;">
+      <!-- Controles -->
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <label style="display:block; font-size:12px; color:#a1a1aa; margin-bottom:6px; font-weight:700;">1. TIPO DE ARTE</label>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
+            <button type="button" class="cb-art-type active" data-type="agende" style="padding:9px 6px; border-radius:10px; border:1px solid #d4af37; background:#d4af37; color:#111; font-weight:700; font-size:12px; cursor:pointer;">📅 Agende</button>
+            <button type="button" class="cb-art-type" data-type="precos" style="padding:9px 6px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#1b1f2a; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">💈 Preços</button>
+            <button type="button" class="cb-art-type" data-type="aviso" style="padding:9px 6px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#1b1f2a; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">📢 Aviso</button>
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block; font-size:12px; color:#a1a1aa; margin-bottom:6px; font-weight:700;">2. FORMATO</label>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:6px;">
+            <button type="button" class="cb-art-fmt active" data-fmt="story" style="padding:9px; border-radius:10px; border:1px solid #d4af37; background:#d4af37; color:#111; font-weight:700; font-size:12px; cursor:pointer;">📱 Story / Status (9:16)</button>
+            <button type="button" class="cb-art-fmt" data-fmt="post" style="padding:9px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#1b1f2a; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">🖼️ Post Feed (1:1)</button>
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block; font-size:12px; color:#a1a1aa; margin-bottom:6px; font-weight:700;">3. MODELO DE FUNDO EXCLUSIVO (8 OPÇÕES)</label>
+          <div id="cbArtThemesGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;"></div>
+        </div>
+
+        <div>
+          <label style="display:block; font-size:12px; color:#a1a1aa; margin-bottom:4px; font-weight:700;">4. TEXTO PRINCIPAL / AVISO</label>
+          <input type="text" id="cbArtHeadlineInput" value="AGENDE SEU HORÁRIO" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#1b1f2a; color:#fff; font-size:13px; box-sizing:border-box; margin-bottom:8px;">
+          <input type="text" id="cbArtSubInput" value="Atendimento rápido, sem fila e 24h online" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#1b1f2a; color:#fff; font-size:13px; box-sizing:border-box;">
+        </div>
+
+        <button type="button" id="cbDownloadArtBtn" style="width:100%; padding:14px; border-radius:12px; border:none; background:linear-gradient(135deg,#f3d06b,#c89d28); color:#111; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(212,175,55,0.35);">⬇️ Baixar Arte Pronta (PNG)</button>
+      </div>
+
+      <!-- Prévia -->
+      <div style="display:flex; flex-direction:column; align-items:center; background:#0b0d11; padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+        <canvas id="cbArtCanvas" width="1080" height="1920" style="width:100%; max-width:270px; height:auto; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.6);"></canvas>
+        <small style="color:#71717a; margin-top:8px;">Prévia em tempo real (Alta Resolução)</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const THEMES = [
+    { id: 'royal', name: 'Black Gold', bg1: '#0b0b0e', bg2: '#1c1810', accent: '#f3d06b', text: '#ffffff', sub: '#d4d4d8', pattern: 'rays' },
+    { id: 'barber', name: 'Barber Pole', bg1: '#0e131f', bg2: '#182236', accent: '#ef4444', text: '#ffffff', sub: '#cbd5e1', pattern: 'stripes' },
+    { id: 'emerald', name: 'Esmeralda', bg1: '#071917', bg2: '#0f332e', accent: '#eAB308', text: '#ffffff', sub: '#a7f3d0', pattern: 'grid' },
+    { id: 'copper', name: 'Cobre Lux', bg1: '#141110', bg2: '#291d18', accent: '#f59e0b', text: '#fffbeb', sub: '#fed7aa', pattern: 'diagonal' },
+    { id: 'midnight', name: 'Azul VIP', bg1: '#090d1a', bg2: '#132042', accent: '#38bdf8', text: '#ffffff', sub: '#bae6fd', pattern: 'circles' },
+    { id: 'vintage', name: 'Couro Café', bg1: '#1a120b', bg2: '#332214', accent: '#fbbf24', text: '#fef3c7', sub: '#fde68a', pattern: 'frame' },
+    { id: 'graphite', name: 'Grafite', bg1: '#141416', bg2: '#27272a', accent: '#eab308', text: '#fafafa', sub: '#a1a1aa', pattern: 'grid' },
+    { id: 'clean', name: 'Clean Claro', bg1: '#f8fafc', bg2: '#e2e8f0', accent: '#b45309', text: '#0f172a', sub: '#334155', pattern: 'frame' }
+  ];
+
+  let currentType = 'agende';
+  let currentFmt = 'story';
+  let currentTheme = THEMES[0];
+
+  function getShopInfo() {
+    const nameEl = document.querySelector('#brandName, .brand-name, header .brand span');
+    const name = (window.currentOwnerTenant && window.currentOwnerTenant.name)
+      || (nameEl && nameEl.textContent.trim())
+      || 'CorteBook Barbearia';
+    const slug = (window.currentOwnerTenant && window.currentOwnerTenant.slug) || 'imperium';
+    const link = window.location.origin + '/?b=' + slug;
+    const services = (window.state && Array.isArray(window.state.services)) ? window.state.services.slice(0, 6) : [];
+    return { name, link, services };
+  }
+
+  function renderThemesGrid() {
+    const grid = document.getElementById('cbArtThemesGrid');
+    if (!grid || grid.children.length > 0) return;
+    THEMES.forEach((t, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.title = t.name;
+      btn.style.cssText = `height:46px; border-radius:10px; border:${idx === 0 ? '2px solid #f3d06b' : '1px solid rgba(255,255,255,0.2)'}; background:linear-gradient(135deg, ${t.bg1}, ${t.bg2}); color:${t.accent}; font-size:10px; font-weight:800; cursor:pointer; display:flex; align-items:flex-end; justify-content:center; padding:4px;`;
+      btn.textContent = t.name;
+      btn.onclick = () => {
+        currentTheme = t;
+        Array.from(grid.children).forEach(c => c.style.border = '1px solid rgba(255,255,255,0.2)');
+        btn.style.border = '2px solid #f3d06b';
+        drawArt();
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  function drawArt() {
+    const canvas = document.getElementById('cbArtCanvas');
+    if (!canvas) return;
+    const isStory = currentFmt === 'story';
+    canvas.width = 1080;
+    canvas.height = isStory ? 1920 : 1080;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const t = currentTheme;
+    const info = getShopInfo();
+
+    // Fundo degradê exclusivo
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, t.bg1);
+    grad.addColorStop(1, t.bg2);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Padrões geométricos exclusivos por tema
+    ctx.save();
+    ctx.globalAlpha = 0.08;
+    ctx.strokeStyle = t.accent;
+    ctx.fillStyle = t.accent;
+    if (t.pattern === 'stripes') {
+      for (let i = -H; i < W + H; i += 90) {
+        ctx.fillStyle = (i / 90) % 2 === 0 ? '#ef4444' : '#3b82f6';
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + 35, 0); ctx.lineTo(i - H + 35, H); ctx.lineTo(i - H, H); ctx.fill();
+      }
+    } else if (t.pattern === 'grid') {
+      for (let x = 0; x < W; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y < H; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    } else if (t.pattern === 'circles') {
+      ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(W / 2, H / 2, 420, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(W / 2, H / 2, 620, 0, Math.PI * 2); ctx.stroke();
+    } else {
+      ctx.lineWidth = 3;
+      for (let i = 0; i < 12; i++) {
+        ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo((W / 11) * i, H); ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    // Moldura interna elegante
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 6;
+    ctx.strokeRect(48, 48, W - 96, H - 96);
+
+    // Nome da barbearia no topo
+    ctx.fillStyle = t.accent;
+    ctx.font = 'bold 44px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(info.name.toUpperCase(), W / 2, isStory ? 210 : 145);
+
+    // Título principal
+    const headline = (document.getElementById('cbArtHeadlineInput').value || 'AGENDE SEU HORÁRIO').toUpperCase();
+    const subtext = document.getElementById('cbArtSubInput').value || '';
+
+    ctx.fillStyle = t.text;
+    ctx.font = '900 76px sans-serif';
+    const words = headline.split(' ');
+    let line = '', yPos = isStory ? 440 : 280;
+    words.forEach((w) => {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > W - 180 && line !== '') {
+        ctx.fillText(line.trim(), W / 2, yPos);
+        line = w + ' ';
+        yPos += 88;
+      } else {
+        line = test;
+      }
+    });
+    ctx.fillText(line.trim(), W / 2, yPos);
+
+    ctx.fillStyle = t.sub;
+    ctx.font = '500 36px sans-serif';
+    ctx.fillText(subtext, W / 2, yPos + 75);
+
+    if (currentType === 'precos') {
+      let sy = yPos + 165;
+      const lista = info.services.length ? info.services : [
+        { name: 'Corte Degradê', price: 35 },
+        { name: 'Barba Completa', price: 25 },
+        { name: 'Corte + Barba', price: 55 }
+      ];
+      lista.forEach((srv) => {
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(110, sy - 42, W - 220, 66);
+        ctx.fillStyle = t.text;
+        ctx.font = 'bold 34px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(srv.name, 140, sy);
+        ctx.fillStyle = t.accent;
+        ctx.textAlign = 'right';
+        ctx.fillText('R$ ' + Number(srv.price || 0).toFixed(2).replace('.', ','), W - 140, sy);
+        sy += 86;
+      });
+      ctx.textAlign = 'center';
+    }
+
+    const boxY = isStory ? H - 310 : H - 220;
+    ctx.fillStyle = t.accent;
+    ctx.fillRect(140, boxY, W - 280, 96);
+    ctx.fillStyle = '#111111';
+    ctx.font = '900 34px sans-serif';
+    ctx.fillText('AGENDE ONLINE EM:', W / 2, boxY + 42);
+    ctx.font = 'bold 30px sans-serif';
+    ctx.fillText(info.link.replace(/^https?:\/\//, ''), W / 2, boxY + 80);
+  }
+
+  document.addEventListener('click', function(e) {
+    const btn = e.target && e.target.closest('button');
+    if (btn && btn.textContent && btn.textContent.includes('Criar Arte p/ Divulgar')) {
+      e.preventDefault();
+      e.stopPropagation();
+      renderThemesGrid();
+      document.getElementById('cbArtStudioModal').style.display = 'block';
+      drawArt();
+    }
+  }, true);
+
+  document.getElementById('cbCloseArtStudio').onclick = () => {
+    document.getElementById('cbArtStudioModal').style.display = 'none';
+  };
+
+  document.querySelectorAll('.cb-art-type').forEach((b) => {
+    b.onclick = () => {
+      document.querySelectorAll('.cb-art-type').forEach(x => { x.style.background = '#1b1f2a'; x.style.color = '#fff'; });
+      b.style.background = '#d4af37'; b.style.color = '#111';
+      currentType = b.dataset.type;
+      if (currentType === 'precos') document.getElementById('cbArtHeadlineInput').value = 'TABELA DE SERVIÇOS';
+      if (currentType === 'agende') document.getElementById('cbArtHeadlineInput').value = 'AGENDE SEU HORÁRIO';
+      if (currentType === 'aviso') document.getElementById('cbArtHeadlineInput').value = 'HORÁRIOS LIVRES HOJE';
+      drawArt();
+    };
+  });
+
+  document.querySelectorAll('.cb-art-fmt').forEach((b) => {
+    b.onclick = () => {
+      document.querySelectorAll('.cb-art-fmt').forEach(x => { x.style.background = '#1b1f2a'; x.style.color = '#fff'; });
+      b.style.background = '#d4af37'; b.style.color = '#111';
+      currentFmt = b.dataset.fmt;
+      drawArt();
+    };
+  });
+
+  document.getElementById('cbArtHeadlineInput').oninput = drawArt;
+  document.getElementById('cbArtSubInput').oninput = drawArt;
+
+  document.getElementById('cbDownloadArtBtn').onclick = () => {
+    const canvas = document.getElementById('cbArtCanvas');
+    const a = document.createElement('a');
+    a.download = 'arte-cortebook-' + currentFmt + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+})();
+</script>
 
 
 </body>
