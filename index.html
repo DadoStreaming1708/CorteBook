@@ -8476,6 +8476,83 @@ setInterval(function() {
 })();
 </script>
 
+<style>
+  /* Deixa a Loja de Produtos compacta em 4 colunas no PC */
+  @media (min-width: 900px) {
+    #storeView .grid,
+    #storeProductsGrid,
+    #storeGrid,
+    #storeProducts {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 16px !important;
+    }
+
+    #storeView img {
+      height: 185px !important;
+      object-fit: cover !important;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  // 1. Adiciona instrução de instalar no Computador no aviso de instalação
+  const origAlert = window.alert;
+  window.alert = function(msg) {
+    if (typeof msg === 'string' && msg.includes('Para instalar o App CorteBook')) {
+      if (!msg.includes('No Computador')) {
+        msg += '\n• No Computador (Chrome/Edge): Clique no ícone de instalar no canto direito da barra de endereço lá em cima e confirme em "Instalar".';
+      }
+    }
+    return origAlert.call(this, msg);
+  };
+
+  // 2. Enxuga itens repetidos do menu lateral e oculta opções de ADM quando for visitante público
+  function organizarItensMenu() {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+
+    const adminView = document.getElementById('adminView');
+    const isAdminLogado = adminView && !adminView.classList.contains('hidden');
+
+    const botoes = Array.from(sidebar.querySelectorAll('button, a'));
+    botoes.forEach((btn) => {
+      const txt = (btn.textContent || '').trim();
+
+      // Remove duplicações dentro do próprio menu
+      if (txt.includes('Expedientes / Horários') || txt === 'Assinaturas') {
+        btn.style.display = 'none';
+        return;
+      }
+
+      // Se for visitante público (não logado no ADM), mostra apenas o que interessa ao cliente
+      if (!isAdminLogado) {
+        const permitidosPublico = ['Agenda', 'Novo agendamento', 'Loja de produtos', 'Área do barbeiro', 'Instalar Aplicativo'];
+        const manter = permitidosPublico.some((p) => txt.includes(p));
+        if (!manter && !btn.id.includes('close')) {
+          btn.style.display = 'none';
+        }
+      } else {
+        // Se for ADM logado, garante que os itens de gestão apareçam
+        if (!txt.includes('Expedientes / Horários') && txt !== 'Assinaturas') {
+          btn.style.display = '';
+        }
+      }
+    });
+
+    // Esconde títulos de seção vazios quando for visitante público
+    sidebar.querySelectorAll('div, span, p, small').forEach((lbl) => {
+      const t = (lbl.textContent || '').trim();
+      if (['ATENDIMENTO', 'CADASTROS', 'FINANCEIRO'].includes(t)) {
+        lbl.style.display = isAdminLogado ? '' : 'none';
+      }
+    });
+  }
+
+  setInterval(organizarItensMenu, 500);
+})();
+</script>
 
 
 </body>
