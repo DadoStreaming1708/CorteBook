@@ -8382,6 +8382,12 @@ setInterval(function() {
       font-size: 15px !important;
       min-height: 52px !important;
     }
+        /* 7. Serviços em 4 colunas no PC (2 na esquerda + 2 na direita) */
+    #publicServices {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 14px !important;
+    }
+
   }
 </style>
 
