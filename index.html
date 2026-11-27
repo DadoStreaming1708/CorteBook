@@ -898,7 +898,7 @@ body:has(#cortebookLanding.hidden-view) :is(#cbLandingPreview,#cbLandingCta,#cbL
     <div class="week-day"><div class="week-day-name"><span class="today-dot"></span>Domingo</div><div class="week-day-hours"><span class="closed">Fechado</span></div></div>
    </div>
    <div class="hours-extras">
-    <div class="hours-extra"><h3><span class="extra-icon" aria-hidden="true">✆</span>Contato</h3><p>WhatsApp: <a id="businessHoursContact" href="https://wa.me/5582987075016" style="color:#f6e3a1;text-decoration:none">(82) 98707-5016</a></p></div>
+    <div class="hours-extra"><h3><span class="extra-icon" aria-hidden="true">✆</span>Contato</h3><p>WhatsApp: <a id="businessHoursContact" href="https://wa.me/5582996999221" style="color:#f6e3a1;text-decoration:none">(82) 99699-9221</a></p></div>
     <div class="hours-extra"><h3><span class="extra-icon" aria-hidden="true">▣</span>Formas de Pagamento</h3><div class="payment-pills"><span class="payment-pill">💳 Crédito</span><span class="payment-pill">💳 Débito</span><span class="payment-pill">💵 Dinheiro</span><span class="payment-pill">⚡ Pix</span><span class="payment-pill">👤 Saldo do cliente</span></div></div>
    </div>
   </div>
@@ -1067,7 +1067,7 @@ function normalizeState(){
  state.clients.forEach(c=>{if(!Number.isInteger(c.loyaltyStamps))c.loyaltyStamps=0});
  state.blocks=state.blocks.map(b=>({...b,barberId:b.barberId||'all',duration:Math.max(15,Number(b.duration)||30)}));
 }
-const WHATSAPP_NUMBER='5582987075016';
+const WHATSAPP_NUMBER='5582996999221';
 const BARBER_TENANT_ID='1081308f-588b-4cd8-a750-99a038fad2b6';
 // Nome da tabela de avaliações no Supabase (ajuste aqui se a sua tabela tiver outro nome, ex.: 'feedbacks').
 const REVIEWS_TABLE='reviews';
@@ -1098,7 +1098,7 @@ const WEEK_DAYS=[['segunda','Segunda-feira',1],['terca','Terça-feira',2],['quar
 // Objeto global solicitado: os turnos podem ser lidos/alterados pelo restante do projeto.
 let horariosFuncionamento=structuredCloneSafe(DEFAULT_WEEKLY_HOURS);
 
-const blankState=()=>({services:structuredCloneSafe(DEFAULT_SERVICES),barbers:structuredCloneSafe(DEFAULT_BARBERS),appointments:[],clients:[],reviews:[],gallery:[],orders:[],transactions:[],payables:[],cashClosings:[],products:[],blocks:[],hours:{open:'09:00',close:'19:00',days:[1,2,3,4,5,6]},weeklySchedule:structuredCloneSafe(DEFAULT_WEEKLY_HOURS),settings:{whatsapp:'82987075016',pixKey:'dadosupport@gmail.com',instagram:'',address:'Maceió - AL',notice:''},branding:{color:'#d4af37',logo:''},plans:[],subscriptions:[]});
+const blankState=()=>({services:structuredCloneSafe(DEFAULT_SERVICES),barbers:structuredCloneSafe(DEFAULT_BARBERS),appointments:[],clients:[],reviews:[],gallery:[],orders:[],transactions:[],payables:[],cashClosings:[],products:[],blocks:[],hours:{open:'09:00',close:'19:00',days:[1,2,3,4,5,6]},weeklySchedule:structuredCloneSafe(DEFAULT_WEEKLY_HOURS),settings:{whatsapp:'82996999221',pixKey:'dadosupport@gmail.com',instagram:'',address:'Maceió - AL',notice:''},branding:{color:'#d4af37',logo:''},plans:[],subscriptions:[]});
 function structuredCloneSafe(v){return JSON.parse(JSON.stringify(v))}
 let state;
 try{state=Object.assign(blankState(),JSON.parse(localStorage.getItem('barberOnStudioPublicCache')||'{}'));state.settings=Object.assign(blankState().settings,state.settings||{});if(!state.settings.pixKey)state.settings.pixKey='dadosupport@gmail.com';state.hours=Object.assign(blankState().hours,state.hours||{});state.branding=Object.assign(blankState().branding,state.branding||{});state.siteContent=Object.assign({siteName:'CORTEBOOK',eyebrow:'BARBEARIA · DESDE 1999',headline:'CORTEBOOK',description:'Tradição, cuidado e excelência em cada detalhe. Escolha seu serviço, profissional e horário.',buttonText:'AGENDAR MEU HORÁRIO',announcement:'',accentColor:state.branding.color||'#d4af37'},state.siteContent||{});state.siteDraft=Object.assign({},state.siteContent,state.siteDraft||{})}catch{state=blankState()}
@@ -2036,7 +2036,7 @@ function renderBarbers(){
  <div class="sectionhead" style="margin-top:18px"><h2>Adicionar profissional</h2><button class="btn" data-act="add-barber">＋ Cadastrar barbeiro</button></div>
  <div class="cards">${state.barbers.map(b=>`<div class="listrow"><div><strong>${esc(b.name)}</strong><small>${b.active?'Ativo':'Inativo'} · ${b.login_handle?'Acesso configurado':'Sem login'}</small></div><button class="btn secondary" data-act="toggle-barber" data-id="${b.id}">${b.active?'Desativar':'Ativar'}</button></div>`).join('')}</div>`;
 }
-function renderSettings(){const c=state.settings,b=state.branding||{color:'#d4af37',logo:''};return `<div class="panel" style="padding:16px;margin-bottom:14px"><div class="sectionhead"><h2>Identidade visual White Label</h2></div><form id="brandingForm"><div class="field"><label>Cor principal do estabelecimento</label><div class="formgrid"><label class="choice"><input type="radio" name="brandColor" value="#d4af37" ${b.color==='#d4af37'?'checked':''}> Dourado CorteBook</label><label class="choice"><input type="radio" name="brandColor" value="#dc2626" ${b.color==='#dc2626'?'checked':''}> Vermelho</label><label class="choice"><input type="radio" name="brandColor" value="#d4a017" ${b.color==='#d4a017'?'checked':''}> Dourado</label><label class="choice"><input type="radio" name="brandColor" value="#16a34a" ${b.color==='#16a34a'?'checked':''}> Verde</label><label class="choice"><input type="radio" name="brandColor" value="#fcfbf8" ${b.color==='#fcfbf8'?'checked':''}> Branco</label></div><input type="color" name="customColor" value="${esc(b.color)}" aria-label="Escolher cor personalizada" style="width:100%;height:46px;padding:4px;background:#0a0a0a;border:1px solid var(--line);border-radius:10px"></div><div class="field"><label>Enviar logomarca (PNG, JPG ou WEBP)</label><input type="file" id="brandLogoFile" accept="image/png,image/jpeg,image/webp"><small class="muted">Imagem armazenada neste navegador. Use arquivo de até 1 MB.</small><div id="logoPreview" style="margin-top:8px">${b.logo?`<img src="${b.logo}" alt="Prévia da logo" style="width:76px;height:76px;object-fit:cover;border-radius:50%">`:''}</div><button type="button" class="btn ghost" id="removeLogo" style="margin-top:8px">Remover logomarca enviada</button></div><button class="btn full" type="submit">Salvar identidade visual</button></form></div>${renderWeeklyScheduleAdmin()}<div class="panel" style="padding:16px"><div class="sectionhead"><h2>Contatos e expediente</h2></div><form id="settingsForm"><div class="field"><label>WhatsApp de agendamentos (com DDD)</label><input name="whatsapp" type="tel" value="${esc(c.whatsapp)}" placeholder="82987075016" required></div><div class="field"><label>Chave Pix do Estabelecimento</label><input name="pixKey" type="text" value="${esc(c.pixKey||'dadosupport@gmail.com')}" placeholder="dadosupport@gmail.com" required></div><div class="field"><label>Link do Instagram</label><input name="instagram" type="url" value="${esc(c.instagram)}" placeholder="https://instagram.com/seuperfil"></div><div class="field"><label>Endereço exibido no rodapé</label><input name="address" value="${esc(c.address)}" placeholder="Maceió - AL"></div><hr style="border-color:var(--line);margin:20px 0"><div class="sectionhead"><h2>Horário de expediente</h2></div><div class="formgrid"><div class="field"><label>Início</label><input name="open" type="time" value="${esc(state.hours.open)}" required></div><div class="field"><label>Término</label><input name="close" type="time" value="${esc(state.hours.close)}" required></div></div><div class="field"><label>Aviso Importante</label><textarea name="notice" maxlength="240" placeholder="Digite um recado para seus clientes">${esc(c.notice)}</textarea><small class="muted">Se preenchido, aparece em uma tarja no topo do site público.</small></div><button class="btn full" type="submit">Salvar configurações gerais</button></form></div>`}
+function renderSettings(){const c=state.settings,b=state.branding||{color:'#d4af37',logo:''};return `<div class="panel" style="padding:16px;margin-bottom:14px"><div class="sectionhead"><h2>Identidade visual White Label</h2></div><form id="brandingForm"><div class="field"><label>Cor principal do estabelecimento</label><div class="formgrid"><label class="choice"><input type="radio" name="brandColor" value="#d4af37" ${b.color==='#d4af37'?'checked':''}> Dourado CorteBook</label><label class="choice"><input type="radio" name="brandColor" value="#dc2626" ${b.color==='#dc2626'?'checked':''}> Vermelho</label><label class="choice"><input type="radio" name="brandColor" value="#d4a017" ${b.color==='#d4a017'?'checked':''}> Dourado</label><label class="choice"><input type="radio" name="brandColor" value="#16a34a" ${b.color==='#16a34a'?'checked':''}> Verde</label><label class="choice"><input type="radio" name="brandColor" value="#fcfbf8" ${b.color==='#fcfbf8'?'checked':''}> Branco</label></div><input type="color" name="customColor" value="${esc(b.color)}" aria-label="Escolher cor personalizada" style="width:100%;height:46px;padding:4px;background:#0a0a0a;border:1px solid var(--line);border-radius:10px"></div><div class="field"><label>Enviar logomarca (PNG, JPG ou WEBP)</label><input type="file" id="brandLogoFile" accept="image/png,image/jpeg,image/webp"><small class="muted">Imagem armazenada neste navegador. Use arquivo de até 1 MB.</small><div id="logoPreview" style="margin-top:8px">${b.logo?`<img src="${b.logo}" alt="Prévia da logo" style="width:76px;height:76px;object-fit:cover;border-radius:50%">`:''}</div><button type="button" class="btn ghost" id="removeLogo" style="margin-top:8px">Remover logomarca enviada</button></div><button class="btn full" type="submit">Salvar identidade visual</button></form></div>${renderWeeklyScheduleAdmin()}<div class="panel" style="padding:16px"><div class="sectionhead"><h2>Contatos e expediente</h2></div><form id="settingsForm"><div class="field"><label>WhatsApp de agendamentos (com DDD)</label><input name="whatsapp" type="tel" value="${esc(c.whatsapp)}" placeholder="82996999221" required></div><div class="field"><label>Chave Pix do Estabelecimento</label><input name="pixKey" type="text" value="${esc(c.pixKey||'dadosupport@gmail.com')}" placeholder="dadosupport@gmail.com" required></div><div class="field"><label>Link do Instagram</label><input name="instagram" type="url" value="${esc(c.instagram)}" placeholder="https://instagram.com/seuperfil"></div><div class="field"><label>Endereço exibido no rodapé</label><input name="address" value="${esc(c.address)}" placeholder="Maceió - AL"></div><hr style="border-color:var(--line);margin:20px 0"><div class="sectionhead"><h2>Horário de expediente</h2></div><div class="formgrid"><div class="field"><label>Início</label><input name="open" type="time" value="${esc(state.hours.open)}" required></div><div class="field"><label>Término</label><input name="close" type="time" value="${esc(state.hours.close)}" required></div></div><div class="field"><label>Aviso Importante</label><textarea name="notice" maxlength="240" placeholder="Digite um recado para seus clientes">${esc(c.notice)}</textarea><small class="muted">Se preenchido, aparece em uma tarja no topo do site público.</small></div><button class="btn full" type="submit">Salvar configurações gerais</button></form></div>`}
 function renderProducts(){
  const orders=state.storeOrders||[];
  return `<div class="sectionhead"><div><h2>Gerenciar loja</h2><div class="small muted">Cadastro, preço e estoque manual</div></div><button class="btn" data-act="add-product">＋ Produto</button></div>
@@ -2050,7 +2050,7 @@ function renderPublicBusinessHours(){
  const root=$('#publicWeeklyHours');if(!root)return;
  const todayIndex=new Date().getDay();
  root.innerHTML=WEEK_DAYS.map(([key,label,dayNumber])=>`<div class="week-day ${dayNumber===todayIndex?'today':''}" ${dayNumber===todayIndex?'aria-current="date"':''}><div class="week-day-name"><span class="today-dot" aria-hidden="true"></span>${label}</div><div class="week-day-hours">${formatWeeklyTurns(horariosFuncionamento[key])}</div></div>`).join('');
- const phone=String(state.settings?.whatsapp||'82987075016').replace(/\D/g,'');
+ const phone=String(state.settings?.whatsapp||'82996999221').replace(/\D/g,'');
  const contact=$('#businessHoursContact');if(contact){contact.href=`https://wa.me/55${phone}`;contact.textContent=phone?`(${phone.slice(0,2)}) ${phone.slice(2,7)}-${phone.slice(7)}`:'Contato indisponível';}
 }
 function renderWeeklyScheduleAdmin(){
@@ -3269,7 +3269,7 @@ function esqueciSenhaCliente(){
   const f=document.getElementById('clientLoginForm');
   const phone=f?String(new FormData(f).get('phone')||'').trim():'';
   const cfg=JSON.parse(localStorage.getItem('imperium_settings')||localStorage.getItem('barber_settings')||'{}');
-  let admPhone=String(cfg.whatsapp||cfg.phone||'5582987075016').replace(/\D/g,'');
+  let admPhone=String(cfg.whatsapp||cfg.phone||'5582996999221').replace(/\D/g,'');
   if(admPhone.length===10||admPhone.length===11)admPhone='55'+admPhone;
   const msg=encodeURIComponent('Olá! Esqueci a senha da minha conta na CorteBook Barber'+(phone?' (WhatsApp: '+phone+')':'')+'. Pode redefinir para mim?');
   location.href='//'+'wa.me/'+admPhone+'?text='+msg;
@@ -3496,7 +3496,7 @@ setInterval(()=>{
   <div class="cb-feat"><h3>💳 Assinatura no Cartão</h3><p>Ative planos mensais com cobrança automática no cartão de crédito dos seus clientes VIP direto na sua conta.</p></div>
   <div class="cb-feat"><h3>✂ Painel Para Equipe</h3><p>Cada barbeiro acessa apenas a própria agenda, comandas e selos de fidelidade, sem ver o faturamento da casa.</p></div>
  </section>
-  <footer class="footer">CorteBook Tecnologia · CNPJ: 69.954.457/0001-31 · Suporte WhatsApp: (82) 98707-5016 · Todos os direitos reservados 2026</footer>
+  <footer class="footer">CorteBook Tecnologia · CNPJ: 69.954.457/0001-31 · Suporte WhatsApp: (82) 99699-9221 · Todos os direitos reservados 2026</footer>
 
 </div>
 
@@ -3526,7 +3526,7 @@ setInterval(()=>{
    <strong style="display:block;margin:4px 0 10px;user-select:all">69.954.457/0001-31</strong>
    <button class="btn secondary full" type="button" onclick="navigator.clipboard?.writeText('69.954.457/0001-31');toast('Chave Pix CNPJ copiada!')">Copiar Chave Pix (CNPJ)</button>
   </div>
-      <a class="btn full" style="display:block;text-decoration:none;margin-bottom:10px" target="_blank" href="https://wa.me/5582987075016.">Enviar comprovante e ativar agora</a>
+      <a class="btn full" style="display:block;text-decoration:none;margin-bottom:10px" target="_blank" href="https://wa.me/5582996999221.">Enviar comprovante e ativar agora</a>
 
 
 
@@ -3831,7 +3831,7 @@ setInterval(()=>{
  </section>
 
   <!-- Botão Flutuante WhatsApp (Apenas na Landing Page da CorteBook) -->
- <a id="cbFloatWpp" href="https://wa.me/5582987075016" target="_blank" rel="noopener" aria-label="Suporte WhatsApp CorteBook" style="position:fixed;right:18px;bottom:56px;z-index:9550;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px #25d36666;text-decoration:none;font-weight:900;font-size:13px">WPP</a>
+ <a id="cbFloatWpp" href="https://wa.me/5582996999221" target="_blank" rel="noopener" aria-label="Suporte WhatsApp CorteBook" style="position:fixed;right:18px;bottom:56px;z-index:9550;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px #25d36666;text-decoration:none;font-weight:900;font-size:13px">WPP</a>
 
  <script>
   setInterval(() => {
@@ -3998,7 +3998,7 @@ setInterval(()=>{
     <div class="cb-dash-card">
      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <strong style="color:#f3d06b;font-size:15px">🔗 Divulgar Minha Agenda</strong>
-      <a href="https://wa.me/5582987075016" target="_blank" style="background:#25d36622;border:1px solid #25d366;color:#4ade80;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;text-decoration:none">💬 Fale Conosco</a>
+      <a href="https://wa.me/5582996999221" target="_blank" style="background:#25d36622;border:1px solid #25d366;color:#4ade80;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;text-decoration:none">💬 Fale Conosco</a>
      </div>
      <div style="display:flex;gap:8px;margin-bottom:10px">
       <input readonly value="${shopLink}" style="font-size:12px;background:#0d0d10">
@@ -4590,7 +4590,7 @@ setInterval(()=>{
   platformPrice: 'R$ 39,99/mês',
   trialDays: '15 dias grátis',
   pixKey: 'dadosupport@gmail.com',
-  supportWa: '5582987075016',
+  supportWa: '5582996999221',
   topNotice: '',
   heroTitle: '',
   heroSubtitle: ''
@@ -5542,8 +5542,8 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
       });
 
       document.querySelectorAll('#publicView p, #publicView span, #publicView div, #publicView a, footer a').forEach(el => {
-        if (el.children.length === 0 && el.textContent && el.textContent.includes('98707-5016')) {
-          el.textContent = el.textContent.replace(/\(82\)\s*98707-5016/g, telFormatado);
+        if (el.children.length === 0 && el.textContent && el.textContent.includes('99699-9221')) {
+          el.textContent = el.textContent.replace(/\(82\)\s*99699-9221/g, telFormatado);
         }
       });
     }
@@ -5563,7 +5563,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 })();
 </script>
   <style>#cbWppFloat{position:fixed;right:16px;bottom:86px;z-index:40;width:50px;height:50px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(37,211,102,.4);text-decoration:none}#cbWppFloat:active{transform:scale(.93)}</style>
-<a id="cbWppFloat" href="https://wa.me/5582987075016" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="26" height="26" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 2.67c-7.36 0-13.33 5.97-13.33 13.33 0 2.35.61 4.64 1.78 6.67L2.6 29.4l6.91-1.81a13.28 13.28 0 0 0 6.53 1.71h.01c7.36 0 13.33-5.97 13.33-13.33 0-3.56-1.39-6.91-3.91-9.43a13.24 13.24 0 0 0-9.43-3.87zm0 24.4h-.01a11.05 11.05 0 0 1-5.63-1.54l-.4-.24-4.1 1.07 1.09-4-.26-.41a11.03 11.03 0 0 1-1.69-5.88c0-6.1 4.96-11.06 11.07-11.06 2.95 0 5.73 1.15 7.82 3.24a10.99 10.99 0 0 1 3.24 7.82c0 6.1-4.97 11.06-11.13 11.06zm6.07-8.28c-.33-.17-1.97-.97-2.27-1.08-.31-.11-.53-.17-.75.17-.22.33-.86 1.08-1.05 1.3-.19.22-.39.25-.72.08-.33-.17-1.4-.52-2.67-1.65-.99-.88-1.65-1.97-1.85-2.3-.19-.33-.02-.51.15-.68.15-.15.33-.39.5-.58.17-.19.22-.33.33-.55.11-.22.06-.42-.03-.58-.08-.17-.75-1.81-1.03-2.48-.27-.65-.55-.56-.75-.57h-.64c-.22 0-.58.08-.89.42-.31.33-1.17 1.14-1.17 2.78s1.2 3.22 1.36 3.45c.17.22 2.35 3.59 5.7 5.03.8.34 1.42.55 1.9.7.8.25 1.53.22 2.1.13.64-.1 1.97-.81 2.25-1.58.28-.78.28-1.44.19-1.58-.08-.14-.3-.22-.64-.39z"/></svg></a>
+<a id="cbWppFloat" href="https://wa.me/5582996999221" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="26" height="26" viewBox="0 0 32 32" fill="currentColor"><path d="M16.04 2.67c-7.36 0-13.33 5.97-13.33 13.33 0 2.35.61 4.64 1.78 6.67L2.6 29.4l6.91-1.81a13.28 13.28 0 0 0 6.53 1.71h.01c7.36 0 13.33-5.97 13.33-13.33 0-3.56-1.39-6.91-3.91-9.43a13.24 13.24 0 0 0-9.43-3.87zm0 24.4h-.01a11.05 11.05 0 0 1-5.63-1.54l-.4-.24-4.1 1.07 1.09-4-.26-.41a11.03 11.03 0 0 1-1.69-5.88c0-6.1 4.96-11.06 11.07-11.06 2.95 0 5.73 1.15 7.82 3.24a10.99 10.99 0 0 1 3.24 7.82c0 6.1-4.97 11.06-11.13 11.06zm6.07-8.28c-.33-.17-1.97-.97-2.27-1.08-.31-.11-.53-.17-.75.17-.22.33-.86 1.08-1.05 1.3-.19.22-.39.25-.72.08-.33-.17-1.4-.52-2.67-1.65-.99-.88-1.65-1.97-1.85-2.3-.19-.33-.02-.51.15-.68.15-.15.33-.39.5-.58.17-.19.22-.33.33-.55.11-.22.06-.42-.03-.58-.08-.17-.75-1.81-1.03-2.48-.27-.65-.55-.56-.75-.57h-.64c-.22 0-.58.08-.89.42-.31.33-1.17 1.14-1.17 2.78s1.2 3.22 1.36 3.45c.17.22 2.35 3.59 5.7 5.03.8.34 1.42.55 1.9.7.8.25 1.53.22 2.1.13.64-.1 1.97-.81 2.25-1.58.28-.78.28-1.44.19-1.58-.08-.14-.3-.22-.64-.39z"/></svg></a>
 
 <!-- MÓDULO CORTEBOOK PRO TOOLS (4 FERRAMENTAS TUDO-EM-UM) -->
 <script>
@@ -6796,7 +6796,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 <script>
 (function() {
   'use strict';
-  const WPP_URL = 'https://wa.me/5582987075016';
+  const WPP_URL = 'https://wa.me/5582996999221';
 
   function buildFullSaasLanding() {
     const landing = document.getElementById('cortebookLanding');
@@ -7509,7 +7509,7 @@ a[href*="netlify.com"], [data-netlify-deploy-id] { display: none !important; }
 }
 </style>
 
-<a href="https://wa.me/5582987075016" target="_blank" rel="noopener" class="cb-zap-pulse-btn" title="Falar no WhatsApp">
+<a href="https://wa.me/5582996999221" target="_blank" rel="noopener" class="cb-zap-pulse-btn" title="Falar no WhatsApp">
   <svg viewBox="0 0 32 32" width="32" height="32" fill="#ffffff">
     <path d="M16 3C8.82 3 3 8.82 3 16c0 2.29.6 4.52 1.74 6.49L3 29l6.69-1.71A12.93 12.93 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.6c-2.02 0-4-.54-5.73-1.56l-.41-.24-3.97 1.01 1.06-3.87-.27-.43A10.56 10.56 0 0 1 5.4 16c0-5.84 4.76-10.6 10.6-10.6S26.6 10.16 26.6 16 21.84 26.6 16 26.6zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.15 3.09 1.31 3.3c.16.21 2.26 3.45 5.48 4.84.77.33 1.36.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.89-.77 2.16-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/>
   </svg>
@@ -7772,7 +7772,7 @@ setInterval(function() {
         if (refBtn && !box.dataset.zapInjetado) {
           box.dataset.zapInjetado = '1';
           var zap = document.createElement('a');
-          var tel = (window.currentTenant?.whatsapp || window.tenant?.whatsapp || '5582987075016').replace(/\D/g, '');
+          var tel = (window.currentTenant?.whatsapp || window.tenant?.whatsapp || '5582996999221').replace(/\D/g, '');
           if (tel.length <= 11) tel = '55' + tel;
           var resumo = box.innerText.split('\n').filter(Boolean).slice(1, 4).join(' - ');
           zap.href = 'https://wa.me' + tel + '?text=' + encodeURIComponent('Olá! Acabei de agendar pelo CorteBook: ' + resumo);
